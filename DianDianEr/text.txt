@@ -1,0 +1,21 @@
+<_image>Icon-72.png</_image>
+
+<row>点点儿 Version 1.0</row>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<row2>北京蓝鸥科技研发中心</row2>
+<row3><_link>http:www.lanou3g.com|©2013 - Diandian</_link></row3>
+

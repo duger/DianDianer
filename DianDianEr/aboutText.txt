@@ -1,0 +1,11 @@
+<_image>Icon-72.png</_image>
+<row>点点儿 Version 1.0</row>
+
+<row1>     点点儿 是一款集成<row>涂鸦</row>、<row>拍照</row>、<row>语音</row>、<row>地图</row>等功能的社交应用，在这里，你不仅可以分享自己身边的点点滴滴，同样你还可以看到身边的好友或者路人的分享，在这里,你将寻找到无限乐趣当然，我们的功能还将继续逐步增加和完善。
+      只要你有任何想法，联系我们:<_link>http:www.lanou3g.com|www.lanou3g.com。</_link>或发送至邮箱:<italic>896607869@qq.com</italic></row1>
+
+
+
+<row2>北京蓝鸥科技研发中心</row2>
+<row3><_link>http:www.lanou3g.com|©2013 - Diandian</_link></row3>
+

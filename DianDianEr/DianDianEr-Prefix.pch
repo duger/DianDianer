@@ -1,0 +1,29 @@
+//
+// Prefix header for all source files of the 'DianDianEr' target in the 'DianDianEr' project
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+
+#endif
+
+#define kXMPPmyJID  @"kXMPPmyJID"
+#define kXMPPmyPassword  @"kXMPPmyPassword"
+#define kHOSTNAME     @"124.205.147.26"
+#define kDOMAIN   @"124.205.147.26/xmpp"
+#define kGUEST @"guest"
+#define kGUESTPASSWORD @"123456"
+
+#import "IphoneScreen.h"
+#import "Define.h"
+
+#import "XMPPManager.h"
+#import "DiandianCoreDataManager.h"
+#import "SelectManager.h"

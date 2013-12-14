@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="3396" systemVersion="12F37" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="ChartList" representedClassName="ChartList" syncable="YES">
+        <attribute name="chartList_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="total_num" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="unread_num" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="user_jid" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="chartListToMessages" optional="YES" toMany="YES" deletionRule="Nullify" ordered="YES" destinationEntity="Messages" syncable="YES"/>
+    </entity>
+    <entity name="Comment" representedClassName="Comment" syncable="YES">
+        <attribute name="c_content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="c_date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="c_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="c_user_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="share_id" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="commentToReply" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Reply" inverseName="replyToComment" inverseEntity="Reply" syncable="YES"/>
+        <relationship name="commentToShare" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Share" inverseName="shareToComment" inverseEntity="Share" syncable="YES"/>
+    </entity>
+    <entity name="Friendlist" representedClassName="Friendlist" syncable="YES">
+        <attribute name="f_id" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="f_relationship_hot" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="f_user_id" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="firendToUser" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="User" inverseName="userToFriend" inverseEntity="User" syncable="YES"/>
+    </entity>
+    <entity name="Good" representedClassName="Good" syncable="YES">
+        <attribute name="g_id" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="g_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="g_user_id" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="goodToShare" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Share" inverseName="shareToGood" inverseEntity="Share" syncable="YES"/>
+    </entity>
+    <entity name="Messages" representedClassName="Messages" syncable="YES">
+        <attribute name="chart_content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="chart_date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="chart_state" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="from_jid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="to_jid" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Reply" representedClassName="Reply" syncable="YES">
+        <attribute name="r_comment_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="r_content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="r_date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="r_from_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="r_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="r_to_id" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="replyToComment" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Comment" inverseName="commentToReply" inverseEntity="Comment" syncable="YES"/>
+    </entity>
+    <entity name="Share" representedClassName="Share" syncable="YES">
+        <attribute name="s_content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="s_createdate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="s_hot" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="s_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="s_image_url" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="s_latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="s_locationName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="s_longitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="s_sound_url" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="s_user_id" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="shareToComment" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Comment" inverseName="commentToShare" inverseEntity="Comment" syncable="YES"/>
+        <relationship name="shareToGood" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Good" inverseName="goodToShare" inverseEntity="Good" syncable="YES"/>
+    </entity>
+    <entity name="User" representedClassName="User" syncable="YES">
+        <attribute name="u_birth" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="u_id" optional="YES" attributeType="Integer 16" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="u_image" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="u_jid" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="u_latitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="u_longtitude" optional="YES" attributeType="Double" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="u_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="u_sex" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="u_signature" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="userToFriend" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Friendlist" inverseName="firendToUser" inverseEntity="Friendlist" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="ChartList" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Comment" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Friendlist" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Good" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Messages" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Reply" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="Share" positionX="0" positionY="0" width="0" height="0"/>
+        <element name="User" positionX="0" positionY="0" width="0" height="0"/>
+    </elements>
+</model>
