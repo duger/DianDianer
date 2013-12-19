@@ -1968,14 +1968,14 @@
 			name = "回复";
 			sourceTree = "<group>";
 		};
-		301472F11814F0520093AA78 /* 录音 */ = {
+		301472F11814F0520093AA78 /* Recording */ = {
 			isa = PBXGroup;
 			children = (
 				301472F21814F0A40093AA78 /* RecordViewController.h */,
 				301472F31814F0A40093AA78 /* RecordViewController.m */,
 				301472F51814FC7E0093AA78 /* 图片 */,
 			);
-			name = "录音";
+			name = Recording;
 			sourceTree = "<group>";
 		};
 		301472F51814FC7E0093AA78 /* 图片 */ = {
@@ -2044,14 +2044,14 @@
 			name = "多功能按钮";
 			sourceTree = "<group>";
 		};
-		30147340181524500093AA78 /* 分享界面 */ = {
+		30147340181524500093AA78 /* ShareView */ = {
 			isa = PBXGroup;
 			children = (
 				8AC98A8B1820F302009125AE /* image */,
 				30147341181524690093AA78 /* ShareViewController.h */,
 				30147342181524690093AA78 /* ShareViewController.m */,
 			);
-			name = "分享界面";
+			name = ShareView;
 			sourceTree = "<group>";
 		};
 		3015B2AE1816079800923DFC /* 下拉框 */ = {
@@ -2121,13 +2121,13 @@
 			name = "个人主页";
 			sourceTree = "<group>";
 		};
-		30B2260A183D954100E57471 /* 评论界面 */ = {
+		30B2260A183D954100E57471 /* CommentView */ = {
 			isa = PBXGroup;
 			children = (
 				30B2260B183D969800E57471 /* CommentViewController.h */,
 				30B2260C183D969800E57471 /* CommentViewController.m */,
 			);
-			name = "评论界面";
+			name = CommentView;
 			sourceTree = "<group>";
 		};
 		30C4B6DC1817755E0002FE56 /* 自定义单元格 */ = {
@@ -2235,22 +2235,11 @@
 		30CF0F4D180F659E00C25ABE /* DianDianEr */ = {
 			isa = PBXGroup;
 			children = (
-				79FC41E71821402C000BB108 /* 数据库 */,
-				8AC9F709181E88FE006378BA /* 分享管理 */,
-				30147340181524500093AA78 /* 分享界面 */,
-				8AB849371822523700D29BB2 /* 下载管理 */,
-				30B2260A183D954100E57471 /* 评论界面 */,
-				30CF103718112FBD00C25ABE /* 登陆 */,
-				30CF103C1811363100C25ABE /* 注册 */,
-				30CF102E18112CDB00C25ABE /* 设置 */,
-				8A7D4DD21815151200C1351D /* 拍照 */,
-				301472F11814F0520093AA78 /* 录音 */,
-				79731D1C181680F50013ABBC /* 涂鸦 */,
-				79FC41C71820CE7E000BB108 /* 地图 */,
-				30CF102D18112CB500C25ABE /* 主页 */,
-				8AEAD8041817F82400BB9970 /* 好友聊天 */,
+				79FC41E71821402C000BB108 /* Model */,
+				8A230567186324CB003E34BA /* Controller */,
+				8A23056818632534003E34BA /* View */,
 				8AA6511F18458E3300EE5E02 /* Resource */,
-				30CF10431811379700C25ABE /* 测试 */,
+				30CF10431811379700C25ABE /* test */,
 				30CF0F56180F659E00C25ABE /* AppDelegate.h */,
 				30CF0F57180F659E00C25ABE /* AppDelegate.m */,
 				79B517EE18227B6E00F776B9 /* Define.h */,
@@ -2280,16 +2269,16 @@
 			name = "Supporting File";
 			sourceTree = "<group>";
 		};
-		30CF1028181126C500C25ABE /* 个人主页 */ = {
+		30CF1028181126C500C25ABE /* Homepage */ = {
 			isa = PBXGroup;
 			children = (
 				30CF1029181126E300C25ABE /* HomeViewController.h */,
 				30CF102A181126E300C25ABE /* HomeViewController.m */,
 			);
-			name = "个人主页";
+			name = Homepage;
 			sourceTree = "<group>";
 		};
-		30CF102D18112CB500C25ABE /* 主页 */ = {
+		30CF102D18112CB500C25ABE /* MainView */ = {
 			isa = PBXGroup;
 			children = (
 				3015B2AE1816079800923DFC /* 下拉框 */,
@@ -2300,23 +2289,23 @@
 				30CF0FDB180FEE0800C25ABE /* FirstViewController.h */,
 				30CF0FDC180FEE0800C25ABE /* FirstViewController.m */,
 			);
-			name = "主页";
+			name = MainView;
 			sourceTree = "<group>";
 		};
-		30CF102E18112CDB00C25ABE /* 设置 */ = {
+		30CF102E18112CDB00C25ABE /* SettingView */ = {
 			isa = PBXGroup;
 			children = (
-				30CF1028181126C500C25ABE /* 个人主页 */,
-				30CF103018112D1A00C25ABE /* 隐私设置 */,
-				30CF10381811307600C25ABE /* 系统设置 */,
+				30CF1028181126C500C25ABE /* Homepage */,
+				30CF103018112D1A00C25ABE /* Privacy Settings */,
+				30CF10381811307600C25ABE /* System Settings */,
 				30D77303181B7B34007C0A10 /* image */,
 				30CF0FDD180FEE0800C25ABE /* LeftSideBarViewController.h */,
 				30CF0FDE180FEE0800C25ABE /* LeftSideBarViewController.m */,
 			);
-			name = "设置";
+			name = SettingView;
 			sourceTree = "<group>";
 		};
-		30CF103018112D1A00C25ABE /* 隐私设置 */ = {
+		30CF103018112D1A00C25ABE /* Privacy Settings */ = {
 			isa = PBXGroup;
 			children = (
 				79E4804B1827BCB20011B5B7 /* BrithdaySelect.xib */,
@@ -2325,19 +2314,19 @@
 				30CF103118112D5D00C25ABE /* PrivacyViewController.h */,
 				30CF103218112D5D00C25ABE /* PrivacyViewController.m */,
 			);
-			name = "隐私设置";
+			name = "Privacy Settings";
 			sourceTree = "<group>";
 		};
-		30CF103718112FBD00C25ABE /* 登陆 */ = {
+		30CF103718112FBD00C25ABE /* LoginView */ = {
 			isa = PBXGroup;
 			children = (
 				30CF103418112FB600C25ABE /* LoginViewController.h */,
 				30CF103518112FB600C25ABE /* LoginViewController.m */,
 			);
-			name = "登陆";
+			name = LoginView;
 			sourceTree = "<group>";
 		};
-		30CF10381811307600C25ABE /* 系统设置 */ = {
+		30CF10381811307600C25ABE /* System Settings */ = {
 			isa = PBXGroup;
 			children = (
 				3014735C181555B00093AA78 /* SystemViewController.h */,
@@ -2348,25 +2337,25 @@
 				798956AD1848BD2800F56106 /* SuggestView.m */,
 				7993538B18472B4D007462F8 /* 图文混排 */,
 			);
-			name = "系统设置";
+			name = "System Settings";
 			sourceTree = "<group>";
 		};
-		30CF103C1811363100C25ABE /* 注册 */ = {
+		30CF103C1811363100C25ABE /* Registration */ = {
 			isa = PBXGroup;
 			children = (
 				30CF103D1811364900C25ABE /* RegisterViewController.h */,
 				30CF103E1811364900C25ABE /* RegisterViewController.m */,
 			);
-			name = "注册";
+			name = Registration;
 			sourceTree = "<group>";
 		};
-		30CF10431811379700C25ABE /* 测试 */ = {
+		30CF10431811379700C25ABE /* test */ = {
 			isa = PBXGroup;
 			children = (
 				30CF10401811378800C25ABE /* TextViewController.h */,
 				30CF10411811378900C25ABE /* TextViewController.m */,
 			);
-			name = "测试";
+			name = test;
 			sourceTree = "<group>";
 		};
 		30CF104418113D2400C25ABE /* 抽屉效果 */ = {
@@ -2447,7 +2436,7 @@
 			name = Corp;
 			sourceTree = "<group>";
 		};
-		79731D1C181680F50013ABBC /* 涂鸦 */ = {
+		79731D1C181680F50013ABBC /* Graffiti */ = {
 			isa = PBXGroup;
 			children = (
 				7944BE09183F973400D4715E /* Corp */,
@@ -2465,7 +2454,7 @@
 				79928BEC183C4F0400378931 /* Accesory.h */,
 				79928BED183C4F0400378931 /* Accesory.m */,
 			);
-			name = "涂鸦";
+			name = Graffiti;
 			sourceTree = "<group>";
 		};
 		79928BF4183CAF4300378931 /* images3 */ = {
@@ -2628,7 +2617,7 @@
 			path = EGOImageView;
 			sourceTree = "<group>";
 		};
-		79FC41C71820CE7E000BB108 /* 地图 */ = {
+		79FC41C71820CE7E000BB108 /* Map */ = {
 			isa = PBXGroup;
 			children = (
 				79FC41E218213C33000BB108 /* PopInfoCell.h */,
@@ -2647,10 +2636,10 @@
 				79FC41CE1820D25E000BB108 /* CallOutAnnotation.h */,
 				79FC41CF1820D25E000BB108 /* CallOutAnnotation.m */,
 			);
-			name = "地图";
+			name = Map;
 			sourceTree = "<group>";
 		};
-		79FC41E71821402C000BB108 /* 数据库 */ = {
+		79FC41E71821402C000BB108 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				8AB8493D182252C400D29BB2 /* DiandianCoreDataManager.h */,
@@ -2673,7 +2662,45 @@
 				30AFC165183370B10021C266 /* Friendlist.h */,
 				30AFC166183370B10021C266 /* Friendlist.m */,
 			);
-			name = "数据库";
+			name = Model;
+			sourceTree = "<group>";
+		};
+		8A230567186324CB003E34BA /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				8AB849371822523700D29BB2 /* DownloadManager */,
+				8AC9F709181E88FE006378BA /* ShareManager */,
+				8A23056918632597003E34BA /* XMPPManager */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		8A23056818632534003E34BA /* View */ = {
+			isa = PBXGroup;
+			children = (
+				30CF102D18112CB500C25ABE /* MainView */,
+				79FC41C71820CE7E000BB108 /* Map */,
+				79731D1C181680F50013ABBC /* Graffiti */,
+				301472F11814F0520093AA78 /* Recording */,
+				8A7D4DD21815151200C1351D /* TakePhoto */,
+				30CF102E18112CDB00C25ABE /* SettingView */,
+				30CF103C1811363100C25ABE /* Registration */,
+				30CF103718112FBD00C25ABE /* LoginView */,
+				30B2260A183D954100E57471 /* CommentView */,
+				8AEAD8041817F82400BB9970 /* ChartingView */,
+				30147340181524500093AA78 /* ShareView */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		8A23056918632597003E34BA /* XMPPManager */ = {
+			isa = PBXGroup;
+			children = (
+				8AC93E631818391A0086B869 /* XMPPManager.h */,
+				8AC93E641818391A0086B869 /* XMPPManager.m */,
+				8AC93E6618183DFB0086B869 /* XMPP */,
+			);
+			name = XMPPManager;
 			sourceTree = "<group>";
 		};
 		8A2844CE1818E78500DBB3DC /* Base64 */ = {
@@ -2713,7 +2740,7 @@
 			path = ../icons;
 			sourceTree = "<group>";
 		};
-		8A7D4DD21815151200C1351D /* 拍照 */ = {
+		8A7D4DD21815151200C1351D /* TakePhoto */ = {
 			isa = PBXGroup;
 			children = (
 				8A7D4FB9181515B800C1351D /* IphoneScreen.h */,
@@ -2721,7 +2748,7 @@
 				8A7D4FB6181515AC00C1351D /* CameraViewController.h */,
 				8A7D4FB7181515AC00C1351D /* CameraViewController.m */,
 			);
-			name = "拍照";
+			name = TakePhoto;
 			sourceTree = "<group>";
 		};
 		8A7D4DD31815157500C1351D /* GPUImage */ = {
@@ -3099,13 +3126,13 @@
 			name = ProgressHUD;
 			sourceTree = "<group>";
 		};
-		8AB849371822523700D29BB2 /* 下载管理 */ = {
+		8AB849371822523700D29BB2 /* DownloadManager */ = {
 			isa = PBXGroup;
 			children = (
 				8AB8493A182252AC00D29BB2 /* SelectManager.h */,
 				8AB8493B182252AC00D29BB2 /* SelectManager.m */,
 			);
-			name = "下载管理";
+			name = DownloadManager;
 			sourceTree = "<group>";
 		};
 		8AC93E6618183DFB0086B869 /* XMPP */ = {
@@ -3881,7 +3908,7 @@
 			name = image;
 			sourceTree = "<group>";
 		};
-		8AC9F709181E88FE006378BA /* 分享管理 */ = {
+		8AC9F709181E88FE006378BA /* ShareManager */ = {
 			isa = PBXGroup;
 			children = (
 				8ACE512218229BA7001E9132 /* lame */,
@@ -3895,7 +3922,7 @@
 				8AE944EB181FE66C001490C0 /* test.mp3 */,
 				8AE944EC181FE66C001490C0 /* test.png */,
 			);
-			name = "分享管理";
+			name = ShareManager;
 			sourceTree = "<group>";
 		};
 		8ACE512218229BA7001E9132 /* lame */ = {
@@ -3906,14 +3933,11 @@
 			name = lame;
 			sourceTree = "<group>";
 		};
-		8AEAD8041817F82400BB9970 /* 好友聊天 */ = {
+		8AEAD8041817F82400BB9970 /* ChartingView */ = {
 			isa = PBXGroup;
 			children = (
 				8A2844CE1818E78500DBB3DC /* Base64 */,
-				8AC93E6618183DFB0086B869 /* XMPP */,
 				8AEAD8051817F9AE00BB9970 /* AKTabBarController */,
-				8AC93E631818391A0086B869 /* XMPPManager.h */,
-				8AC93E641818391A0086B869 /* XMPPManager.m */,
 				30CF102518110BF400C25ABE /* RightSideBarViewController.h */,
 				30CF102618110BF400C25ABE /* RightSideBarViewController.m */,
 				8AEAD81D1817FDB100BB9970 /* FriendsViewController.h */,
@@ -3928,7 +3952,7 @@
 				8A2844CB1818E70A00DBB3DC /* ChartCell.h */,
 				8A2844CC1818E70B00DBB3DC /* ChartCell.m */,
 			);
-			name = "好友聊天";
+			name = ChartingView;
 			sourceTree = "<group>";
 		};
 		8AEAD8051817F9AE00BB9970 /* AKTabBarController */ = {
