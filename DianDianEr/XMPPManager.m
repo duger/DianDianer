@@ -116,7 +116,7 @@ static XMPPManager *s_XMPPManager = nil;
 - (void)setupStream{
     xmppStream = [[XMPPStream alloc] init];
     
-    [xmppStream setHostName:@"124.205.147.26"];
+    [xmppStream setHostName:kHOSTNAME];
 	[xmppStream setHostPort:5222];
     // Setup reconnect
 	//
@@ -252,7 +252,7 @@ static XMPPManager *s_XMPPManager = nil;
 //显示个人头像
 -(UIImage *)showOneselfHeadImage
 {
-    XMPPJID *userJID = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@@%@",[[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID],kDOMAIN]];
+    XMPPJID *userJID = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@@%@",[[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID],kDOMAINWITHSOURCE]];
     XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:userJID xmppStream:xmppStream managedObjectContext:managedObjectContext_roster];
     
     UIImage *userImage = nil;
@@ -375,9 +375,9 @@ static XMPPManager *s_XMPPManager = nil;
 - (IBAction)registerInSide:(NSString *)userName andPassword:(NSString *)thePassword{
     isRegister = YES;
     NSError *err;
-    NSString *tjid = [[NSString alloc] initWithFormat:@"%@@%@",userName,@"124.205.147.26"];  //smack
+    NSString *tjid = [[NSString alloc] initWithFormat:@"%@@%@",userName,kDOMAIN];  //smack
     password = thePassword;
-    XMPPJID *jid = [XMPPJID jidWithString:tjid resource:@"XMPP"];
+    XMPPJID *jid = [XMPPJID jidWithString:tjid resource:@"DianDianer"];
     [xmppStream setMyJID:jid];
     
     
@@ -438,7 +438,7 @@ static XMPPManager *s_XMPPManager = nil;
     
     NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
     [message addAttributeWithName:@"type" stringValue:@"chat"];
-    [message addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@124.205.147.26/XMPP",self.toTextField.text]];
+    [message addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",self.toTextField.text,kDOMAINWITHSOURCE]];
     [message addChild:body];
     [message addChild:attachment];
     [self.xmppStream sendElement:message];
@@ -467,7 +467,7 @@ static XMPPManager *s_XMPPManager = nil;
     [xmlBody setStringValue:sound];
     NSXMLElement *xmlMessage = [NSXMLElement elementWithName:@"message"];
     [xmlMessage addAttributeWithName:@"type" stringValue:@"chat"];
-    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@124.205.147.26",self.toTextField.text]];
+    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",self.toTextField.text,kDOMAIN]];
     [xmlMessage addChild:xmlBody];
     [self.xmppStream sendElement:xmlMessage];
     
@@ -548,10 +548,10 @@ static XMPPManager *s_XMPPManager = nil;
 		return NO;
 	}
     
-	myJID = [NSString stringWithFormat:@"%@@%@",myJID,@"124.205.147.26"];
+	myJID = [NSString stringWithFormat:@"%@@%@",myJID,kDOMAIN];
     //    myPassword = self.passwordTextField.text;
 	
-    XMPPJID *jid = [XMPPJID jidWithString:myJID resource:@"XMPP"];
+    XMPPJID *jid = [XMPPJID jidWithString:myJID resource:@"DianDianer"];
 	[xmppStream setMyJID:jid];
 	password = myPassword;
     
@@ -635,10 +635,10 @@ static XMPPManager *s_XMPPManager = nil;
         return NO;
     }
     
-    myJID = [NSString stringWithFormat:@"%@@%@",myJID,@"124.205.147.26"];
+    myJID = [NSString stringWithFormat:@"%@@%@",myJID,kDOMAIN];
     
     
-    XMPPJID *jid = [XMPPJID jidWithString:myJID resource:@"XMPP"];
+    XMPPJID *jid = [XMPPJID jidWithString:myJID resource:@"DianDianer"];
     [xmppStream setMyJID:jid];
     password = myPassword;
     
@@ -705,8 +705,8 @@ static XMPPManager *s_XMPPManager = nil;
     [si addChild:feature];
     [si addChild:file];
     NSXMLElement *iq = [NSXMLElement elementWithName:@"iq"];
-    [iq addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@/XMPP",self.toTextField.text,@"124.205.147.26"]];//
-    [iq addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@124.205.147.26",self.userNameTextField.text]];
+    [iq addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",self.toTextField.text,kDOMAIN]];//
+    [iq addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@%@",self.userNameTextField.text,kDOMAIN]];
     [iq addAttributeWithName:@"type" stringValue:@"set"];
     [iq addAttributeWithName:@"id" stringValue:@"iq_13"];
     [iq addChild:si];
@@ -724,7 +724,7 @@ static XMPPManager *s_XMPPManager = nil;
     [xmlBody setStringValue:self.messageTextField.text];
     NSXMLElement *xmlMessage = [NSXMLElement elementWithName:@"message"];
     [xmlMessage addAttributeWithName:@"type" stringValue:@"chat"];
-    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@124.205.147.26",self.toTextField.text]];
+    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",self.toTextField.text,kDOMAIN]];
     [xmlMessage addChild:xmlBody];
     [self.xmppStream sendElement:xmlMessage];
     
