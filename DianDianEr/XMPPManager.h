@@ -22,7 +22,7 @@
 
 @end
 
-@interface XMPPManager : NSObject<XMPPRosterDelegate,XMPPvCardTempModuleDelegate>
+@interface XMPPManager : NSObject<XMPPRosterDelegate,XMPPvCardTempModuleDelegate,XMPPManagerDelegate>
 {
 	XMPPStream *xmppStream;
 	XMPPReconnect *xmppReconnect;

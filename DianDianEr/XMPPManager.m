@@ -185,6 +185,9 @@ static XMPPManager *s_XMPPManager = nil;
 	[xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
     [xmppvCardTempModule addDelegate:self delegateQueue:dispatch_get_main_queue()];
     [xmppSearch addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    [xmppvCardAvatarModule addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    [xmppCapabilities addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    [xmppReconnect addDelegate:self delegateQueue:dispatch_get_main_queue()];
 	
     [xmppStream setHostName:kHOSTNAME];
     [xmppStream setHostPort:5222];
