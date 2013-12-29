@@ -492,6 +492,8 @@ static int indexCount = 1;
     }
     //给评论按钮添加点击事件
     [cell.commentButton addTarget:self action:@selector(goToComment:) forControlEvents:UIControlEventTouchUpInside];
+    //给举报按钮添加点击事件
+    [cell.ReportButton addTarget:self action:@selector(reportAShare:) forControlEvents:UIControlEventTouchUpInside];
     return cell;
 }
 
@@ -527,6 +529,12 @@ static int indexCount = 1;
     }];
 }
 
+-(void)reportAShare:(UIButton *)sender
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:nil cancelButtonTitle:@"取消" destructiveButtonTitle:@"举报" otherButtonTitles:nil , nil];
+    [actionSheet showInView:self.view];
+    
+}
 
 - (void)playAudio:(Mp3PlayerButton *)button
 {

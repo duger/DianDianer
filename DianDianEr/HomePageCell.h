@@ -35,6 +35,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *praiseCount;
 //图标下的view
 @property (strong, nonatomic) IBOutlet UIView *mainView;
+//举报按钮
+@property (strong, nonatomic) IBOutlet UIButton *ReportButton;
+
 @property (strong, nonatomic) Mp3PlayerButton *playButton;
 @property (retain, nonatomic) NSString * shareID;
 @property(assign,nonatomic) BOOL isGoodorNot;

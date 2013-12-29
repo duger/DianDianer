@@ -12,6 +12,7 @@
 #import "ImageCropperView.h"
 
 @protocol  TuYaViewControllerDelegate<NSObject>
+@optional
 -(void)didFinishTuYa;
 -(void)tuYaGoToShare;
 @end

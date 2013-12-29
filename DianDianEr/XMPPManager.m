@@ -256,7 +256,7 @@ static XMPPManager *s_XMPPManager = nil;
 -(UIImage *)showOneselfHeadImage
 {
     XMPPJID *userJID = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@@%@",[[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID],kDOMAINWITHSOURCE]];
-    XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:userJID xmppStream:xmppStream managedObjectContext:managedObjectContext_roster];
+    XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:userJID xmppStream:xmppStream managedObjectContext:[self managedObjectContext_roster]];
     
     UIImage *userImage = nil;
     UIImage *oneselfImage = [[UIImage alloc]init];
@@ -316,7 +316,7 @@ static XMPPManager *s_XMPPManager = nil;
 -(void)setUserImage:(XMPPJID *)JID
 {
     //    dispatch_block_t block = ^{
-    XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:JID xmppStream:xmppStream managedObjectContext:managedObjectContext_roster];
+    XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:JID xmppStream:xmppStream managedObjectContext:[self managedObjectContext_roster]];
     UIImage *image_ = nil;
     
     if(user.photo != nil)
@@ -753,7 +753,7 @@ static XMPPManager *s_XMPPManager = nil;
 {
 	NSAssert([NSThread isMainThread],
 	         @"NSManagedObjectContext is not thread safe. It must always be used on the same thread/queue");
-	
+	 managedObjectContext_roster = [xmppRosterStorage mainThreadManagedObjectContext];
 	if (managedObjectContext_roster == nil)
 	{
 		managedObjectContext_roster = [[NSManagedObjectContext alloc] init];
@@ -774,7 +774,7 @@ static XMPPManager *s_XMPPManager = nil;
 {
 	NSAssert([NSThread isMainThread],
 	         @"NSManagedObjectContext is not thread safe. It must always be used on the same thread/queue");
-	
+	managedObjectContext_capabilities = [xmppCapabilitiesStorage mainThreadManagedObjectContext];
 	if (managedObjectContext_capabilities == nil)
 	{
 		managedObjectContext_capabilities = [[NSManagedObjectContext alloc] init];

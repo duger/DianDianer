@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13A603" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="4514" systemVersion="13B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none">
     <dependencies>
         <deployment defaultVersion="1552" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
@@ -63,7 +63,7 @@
                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </label>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="34">
-                                <rect key="frame" x="152" y="2" width="31" height="15"/>
+                                <rect key="frame" x="113" y="3" width="31" height="15"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -79,7 +79,7 @@
                                 <state key="highlighted" image="commenthightlight.png"/>
                             </button>
                             <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="xGg-FG-iU0">
-                                <rect key="frame" x="239" y="-2" width="25" height="25"/>
+                                <rect key="frame" x="213" y="-2" width="25" height="25"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" image="good.png">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -89,6 +89,15 @@
                                     <action selector="didClickGood:" destination="3" eventType="touchUpInside" id="K1I-ju-ci5"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="bM1-fl-7MB">
+                                <rect key="frame" x="263" y="4" width="27" height="14"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <state key="normal" image="report.png">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <state key="highlighted" image="reportHightlight.png"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
@@ -97,6 +106,7 @@
             </tableViewCellContentView>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <connections>
+                <outlet property="ReportButton" destination="bM1-fl-7MB" id="vqx-7a-FDc"/>
                 <outlet property="addressLabel" destination="100" id="247"/>
                 <outlet property="commentButton" destination="XkM-IH-5iY" id="85X-BY-mOe"/>
                 <outlet property="commentCount" destination="201" id="254"/>
@@ -116,5 +126,7 @@
         <image name="commint.png" width="46" height="48"/>
         <image name="good.png" width="54" height="55"/>
         <image name="goodhightlight.png" width="54" height="51"/>
+        <image name="report.png" width="60" height="36"/>
+        <image name="reportHightlight.png" width="60" height="36"/>
     </resources>
 </document>

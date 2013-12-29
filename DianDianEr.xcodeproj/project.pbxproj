@@ -303,6 +303,8 @@
 		8A3B3798182C978A00D8EE08 /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 8A3B3788182C978A00D8EE08 /* iTunesArtwork */; };
 		8A3B3799182C978A00D8EE08 /* iTunesArtwork@2x in Resources */ = {isa = PBXBuildFile; fileRef = 8A3B3789182C978A00D8EE08 /* iTunesArtwork@2x */; };
 		8A3B379B182CACDA00D8EE08 /* cell1.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A3B379A182CACDA00D8EE08 /* cell1.png */; };
+		8A532E9E1868A13C00BC5036 /* report.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A532E9C1868A13C00BC5036 /* report.png */; };
+		8A532E9F1868A13C00BC5036 /* reportHightlight.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A532E9D1868A13C00BC5036 /* reportHightlight.png */; };
 		8A620CF5182C28B000226F64 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A620CF4182C28B000226F64 /* Images.xcassets */; };
 		8A620CF9182C2FB700226F64 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A620CF6182C2FB700226F64 /* Default-568h@2x.png */; };
 		8A620CFA182C2FB700226F64 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A620CF7182C2FB700226F64 /* Default.png */; };
@@ -1100,6 +1102,8 @@
 		8A3B3788182C978A00D8EE08 /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		8A3B3789182C978A00D8EE08 /* iTunesArtwork@2x */ = {isa = PBXFileReference; lastKnownFileType = file; path = "iTunesArtwork@2x"; sourceTree = "<group>"; };
 		8A3B379A182CACDA00D8EE08 /* cell1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cell1.png; sourceTree = "<group>"; };
+		8A532E9C1868A13C00BC5036 /* report.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = report.png; sourceTree = "<group>"; };
+		8A532E9D1868A13C00BC5036 /* reportHightlight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reportHightlight.png; sourceTree = "<group>"; };
 		8A620CF4182C28B000226F64 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		8A620CF6182C2FB700226F64 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		8A620CF7182C2FB700226F64 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
@@ -2130,7 +2134,7 @@
 			name = CommentView;
 			sourceTree = "<group>";
 		};
-		30C4B6DC1817755E0002FE56 /* 自定义单元格 */ = {
+		30C4B6DC1817755E0002FE56 /* CustomCells */ = {
 			isa = PBXGroup;
 			children = (
 				30AFC17D183376B80021C266 /* 个人主页 */,
@@ -2141,7 +2145,7 @@
 				30C4B6DE181775730002FE56 /* 好友 */,
 				30C4B6DD1817756C0002FE56 /* 消息 */,
 			);
-			name = "自定义单元格";
+			name = CustomCells;
 			sourceTree = "<group>";
 		};
 		30C4B6DD1817756C0002FE56 /* 消息 */ = {
@@ -2171,12 +2175,14 @@
 			children = (
 				30C4B6EE18177A2B0002FE56 /* HomePageCell.h */,
 				30C4B6EF18177A2B0002FE56 /* HomePageCell.m */,
+				30C4B6F118177A410002FE56 /* HomePageCell.xib */,
 				8A2C396E18488EB9007A221C /* commenthightlight.png */,
 				8A2C396F18488EB9007A221C /* goodhightlight.png */,
 				8A2C396A18488BC7007A221C /* commint.png */,
 				8A2C396B18488BC7007A221C /* good.png */,
 				30C4B6F518177D040002FE56 /* arrow-1@2x.png */,
-				30C4B6F118177A410002FE56 /* HomePageCell.xib */,
+				8A532E9C1868A13C00BC5036 /* report.png */,
+				8A532E9D1868A13C00BC5036 /* reportHightlight.png */,
 				3001FA23181F4B74002E62E5 /* Change.h */,
 				3001FA24181F4B74002E62E5 /* Change.m */,
 			);
@@ -3092,7 +3098,7 @@
 				79B517AB18225E3100F776B9 /* JSONKit */,
 				79B5179818225BB900F776B9 /* 刷新 */,
 				30CF104418113D2400C25ABE /* 抽屉效果 */,
-				30C4B6DC1817755E0002FE56 /* 自定义单元格 */,
+				30C4B6DC1817755E0002FE56 /* CustomCells */,
 				303BC2C3182209AB004F20C4 /* 图片 */,
 			);
 			name = Resource;
@@ -4046,7 +4052,7 @@
 				ORGANIZATIONNAME = "王超";
 				TargetAttributes = {
 					30CF0F43180F659E00C25ABE = {
-						DevelopmentTeam = GJEL3SJ9F8;
+						DevelopmentTeam = 2N55Z2ABQ3;
 						SystemCapabilities = {
 							com.apple.GameCenter = {
 								enabled = 0;
@@ -4271,6 +4277,7 @@
 				8A6EEC95184A23C200AF7DF2 /* plusHight.png in Resources */,
 				8ACE511E182292D5001E9132 /* 2013-10-31 13:20:41 +0000.aac in Resources */,
 				300E6EE81823AC39006F4F0D /* 按钮-播放.png in Resources */,
+				8A532E9F1868A13C00BC5036 /* reportHightlight.png in Resources */,
 				7993815C1837A0D2002493F8 /* oranger.png in Resources */,
 				300E6EE91823AC39006F4F0D /* 按钮-播放@2x.png in Resources */,
 				7993815F1837A0D2002493F8 /* random.png in Resources */,
@@ -4286,6 +4293,7 @@
 				300A66AB18272ACC008D6F43 /* background2@2x.png in Resources */,
 				300A66AC18272ACC008D6F43 /* BG1@2x.png in Resources */,
 				8AF07D421840DE8800ACE2F0 /* DefaultHead.png in Resources */,
+				8A532E9E1868A13C00BC5036 /* report.png in Resources */,
 				300A66AD18272ACC008D6F43 /* BG1.png in Resources */,
 				798956A31848A7BD00F56106 /* white_.png in Resources */,
 				300A66AE18272ACC008D6F43 /* container.png in Resources */,
@@ -4859,8 +4867,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: YaYun Cui (QG9C9G6T78)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: YaYun Cui (QG9C9G6T78)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: hao xiao (F5JNPR77M6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: hao xiao (F5JNPR77M6)";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DianDianEr/DianDianEr-Prefix.pch";
@@ -4897,8 +4905,8 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer: YaYun Cui (QG9C9G6T78)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: YaYun Cui (QG9C9G6T78)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: hao xiao (F5JNPR77M6)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: hao xiao (F5JNPR77M6)";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DianDianEr/DianDianEr-Prefix.pch";
