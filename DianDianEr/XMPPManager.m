@@ -375,7 +375,7 @@ static XMPPManager *s_XMPPManager = nil;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Connect/disconnect
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (IBAction)registerInSide:(NSString *)userName andPassword:(NSString *)thePassword{
+- (void)registerInSide:(NSString *)userName andPassword:(NSString *)thePassword{
     isRegister = YES;
     NSError *err;
     NSString *tjid = [[NSString alloc] initWithFormat:@"%@@%@",userName,kDOMAIN];  //smack
@@ -399,8 +399,6 @@ static XMPPManager *s_XMPPManager = nil;
         [alertView show];
     }else
     {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"创建帐号成功" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        //        [alertView show];
         NSLog(@"成功注册啦");
     }
     

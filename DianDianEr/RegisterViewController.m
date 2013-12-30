@@ -196,9 +196,6 @@
         
         
         [[XMPPManager instence]registerInSide:userName.text andPassword:userPassword.text];
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"注册" message:@"注册中，请等待！" delegate:nil cancelButtonTitle:nil otherButtonTitles:@"好", nil];
-        //            [alertView show];
-        //            [self.navigationController popViewControllerAnimated:YES];
         return;
     }
     else
@@ -223,6 +220,7 @@
 
 -(void)leaveRegister
 {
+    [[XMPPManager instence]disconnect];
     [self.navigationController popViewControllerAnimated:YES];
 }
 @end
