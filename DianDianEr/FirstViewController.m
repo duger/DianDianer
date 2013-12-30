@@ -24,6 +24,8 @@
 #import "MapViewController.h"
 #import "CommentViewController.h"
 #import "Change.h"
+#import "MMProgressHUD.h"
+#import "MMProgressHUDOverlayView.h"
 
 
 @interface FirstViewController ()<NCMusicEngineDelegate>
@@ -532,6 +534,7 @@ static int indexCount = 1;
 -(void)reportAShare:(UIButton *)sender
 {
     UIActionSheet *actionSheet = [[UIActionSheet alloc]initWithTitle:nil delegate:nil cancelButtonTitle:@"取消" destructiveButtonTitle:@"举报" otherButtonTitles:nil , nil];
+    actionSheet.delegate = self;
     [actionSheet showInView:self.view];
     
 }
@@ -614,7 +617,23 @@ static int indexCount = 1;
     [NSTimer scheduledTimerWithTimeInterval:0.5 target:aTableView selector:@selector(reloadData) userInfo:nil repeats:NO];
 }
 
+#pragma mark - ActionSheet Delegate
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleFade];
+        [MMProgressHUD showWithTitle:@"" status:@"举报中"];
+        [NSTimer scheduledTimerWithTimeInterval:(arc4random()%200)/100.0f target:self selector:@selector(didMissProgressHUD) userInfo:nil repeats:NO];
+        
+        
+        
+    }
+}
 
+-(void)didMissProgressHUD
+{
+    [MMProgressHUD dismissWithSuccess:@"举报成功"];
+}
 
 
 - (void)dealloc

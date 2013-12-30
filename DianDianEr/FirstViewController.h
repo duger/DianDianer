@@ -15,7 +15,7 @@
 #import "MJRefresh.h"
 #import "RecordViewController.h"
 
-@interface FirstViewController : UIViewController<AwesomeMenuDelegate,CameraViewControllerDelegate,TuYaViewControllerDelegate,UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate,RecordViewControllerDelegate>
+@interface FirstViewController : UIViewController<AwesomeMenuDelegate,CameraViewControllerDelegate,TuYaViewControllerDelegate,UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate,RecordViewControllerDelegate,UIActionSheetDelegate>
 @property (nonatomic,retain) NSMutableArray *shareArray;
 - (IBAction)cicCLickZuoBian:(CustomItem *)sender;
 - (IBAction)didClickRight:(CustomItem *)sender;

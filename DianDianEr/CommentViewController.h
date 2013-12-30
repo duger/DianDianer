@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Share.h"
 #import "NCMusicEngine.h"
+#import "MMProgressHUD.h"
 
 @interface CommentViewController : UIViewController<UITextFieldDelegate,UITableViewDataSource,UITableViewDelegate,NCMusicEngineDelegate>
 

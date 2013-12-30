@@ -120,7 +120,7 @@ static ShareManager *s_shareMangager = nil;
     [body appendData:[content_Disposition1 dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[content_Type dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:imageData];
-    [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [body appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n",   boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[content_Disposition2 dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:[content_Type dataUsingEncoding:NSUTF8StringEncoding]];
     [body appendData:soundData];

@@ -458,23 +458,6 @@
     return YES;
 }
 
--(void) autoMovekeyBoard: (float) h{
-    
-    
-    UIToolbar *toolbar = (UIToolbar *)[self.view viewWithTag:TOOLBARTAG];
-    if (IS_IPHONE5) {
-        toolbar.frame = CGRectMake(0.0f, (float)(ScreenHeight-h-24.0), 320.0f, 44.0f);
-    }else{
-        toolbar.frame = CGRectMake(0.0f, (float)(ScreenHeight-h-42.0), 320.0f, 44.0f);
-    }
-//	UITableView *tableView = (UITableView *)[self.view viewWithTag:TABLEVIEWTAG];
-	self.tableView.frame = CGRectMake(0, 64, 320.0f,(float)(ScreenHeight-h-95.0));
-    if (self.chatArray.count > 5) {
-    [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chatArray count]-1 inSection:0]
-                          atScrollPosition: UITableViewScrollPositionBottom
-                                  animated:YES];
-    }
-}
 #pragma mark MJRefresh Delegate -进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
@@ -526,7 +509,7 @@
     [animationDurationValue getValue:&animationDuration];
     
     // Animate the resize of the text view's frame in sync with the keyboard's appearance.
-    [self autoMovekeyBoard:keyboardRect.size.height];
+    [self autoMovekeyBoard:keyboardRect.size.height andDuration:animationDuration];
 }
 
 
@@ -543,9 +526,34 @@
     [animationDurationValue getValue:&animationDuration];
     
     
-    [self autoMovekeyBoard:0];
+    [self autoMovekeyBoard:0 andDuration:animationDuration];
 }
 
+-(void) autoMovekeyBoard: (float)h andDuration:(NSTimeInterval)animationDuration{
+    
+    CATransition *animation = [CATransition animation];
+    animation.delegate = self;
+	animation.duration = animationDuration;
+	animation.timingFunction = UIViewAnimationCurveEaseInOut;
+	animation.type = kCATransitionFade;
+	animation.subtype = kCATransitionFromTop;
+
+    UIToolbar *toolbar = (UIToolbar *)[self.view viewWithTag:TOOLBARTAG];
+    [toolbar.layer addAnimation:animation forKey:@"chart"];
+    
+    if (IS_IPHONE5) {
+        toolbar.frame = CGRectMake(0.0f, (float)(ScreenHeight-h-24.0), 320.0f, 44.0f);
+    }else{
+        toolbar.frame = CGRectMake(0.0f, (float)(ScreenHeight-h-42.0), 320.0f, 44.0f);
+    }
+    //	UITableView *tableView = (UITableView *)[self.view viewWithTag:TABLEVIEWTAG];
+	self.tableView.frame = CGRectMake(0, 64, 320.0f,(float)(ScreenHeight-h-95.0));
+    if (self.chatArray.count > 5) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chatArray count]-1 inSection:0]
+                              atScrollPosition: UITableViewScrollPositionBottom
+                                      animated:YES];
+    }
+}
 
 
 

@@ -30,7 +30,8 @@
 
 
 - (IBAction)didClickResignButton:(UIButton *)sender;
-
+//返回用户名界面
+- (IBAction)goUpView:(UIButton *)sender;
 
 
 @end

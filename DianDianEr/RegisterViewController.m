@@ -52,7 +52,7 @@
     [self.view setFrame:CGRectMake(0, 0, 320, 1200)];
     
 //    [[NSNotificationCenter defaultCenter] addObserver:userName selector:@selector(goToSetPassWord:) name:UITextFieldTextDidEndEditingNotification object:nil];
-    [userName setCenter:CGPointMake(178, 280)];
+    [userName setCenter:CGPointMake(178, 278)];
     [nextStepButton setCenter:CGPointMake(160, 340)];
     [backButtonOne setCenter:CGPointMake(160, 440)];
     
@@ -121,7 +121,7 @@
 
 - (IBAction)didClickNextStepButton:(UIButton *)sender {
     [userName resignFirstResponder];
-    [UIView animateWithDuration:0.5 animations:^{
+    [UIView animateWithDuration:0.4 animations:^{
         [self.view setFrame:CGRectMake(0, -500, 320, 1400)];
     } completion:^(BOOL finished) {
 //        [userPassword becomeFirstResponder];
@@ -206,6 +206,17 @@
         NSLog(@"注册失败");
     }
 
+}
+
+- (IBAction)goUpView:(UIButton *)sender {
+    [UIView animateWithDuration:0.4 animations:^{
+        [self.view setFrame:CGRectMake(0, 0, 320, 1400)];
+    } completion:^(BOOL finished) {
+
+    }];
+
+    
+    
 }
 
 

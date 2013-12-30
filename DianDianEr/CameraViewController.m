@@ -377,7 +377,7 @@ static CameraViewController *s_CameraViewController = nil;
                  [ShareManager defaultManager].tempImagePath =filePath;
                  
                  
-                 NSLog(@"%@",filePath);
+//                 NSLog(@"%@",filePath);
                  if (![Singleton instance].fromCamera) {
                      [self.delegate didFinishImage:tempImage];
                  }
@@ -459,7 +459,7 @@ static CameraViewController *s_CameraViewController = nil;
     NSString *fullPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:@"currentImage.png"];
     NSData *imageData = UIImagePNGRepresentation(image);
     [imageData writeToFile:fullPath atomically:YES];
-    NSLog(@"%@\n",fullPath);
+//    NSLog(@"%@\n",fullPath);
 //    [self.delegate didFinishPickImage:fullPath];
     
     [ShareManager defaultManager].tempImagePath = fullPath;

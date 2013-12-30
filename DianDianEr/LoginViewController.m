@@ -21,9 +21,7 @@
 @end
 
 @implementation LoginViewController
-{
-    MMProgressHUD *progressHUD;
-}
+
 @synthesize userName;
 @synthesize userPassword;
 
@@ -84,10 +82,10 @@
     }
     
     [XMPPManager instence].delegate = self;
-    
+    //密码不显示
     self.userPassword.secureTextEntry = YES;
+    //点击屏幕去键盘
     UITapGestureRecognizer *tapGes = [[UITapGestureRecognizer alloc]initWithTarget:userPassword action:@selector(resignFirstResponder)];
-
     [tapGes addTarget:userName action:@selector(resignFirstResponder)];
     [self.view addGestureRecognizer:tapGes];
     
@@ -96,6 +94,13 @@
     self.userPassword.text = @"";
     
     [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleFade];
+    
+    //加个观察者去 使界面移动
+    //键盘弹出
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
+    //键盘收回
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -163,6 +168,37 @@
     }
     
 }
+#pragma mark - Keyboard Notification Mothods
+-(void)keyboardWillShow:(NSNotification *)notification
+{
+    NSDictionary *userInfo = [notification userInfo];
+    NSValue *animationDurationValue = [userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey];
+    NSTimeInterval animationDuration;
+    [animationDurationValue getValue:&animationDuration];
+    
+    CGRect keyboardRect = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey]CGRectValue];
+    CGFloat keyboardHeight = keyboardRect.size.height;
+    
+    [self autoMoveKeyboard:keyboardHeight andAnimationDuration:animationDuration];
+}
+
+-(void)keyboardWillHide:(NSNotification *)notification
+{
+    [self autoMoveKeyboard:160 andAnimationDuration:0];
+}
+
+
+-(void)autoMoveKeyboard:(CGFloat)keyBoardHeight andAnimationDuration:(NSTimeInterval)animationDuration
+{
+    [UIView animateWithDuration:0.3 animations:^{
+        self.view.frame = CGRectMake(0, 160 - keyBoardHeight, self.view.bounds.size.width, self.view.bounds.size.height);
+    }];
+
+    
+    
+    
+}
+
 
 #pragma mark - xmppmanager Delegate
 -(void)authenticateSuccessed

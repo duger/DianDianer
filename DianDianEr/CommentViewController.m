@@ -84,6 +84,7 @@
     NSLog(@"%@",[replytArray description]);
     
     
+    
     //随意点击去键盘
     UITapGestureRecognizer *tapGes = [[UITapGestureRecognizer alloc]initWithTarget:self.content action:@selector(resignFirstResponder)];
     [self.view addGestureRecognizer:tapGes];
@@ -109,8 +110,7 @@
     
     
     CGRect keyboardRect = [[userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    
-    CGFloat keyboardHeight =keyboardRect.size.height;
+    CGFloat keyboardHeight = keyboardRect.size.height;
     
     CATransition *animation = [CATransition animation];
 	animation.duration = animationDuration;
@@ -200,6 +200,7 @@
         CGRect labelRect = [self getShareLabelSize:self.shareFromFirstView.s_content];
         cell.shareContent.frame = CGRectMake(16 , 60, 300, labelRect.size.height);
         [cell.commentButton addTarget:self action:@selector(didClickComment) forControlEvents:UIControlEventTouchUpInside];
+        cell.commentButton.titleLabel.text = @"举报";
         if ([self.shareFromFirstView.s_image_url isEqualToString:@"http://124.205.147.26/student/class_10/team_seven/resource/images"])
         {
             
@@ -273,8 +274,20 @@
 #pragma mark - 点击查看单元格上的评论按钮
 -(void)didClickComment
 {
-    self.sendButton.title = @"评论";
-    [self.content becomeFirstResponder];
+//    self.sendButton.title = @"评论";
+//    [self.content becomeFirstResponder];
+    
+    self.sendButton.title = @"举报";
+    
+    [MMProgressHUD setPresentationStyle:MMProgressHUDPresentationStyleFade];
+    [MMProgressHUD showWithTitle:@"" status:@"举报中"];
+    [NSTimer scheduledTimerWithTimeInterval:(arc4random()%200)/100.0f target:self selector:@selector(didMissProgressHUD) userInfo:nil repeats:NO];
+
+}
+
+-(void)didMissProgressHUD
+{
+    [MMProgressHUD dismissWithSuccess:@"举报成功"];
 }
 
 #pragma mark -didClickPlayMp3Button-
@@ -314,6 +327,9 @@
     [ShareManager defaultManager].replyToID = cell.commentUserName.text;
     [ShareManager defaultManager].replyCommentID = cell.commentID;
 }
+
+
+
 
 #pragma mark - didClickSend
 - (IBAction)didClickSend:(UIBarButtonItem *)sender

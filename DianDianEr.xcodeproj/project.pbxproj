@@ -122,7 +122,6 @@
 		30AFC167183370B10021C266 /* Friendlist.m in Sources */ = {isa = PBXBuildFile; fileRef = 30AFC166183370B10021C266 /* Friendlist.m */; };
 		30AFC16D183370B20021C266 /* User.m in Sources */ = {isa = PBXBuildFile; fileRef = 30AFC16C183370B20021C266 /* User.m */; };
 		30AFC176183370B20021C266 /* Good.m in Sources */ = {isa = PBXBuildFile; fileRef = 30AFC175183370B20021C266 /* Good.m */; };
-		30AFC17A183372A70021C266 /* libmp3lame.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 30AFC179183372A70021C266 /* libmp3lame.a */; };
 		30AFC182183377060021C266 /* UserCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 30AFC181183377060021C266 /* UserCell.xib */; };
 		30AFC185183379630021C266 /* UserCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 30AFC184183379630021C266 /* UserCell.m */; };
 		30B2260D183D969800E57471 /* CommentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 30B2260C183D969800E57471 /* CommentViewController.m */; };
@@ -867,7 +866,6 @@
 		30AFC16C183370B20021C266 /* User.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = User.m; sourceTree = "<group>"; };
 		30AFC174183370B20021C266 /* Good.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Good.h; sourceTree = "<group>"; };
 		30AFC175183370B20021C266 /* Good.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Good.m; sourceTree = "<group>"; };
-		30AFC179183372A70021C266 /* libmp3lame.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libmp3lame.a; sourceTree = "<group>"; };
 		30AFC181183377060021C266 /* UserCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = UserCell.xib; sourceTree = "<group>"; };
 		30AFC183183379630021C266 /* UserCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UserCell.h; sourceTree = "<group>"; };
 		30AFC184183379630021C266 /* UserCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserCell.m; sourceTree = "<group>"; };
@@ -1846,7 +1844,6 @@
 				8AB114EB183CB03800BF5EA9 /* libidn.a in Frameworks */,
 				798677BD18193D98007444D5 /* MapKit.framework in Frameworks */,
 				8A6878B21818F86300F77266 /* CFNetwork.framework in Frameworks */,
-				30AFC17A183372A70021C266 /* libmp3lame.a in Frameworks */,
 				8A6878B01818F85500F77266 /* Security.framework in Frameworks */,
 				8A2844C91818E0C300DBB3DC /* libresolv.dylib in Frameworks */,
 				8A6878AE1818F83900F77266 /* SystemConfiguration.framework in Frameworks */,
@@ -3923,7 +3920,6 @@
 				8AE944E8181FE663001490C0 /* Singleton.h */,
 				8AE944E9181FE663001490C0 /* Singleton.m */,
 				79E5B67B1833AFFD00D9AB05 /* libmp3lame.a */,
-				30AFC179183372A70021C266 /* libmp3lame.a */,
 				8ACE511D182292D5001E9132 /* 2013-10-31 13:20:41 +0000.aac */,
 				8AE944EB181FE66C001490C0 /* test.mp3 */,
 				8AE944EC181FE66C001490C0 /* test.png */,
