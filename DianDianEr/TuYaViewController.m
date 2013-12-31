@@ -102,7 +102,7 @@ static float height;
     
         //控制 画图颜色和大小 按钮
     bigButton = [[UIButton alloc] initWithFrame:CGRectMake(0, height - 20 , 30, 30)];
-    [bigButton setImage:[UIImage imageNamed:@"PCB"] forState:UIControlStateNormal];
+    [bigButton setImage:[UIImage imageNamed:@"pencover"] forState:UIControlStateNormal];
     [self.view addSubview:bigButton];
     [bigButton addTarget:self action:@selector(openColorAndWitdth) forControlEvents:UIControlEventTouchUpInside];
     
@@ -119,7 +119,7 @@ static float height;
     
     //控制 画笔样式控制 按钮
     UIButton *burshShape = [[UIButton alloc] initWithFrame:CGRectMake(kWIDTH_SCREEN - 30, height - 20 , 30, 30)];
-    [burshShape setImage:[UIImage imageNamed:@"PCB"] forState:UIControlStateNormal];
+    [burshShape setImage:[UIImage imageNamed:@"sharecover"] forState:UIControlStateNormal];
     [self.view addSubview:burshShape];
     [burshShape addTarget:self action:@selector(selectShape) forControlEvents:UIControlEventTouchUpInside];
     //显示当前画笔样式 默认曲线
@@ -144,7 +144,7 @@ static float height;
                 brushButton.center = CGPointMake(20+30*i + i*i,  bigButton.center.y);
             } completion:^(BOOL finished) {
                 [UIButton animateWithDuration:0.35 +0.005*i animations:^{
-                    colorButton.frame = CGRectMake(0, height - 20 - 28*i, 30, 22);
+                    colorButton.frame = CGRectMake(1, height - 20 - 28*i, 28, 25);
                     brushButton.center = CGPointMake(20+30*i, bigButton.center.y);
                 }];
             }];
@@ -155,7 +155,7 @@ static float height;
             UIButton * colorButton = (UIButton *)[self.view viewWithTag:100+i];
             UIButton * brushButton = (UIButton *)[self.view viewWithTag:1000+i];
             [UIButton animateWithDuration:0.35 +0.005*i animations:^{
-                colorButton.frame = CGRectMake(0, height - 20+5, 30, 22);
+                colorButton.frame = CGRectMake(1, height - 20+3, 28, 25);
                 brushButton.frame = CGRectMake(0, height - 20, 30, 30);
             }];
         }
@@ -737,7 +737,7 @@ BOOL isExpend;
     for (int i = 1; i <= colorArray.count; i++)
     {
         //画笔颜色 按钮
-        UIButton * color = [[UIButton alloc] initWithFrame:CGRectMake(0, height - 20 , 30, 22)];
+        UIButton * color = [[UIButton alloc] initWithFrame:CGRectMake(1, height - 20 , 28, 25)];
         color.hidden = YES;
         color.backgroundColor = [colorArray objectAtIndex:i-1];
         [self.view addSubview:color];

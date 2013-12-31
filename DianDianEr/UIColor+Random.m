@@ -21,9 +21,9 @@
 
 + (UIColor *)customBlue //1  蓝
 {
-    CGFloat red =  36/ 255.0f;
-	CGFloat green = 0 /  255.0f;
-	CGFloat blue = 255 /  255.0f;
+    CGFloat red =  0 / 255.0f;
+	CGFloat green = 123 /  255.0f;
+	CGFloat blue = 187 /  255.0f;
 	return [UIColor colorWithRed:red green:green blue:blue alpha:1.0f];
 }
 + (UIColor *)customGreen // 2 绿

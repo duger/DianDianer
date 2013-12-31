@@ -839,23 +839,8 @@
                                 <rect key="frame" x="0.0" y="476" width="320" height="72"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="EKK-sd-txd">
-                                        <rect key="frame" x="99" y="2" width="38" height="34"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" backgroundImage="undo.png">
-                                            <color key="titleColor" red="0.098233401264389092" green="0.17046332318390012" blue="0.96123471467391308" alpha="1" colorSpace="calibratedRGB"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <state key="highlighted">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="undo:" destination="DJW-QX-Zah" eventType="touchUpInside" id="Uv1-In-ZDO"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="QSe-Fj-G51">
-                                        <rect key="frame" x="54" y="3" width="40" height="34"/>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="EKK-sd-txd">
+                                        <rect key="frame" x="99" y="0.0" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" backgroundImage="redo.png">
@@ -866,14 +851,29 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
+                                            <action selector="undo:" destination="DJW-QX-Zah" eventType="touchUpInside" id="Uv1-In-ZDO"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="QSe-Fj-G51">
+                                        <rect key="frame" x="54" y="0.0" width="30" height="30"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
+                                        <state key="normal" backgroundImage="undo.png">
+                                            <color key="titleColor" red="0.098233401264389092" green="0.17046332318390012" blue="0.96123471467391308" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <state key="highlighted">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
                                             <action selector="redo:" destination="DJW-QX-Zah" eventType="touchUpInside" id="pii-lW-g2i"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6LK-YP-vtm">
-                                        <rect key="frame" x="140" y="4" width="40" height="30"/>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="6LK-YP-vtm">
+                                        <rect key="frame" x="140" y="0.0" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" backgroundImage="Bin-Empty.png">
+                                        <state key="normal" backgroundImage="clear.png">
                                             <color key="titleColor" red="0.098233401264389092" green="0.17046332318390012" blue="0.96123471467391308" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -881,11 +881,11 @@
                                             <action selector="clear:" destination="DJW-QX-Zah" eventType="touchUpInside" id="STL-9b-77Q"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="PIx-jF-ivq">
-                                        <rect key="frame" x="184" y="4" width="35" height="34"/>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="PIx-jF-ivq">
+                                        <rect key="frame" x="184" y="0.0" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                        <state key="normal" backgroundImage="changeBackground.png">
+                                        <state key="normal" backgroundImage="picker.png">
                                             <color key="titleColor" red="0.098233401264389092" green="0.17046332318390012" blue="0.96123471467391308" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -896,8 +896,8 @@
                                             <action selector="changebackround:" destination="DJW-QX-Zah" eventType="touchUpInside" id="h5c-FD-w9B"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8Ex-ui-fPW">
-                                        <rect key="frame" x="226" y="8" width="34" height="25"/>
+                                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="8Ex-ui-fPW">
+                                        <rect key="frame" x="226" y="0.0" width="30" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
                                         <state key="normal" backgroundImage="save.png">
@@ -1429,12 +1429,11 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Bin-Empty.png" width="114" height="114"/>
         <image name="List-icon.png" width="47" height="29"/>
         <image name="Profile.png" width="298" height="173"/>
         <image name="Settings-bg.png" width="34" height="29"/>
         <image name="WP-Logo-.png" width="77" height="24"/>
-        <image name="changeBackground.png" width="114" height="114"/>
+        <image name="clear.png" width="49" height="48"/>
         <image name="compose_camerabutton_background.png" width="48" height="48"/>
         <image name="compose_camerabutton_background_highlighted.png" width="48" height="48"/>
         <image name="compose_split.png" width="4" height="92"/>
@@ -1442,13 +1441,14 @@
         <image name="icon1.png" width="67" height="57"/>
         <image name="navigationbar_interest.png" width="48" height="48"/>
         <image name="navigationbar_interest_highlighted.png" width="24" height="24"/>
+        <image name="picker.png" width="49" height="49"/>
         <image name="plus.png" width="50" height="50"/>
         <image name="plusHight.png" width="50" height="50"/>
-        <image name="redo.png" width="114" height="114"/>
-        <image name="save.png" width="114" height="114"/>
+        <image name="redo.png" width="44" height="49"/>
+        <image name="save.png" width="49" height="48"/>
         <image name="settings_theme_icon.png" width="48" height="48"/>
         <image name="theme_icon2.png" width="48" height="48"/>
-        <image name="undo.png" width="114" height="114"/>
+        <image name="undo.png" width="44" height="49"/>
         <image name="录音.png" width="40" height="40"/>
         <image name="播放按钮.png" width="40" height="40"/>
         <image name="未标题-1.png" width="15" height="25"/>
