@@ -245,7 +245,7 @@ static float height;
             break;
     }
     //更新显示画图颜色和大小按钮的状态
-    showColoraAndWidth.backgroundColor = [colorArray objectAtIndex:sender.tag -101];
+//    showColoraAndWidth.backgroundColor = [colorArray objectAtIndex:sender.tag -101];
     [showColoraAndWidth setImage:[UIImage imageNamed:[brushImageArray objectAtIndex:sender.tag - 101] ] forState:UIControlStateNormal];
     
     for (int i = 1; i <= brushImageArray.count; i++)
@@ -355,7 +355,6 @@ static float height;
 }
 - (IBAction)undo:(UIButton *)sender    //重做
 {
-    NSLog(@"chongzuo");
     [aPainterView redoLatestStep];
     [self updateButtonStatus];
 }
@@ -679,7 +678,7 @@ BOOL isExpend;
 - (void)initPainterView  //初始化  画板
 {
     
-  
+  //
     //241*322
     if (IS_IPHONE5) {
         if (IS_IPHONE5SCREEN) {
