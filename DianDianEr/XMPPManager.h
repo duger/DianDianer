@@ -125,7 +125,7 @@
 ///my method
 -(void)showAlertView:(NSString *)message;
 
-@property (nonatomic,assign) id<XMPPManagerDelegate> delegate;
+@property (nonatomic,weak) id<XMPPManagerDelegate> delegate;
 
 @end
 

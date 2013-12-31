@@ -40,7 +40,7 @@
     [super viewDidLoad];
     //先连接 再注册
     [XMPPManager instence].delegate = self;
-    [[XMPPManager instence] connect];
+    
     
     if (IS_IPHONE5) {
        
@@ -220,7 +220,7 @@
 
 -(void)leaveRegister
 {
-    [[XMPPManager instence]disconnect];
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 @end

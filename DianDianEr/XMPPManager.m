@@ -382,7 +382,7 @@ static XMPPManager *s_XMPPManager = nil;
     password = thePassword;
     XMPPJID *jid = [XMPPJID jidWithString:tjid resource:@"DianDianer"];
     [xmppStream setMyJID:jid];
-    
+   
     
     if (![xmppStream connectWithTimeout:XMPPStreamTimeoutNone error:&err]) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"连接服务器失败" message:[err localizedDescription] delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -827,6 +827,9 @@ static XMPPManager *s_XMPPManager = nil;
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"创建帐号成功" message:@"创建成功！" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
     [alertView show];
     [self.delegate leaveRegister];
+    
+    isXmppConnected = NO;
+    [xmppStream disconnect];
 }
 - (void)xmppStream:(XMPPStream *)sender didNotRegister:(NSXMLElement *)error {
     DDLogVerbose(@"%@: %@", THIS_FILE, THIS_METHOD);
@@ -903,9 +906,9 @@ static XMPPManager *s_XMPPManager = nil;
 	isXmppConnected = YES;
 	
 	NSError *error = nil;
-    if (isRegister == YES) {
+    if (isRegister) {
         [self _registerNow];
-        isRegister = NO;
+        isRegister = !isRegister;
         return;
     }
 	
@@ -921,7 +924,10 @@ static XMPPManager *s_XMPPManager = nil;
 {
 	NSLog(@"xmppStreamDidAuthenticate");
     if (![xmppStream.myJID.user isEqualToString:@"guest"]) {
-        [self.delegate authenticateSuccessed];
+        if (self.delegate && [self.delegate respondsToSelector:@selector(authenticateSuccessed)]) {
+            [self.delegate authenticateSuccessed];
+        }
+        
     }
     
 	[self goOnline];

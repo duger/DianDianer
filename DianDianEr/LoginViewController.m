@@ -49,7 +49,7 @@
             [self.topView setFrame: CGRectMake(0, 170, 320, 330)];
         }
 
-        
+    [XMPPManager instence].delegate = self;
     
     
     
@@ -81,7 +81,7 @@
         self.userPassword.text = [[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyPassword];
     }
     
-    [XMPPManager instence].delegate = self;
+
     //密码不显示
     self.userPassword.secureTextEntry = YES;
     //点击屏幕去键盘
@@ -108,6 +108,8 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+
 
 
 - (void)viewDidUnload {
