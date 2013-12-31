@@ -139,7 +139,10 @@
 {
 
     
-    [MMProgressHUD showWithTitle:@"登陆" status:@"请稍等..."];
+//    [MMProgressHUD showWithTitle:@"登陆" status:@"请稍等..."];
+    [MMProgressHUD showWithTitle:@"登陆" status:@"连接中..." cancelBlock:^{
+        [[XMPPManager instence].xmppStream disconnect];
+    }];
        
     if ( [self.userName.text isEqualToString:@""]||[self.userPassword.text isEqualToString:@""])
     {
