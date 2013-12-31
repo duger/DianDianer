@@ -41,9 +41,7 @@
         
         FriendsViewController *firendsVC = [self.storyboard instantiateViewControllerWithIdentifier:@"FriendsViewController"];
         firendsVC.delegate = self;
-//        UIBarButtonItem *backItem = [[UIBarButtonItem alloc]initWithTitle:@"返回" style:UIBarButtonItemStyleBordered target:nil action:nil];
-//        self.navigationItem.backBarButtonItem = backItem;
-//        MessagesViewController *messageVC = [self.storyboard instantiateViewControllerWithIdentifier:@"MessagesViewController"];
+
 
         MapViewController *mapVC = [self.storyboard instantiateViewControllerWithIdentifier:@"MapViewController"];
 
@@ -51,7 +49,7 @@
         [self setViewControllers:[NSMutableArray arrayWithObjects:
                                                firendsVC,
                                                mapVC,nil]];
-        [self.tabBarController.view setFrame:CGRectMake(0, 0, 320, 230)];
+//        [self.tabBarController.view setFrame:CGRectMake(0, 0, 320, 230)];
         
         
     }

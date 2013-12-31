@@ -52,7 +52,7 @@ static CameraViewController *s_CameraViewController = nil;
     if (IS_IPHONE5) {
         bottnView = [[UIView alloc]initWithFrame:CGRectMake(0, ScreenHeight- 40, 320, 60)];
     }
-    bottnView.backgroundColor = [UIColor purpleColor];
+    bottnView.backgroundColor = [UIColor colorWithRed:60 green:68 blue:77 alpha:1];
     
     
     

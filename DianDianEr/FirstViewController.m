@@ -120,10 +120,10 @@ static int indexCount = 1;
     UIImage *storyMenuItemImage = [UIImage imageNamed:@"bg-menuitem.png"];
     UIImage *storyMenuItemImagePressed = [UIImage imageNamed:@"bg-menuitem-highlighted.png"];
     
-    UIImage *star1 = [UIImage imageNamed:@"plane.png"];
+    UIImage *star1 = [UIImage imageNamed:@"chart.png"];
     UIImage *star2 = [UIImage imageNamed:@"photo.png"];
     UIImage *star3 = [UIImage imageNamed:@"audio.png"];
-    UIImage *star4 = [UIImage imageNamed:@"painting.png"];
+    UIImage *star4 = [UIImage imageNamed:@"paint.png"];
     
     starMenuItem1 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
                                           highlightedImage:storyMenuItemImagePressed

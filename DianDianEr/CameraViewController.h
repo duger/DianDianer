@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "GPUImage.h"
 @protocol CameraViewControllerDelegate <NSObject>
+@optional
 -(void)didFinishPickImage:(NSString *)imagePath;
 -(void)goToShare;
 -(void)didFinishImage:(UIImage *)CurrentImage;

@@ -9,6 +9,7 @@
 #import "FriendsViewController.h"
 #import "ChartViewController.h"
 #import "XMPPManager.h"
+#import "FriendCell.h"
 
 @interface FriendsViewController ()
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -42,6 +43,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self.friendsTableView registerNib:[UINib nibWithNibName:@"FriendCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"FriendCell"];
     
     [[XMPPManager instence]setFriendsHeadImage];
     
@@ -142,10 +145,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"friendsCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    cell.imageView.image = [UIImage imageNamed:@"list.png"];
-    [cell.imageView setContentMode:UIViewContentModeScaleAspectFill];
+    static NSString *CellIdentifier = @"FriendCell";
+    FriendCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    
+//    [cell.imageView setContentMode:UIViewContentModeScaleAspectFill];
     // Configure the cell...
 //    XMPPUserCoreDataStorageObject *object = [self.dataArray objectAtIndex:indexPath.row];
 //    NSString *name = [object displayName];
@@ -158,12 +161,12 @@
 //    cell.textLabel.text = name;
 //    cell.detailTextLabel.text = [[[object primaryResource] presence] status];
 //    cell.tag = indexPath.row;
-    UILabel *label = [[UILabel alloc]initWithFrame:CGRectMake(25, 10, 240, 30)];
-    [cell addSubview:label];
-    label.text = self.friendsList[indexPath.row];
+
     
-    label.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0];
-    label.textColor = [UIColor whiteColor];
+    cell.nameLabel.text = self.friendsList[indexPath.row];
+
+
+//    [cell insertSubview:cell.textLabel aboveSubview:cell.imageView];
     
     return cell;
 }

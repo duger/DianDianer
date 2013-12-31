@@ -10,6 +10,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <AVFoundation/AVFoundation.h>
 @protocol RecordViewControllerDelegate <NSObject>
+@optional
 -(void)recordGoToShare;
 @end
 @interface RecordViewController : UIViewController<AVAudioRecorderDelegate>
