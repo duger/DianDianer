@@ -24,6 +24,7 @@
 @property (nonatomic,assign) BOOL isUploadingShare;
 @property (nonatomic,assign) BOOL isUploadingReply;
 @property (nonatomic,assign) BOOL isUploadingGood;
+//@property (nonatomic,assign) BOOL is
 
 + (Singleton *)instance;
 

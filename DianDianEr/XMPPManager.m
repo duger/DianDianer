@@ -23,6 +23,7 @@
 #import "NSData+Base64.h"
 #import "NSString+Base64.h"
 #import "XMPPManager.h"
+#import "Singleton.h"
 
 #import <CFNetwork/CFNetwork.h>
 #if DEBUG
@@ -65,6 +66,7 @@ static XMPPManager *s_XMPPManager = nil;
 @synthesize friendList;
 @synthesize headImages;
 
+@synthesize fetchedResultsController;
 
 #define tag_subcribe_alertView 10
 
@@ -183,11 +185,10 @@ static XMPPManager *s_XMPPManager = nil;
     
 	[xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
 	[xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
-    [xmppvCardTempModule addDelegate:self delegateQueue:dispatch_get_main_queue()];
+
     [xmppSearch addDelegate:self delegateQueue:dispatch_get_main_queue()];
-    [xmppvCardAvatarModule addDelegate:self delegateQueue:dispatch_get_main_queue()];
-    [xmppCapabilities addDelegate:self delegateQueue:dispatch_get_main_queue()];
-    [xmppReconnect addDelegate:self delegateQueue:dispatch_get_main_queue()];
+
+
 	
     [xmppStream setHostName:kHOSTNAME];
     [xmppStream setHostPort:5222];
@@ -489,6 +490,7 @@ static XMPPManager *s_XMPPManager = nil;
 - (void)printCoreData:(id)sender {
     NSManagedObjectContext *context = [xmppMessageArchivingCoreDataStorage mainThreadManagedObjectContext];
     NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"XMPPMessageArchiving_Message_CoreDataObject" inManagedObjectContext:context];
+//    NSEntityDescription *entityDescription = [NSEntityDescription entityForName:@"XMPPMessageArchiving_Contact_CoreDataObject" inManagedObjectContext:context];
     NSFetchRequest *request = [[NSFetchRequest alloc]init];
     [request setEntity:entityDescription];
     NSError *error ;
@@ -507,6 +509,8 @@ static XMPPManager *s_XMPPManager = nil;
             NSLog(@"body param is %@",message.body);
             NSLog(@"timestamp param is %@",message.timestamp);
             NSLog(@"outgoing param is %d",[message.outgoing intValue]);
+            NSLog(@"streamBareJidStr is %@",message.streamBareJidStr);
+            NSLog(@"thread is %@",message.thread);
         }
     }
 }
@@ -720,7 +724,7 @@ static XMPPManager *s_XMPPManager = nil;
     [self connect];
 }
 
-- (IBAction)sendMessage:(id)sender {
+- (void)sendMessage:(id)sender {
     NSXMLElement *xmlBody = [NSXMLElement elementWithName:@"body"];
     [xmlBody setStringValue:self.messageTextField.text];
     NSXMLElement *xmlMessage = [NSXMLElement elementWithName:@"message"];
@@ -1238,12 +1242,15 @@ static XMPPManager *s_XMPPManager = nil;
         
 		if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
 		{
-            //			UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:displayName
-            //                                                                message:body
-            //                                                               delegate:nil
-            //                                                      cancelButtonTitle:@"Ok"
-            //                                                      otherButtonTitles:nil];
-            //			[alertView show];
+            if (![[Singleton instance]isCharting]) {
+                UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+                localNotification.alertAction = @"Ok";
+                localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",displayName,body];
+                
+                [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+            }
+            
+            
 		}
 		else
 		{
@@ -1389,6 +1396,9 @@ static XMPPManager *s_XMPPManager = nil;
     UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:nil message:message delegate:self cancelButtonTitle:@"ok" otherButtonTitles:nil, nil];
     [alertView show];
 }
+
+
+
 
 #pragma mark - ChartList Method
 -(NSArray *)startLoadMessages:(NSString *)toJid

@@ -10,6 +10,7 @@
 #import "ChartViewController.h"
 #import "XMPPManager.h"
 #import "FriendCell.h"
+#import "DDLog.h"
 
 @interface FriendsViewController ()
 @property (nonatomic, strong) NSMutableArray *dataArray;
@@ -19,6 +20,10 @@
 {
     UITextField *newFriend;
 }
+
+@synthesize fetchedResultsController;
+
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -133,14 +138,46 @@
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     // Return the number of sections.
-    return 1;
+    return [[[self fetchedResultsController]sections]count];
 }
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)sectionIndex
+{
+	NSArray *sections = [[self fetchedResultsController] sections];
+	
+	if (sectionIndex < [sections count])
+	{
+		id <NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:sectionIndex];
+        
+		int section = [sectionInfo.name intValue];
+		switch (section)
+		{
+			case 0  : return @"Available";
+			case 1  : return @"Away";
+			default : return @"Offline";
+		}
+	}
+	
+	return @"";
+}
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
 //    return [[XMPPManager instence].chartListsForCurrentUser count];
-    return [self.friendsList count];
+//    return [self.friendsList count];
+    NSArray *sections = [[self fetchedResultsController] sections];
+    NSLog(@"sectons %d",[sections count]);
+	
+	if (section < [sections count])
+	{
+		id <NSFetchedResultsSectionInfo> sectionInfo = [sections objectAtIndex:section];
+        
+		return sectionInfo.numberOfObjects;
+	}
+	
+	return 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -162,13 +199,37 @@
 //    cell.detailTextLabel.text = [[[object primaryResource] presence] status];
 //    cell.tag = indexPath.row;
 
+    XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     
-    cell.nameLabel.text = self.friendsList[indexPath.row];
-
+    
+//    cell.nameLabel.text = self.friendsList[indexPath.row];
+    cell.nameLabel.text = user.displayName;
+    [self configurePhotoForCell:cell user:user];
 
 //    [cell insertSubview:cell.textLabel aboveSubview:cell.imageView];
     
     return cell;
+}
+
+
+- (void)configurePhotoForCell:(FriendCell *)cell user:(XMPPUserCoreDataStorageObject *)user
+{
+	// Our xmppRosterStorage will cache photos as they arrive from the xmppvCardAvatarModule.
+	// We only need to ask the avatar module for a photo, if the roster doesn't have it.
+	
+	if (user.photo != nil)
+	{
+		cell.headImage.image = user.photo;
+	}
+	else
+	{
+		NSData *photoData = [[[XMPPManager instence] xmppvCardAvatarModule] photoDataForJID:user.jid];
+        
+		if (photoData != nil)
+			cell.headImage.image = [UIImage imageWithData:photoData];
+		else
+			cell.headImage.image = [UIImage imageNamed:@"Icon-72.png"];
+	}
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -217,6 +278,8 @@
 }
 
 - (IBAction)didClikAddFriendsButton:(UIButton *)sender {
+    //打印聊天列表
+    [[XMPPManager instence]printCoreData:nil];
 
     if ([newFriend.text isEqualToString:@""]) {
         return;
@@ -225,4 +288,54 @@
     newFriend.text = @"";
     }
 }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark NSFetchedResultsController
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+- (NSFetchedResultsController *)fetchedResultsController
+{
+	if (fetchedResultsController == nil)
+	{
+		NSManagedObjectContext *moc = [[XMPPManager instence] managedObjectContext_roster];
+		
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPUserCoreDataStorageObject"
+		                                          inManagedObjectContext:moc];
+		
+		NSSortDescriptor *sd1 = [[NSSortDescriptor alloc] initWithKey:@"sectionNum" ascending:YES];
+		NSSortDescriptor *sd2 = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES];
+		
+		NSArray *sortDescriptors = [NSArray arrayWithObjects:sd1, sd2, nil];
+		
+		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+		[fetchRequest setEntity:entity];
+		[fetchRequest setSortDescriptors:sortDescriptors];
+		[fetchRequest setFetchBatchSize:10];
+		
+		fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+		                                                               managedObjectContext:moc
+		                                                                 sectionNameKeyPath:@"sectionNum"
+		                                                                          cacheName:nil];
+		[fetchedResultsController setDelegate:self];
+		
+		
+		NSError *error = nil;
+		if (![fetchedResultsController performFetch:&error])
+		{
+//			DDLogError(@"Error performing fetch: %@", error);
+            NSLog(@"Error performing fetch: %@", error);
+		}
+        
+	}
+	
+	return fetchedResultsController;
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+	[[self friendsTableView] reloadData];
+}
+
+
 @end

@@ -22,7 +22,7 @@
 
 @end
 
-@interface XMPPManager : NSObject<XMPPRosterDelegate,XMPPvCardTempModuleDelegate,XMPPManagerDelegate>
+@interface XMPPManager : NSObject<XMPPRosterDelegate,XMPPvCardTempModuleDelegate>
 {
 	XMPPStream *xmppStream;
 	XMPPReconnect *xmppReconnect;
@@ -52,6 +52,8 @@
     GCDAsyncSocket *mySocket;
     AVAudioRecorder *recorder;
     NSURL *urlPlay;
+    
+    NSFetchedResultsController *fetchedResultsController;
     
 }
 ///单例
@@ -126,6 +128,9 @@
 -(void)showAlertView:(NSString *)message;
 
 @property (nonatomic,weak) id<XMPPManagerDelegate> delegate;
+
+
+@property(nonatomic,strong) NSFetchedResultsController *fetchedResultsController;
 
 @end
 
