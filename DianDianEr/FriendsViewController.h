@@ -11,9 +11,9 @@
 -(void)goToChartroom;
 @end
 
-@interface FriendsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,XMPPManagerDelegate,NSFetchedResultsControllerDelegate>
+@interface FriendsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,NSFetchedResultsControllerDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *friendsTableView;
-@property(retain,nonatomic) NSMutableArray *friendsList;
+
 
 - (IBAction)didClikAddFriendsButton:(UIButton *)sender;
 
@@ -24,6 +24,6 @@
 
 @property(nonatomic,assign) id<FriendsViewControllerDelegate> delegate;
 
-
+//xmppRoser结果
 @property(nonatomic,strong) NSFetchedResultsController *fetchedResultsController;
 @end

@@ -151,10 +151,10 @@ static XMPPManager *s_XMPPManager = nil;
     //      xmppRosterStorage = [[XMPPRosterCoreDataStorage alloc] initWithInMemoryStore];
 	
 	xmppRoster = [[XMPPRoster alloc] initWithRosterStorage:xmppRosterStorage];
-	
+
 	xmppRoster.autoFetchRoster = YES;
 	xmppRoster.autoAcceptKnownPresenceSubscriptionRequests = YES;
-	
+
 	
 	xmppvCardStorage = [XMPPvCardCoreDataStorage sharedInstance];
 	xmppvCardTempModule = [[XMPPvCardTempModule alloc] initWithvCardStorage:xmppvCardStorage];
@@ -171,6 +171,11 @@ static XMPPManager *s_XMPPManager = nil;
     
     xmppSearch = [[XMPPSearch alloc]init];
     
+    
+    xmppMessageArchivingCoreDataStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
+    xmppMessageArchivingModule = [[XMPPMessageArchiving alloc]initWithMessageArchivingStorage:xmppMessageArchivingCoreDataStorage];
+    [xmppMessageArchivingModule setClientSideMessageArchivingOnly:YES];
+    
 	// Activate xmpp modules
     
 	[xmppReconnect         activate:xmppStream];
@@ -179,7 +184,7 @@ static XMPPManager *s_XMPPManager = nil;
 	[xmppvCardAvatarModule activate:xmppStream];
 	[xmppCapabilities      activate:xmppStream];
     [xmppSearch            activate:xmppStream];
-    
+    [xmppMessageArchivingModule activate:xmppStream];
     
 	// Add ourself as a delegate to anything we may be interested in
     
@@ -187,7 +192,7 @@ static XMPPManager *s_XMPPManager = nil;
 	[xmppRoster addDelegate:self delegateQueue:dispatch_get_main_queue()];
 
     [xmppSearch addDelegate:self delegateQueue:dispatch_get_main_queue()];
-
+    [xmppMessageArchivingModule addDelegate:self delegateQueue:dispatch_get_main_queue()];
 
 	
     [xmppStream setHostName:kHOSTNAME];
@@ -196,12 +201,7 @@ static XMPPManager *s_XMPPManager = nil;
     allowSelfSignedCertificates = NO;
 	allowSSLHostNameMismatch = NO;
     
-    xmppMessageArchivingCoreDataStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
-    xmppMessageArchivingModule = [[XMPPMessageArchiving alloc]initWithMessageArchivingStorage:xmppMessageArchivingCoreDataStorage];
-    [xmppMessageArchivingModule setClientSideMessageArchivingOnly:YES];
-    [xmppMessageArchivingModule activate:xmppStream];
-    [xmppMessageArchivingModule addDelegate:self delegateQueue:dispatch_get_main_queue()];
-    
+
     
    chartListsForCurrentUser = [[DiandianCoreDataManager shareDiandianCoreDataManager]allChartListWithRecentMessagesForUser:[[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID]];
     
@@ -214,7 +214,7 @@ static XMPPManager *s_XMPPManager = nil;
         NSString *chartListName = [item.chartList_id substringFromIndex:krange.location + 1];
         [self.roster addObject:chartListName];
     }
-    NSLog(@"数据库调出来的好友列表%@",self.roster);
+//    NSLog(@"数据库调出来的好友列表%@",self.roster);
     
     //    [self setFriendsHeadImage];
     
@@ -373,9 +373,8 @@ static XMPPManager *s_XMPPManager = nil;
 }
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark Connect/disconnect
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//注册
 - (void)registerInSide:(NSString *)userName andPassword:(NSString *)thePassword{
     isRegister = YES;
     NSError *err;
@@ -415,6 +414,9 @@ static XMPPManager *s_XMPPManager = nil;
     
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark Send Messager
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (IBAction)uploadAudio:(id)sender {
     //ca9f3948472ebbe940fbc16f76bccb95
     //    NSURL *recordedFile = [NSURL URLWithString:[[NSBundle mainBundle]pathForResource:@"endgame" ofType:@"wav"]];
@@ -530,7 +532,9 @@ static XMPPManager *s_XMPPManager = nil;
         NSLog(@"data not save to database : %@",error.description);
     }
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark Connect/disconnect
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (BOOL)connect
 {
     if (![xmppStream isDisconnected]) {
@@ -996,8 +1000,12 @@ static XMPPManager *s_XMPPManager = nil;
     //尝试将好友写入本地数据库
     NSLog(@"%@",xmppStream.myJID);
     
-    [self.delegate reloadTableView];
-    [[DiandianCoreDataManager shareDiandianCoreDataManager]addChartListFromFriends:self.roster];
+//    //代理  刷新好友列表
+//    if (self.delegate && [self.delegate respondsToSelector:@selector(reloadTableView)]) {
+//        [self.delegate reloadTableView];
+//    }
+//    //将好友列表写入数据库
+//    [[DiandianCoreDataManager shareDiandianCoreDataManager]addChartListFromFriends:self.roster];
     
     
 	return YES;
@@ -1266,17 +1274,50 @@ static XMPPManager *s_XMPPManager = nil;
 
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
 {
-    //    NSLog(@"didReceivePresence : %@",presence.description);
+       NSLog(@"didReceivePresence : %@",presence.description);
     //    if (![presence.type isEqualToString:@"error"]) {
     //        self.jidWithResouce = presence.fromStr;
     //    }
     //    NSLog(@"jidWithResouce : %@",jidWithResouce);
+    
+}
+
+-(void)xmppRoster:(XMPPRoster *)sender didReceivePresenceSubscriptionRequest:(XMPPPresence *)presence
+{
+    NSLog(@"didReceiveSubsriptionRequest : %@",presence.description);
     if ([presence.type isEqualToString:@"subscribe"]) {
-        UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:presence.fromStr message:@"add" delegate:self cancelButtonTitle:@"cancle" otherButtonTitles:@"yes", nil];
-        alertView.tag = tag_subcribe_alertView;
-        [alertView show];
+        NSString *message = [NSString stringWithFormat:@"%@想要添加你为好友！",presence.fromStr];
+        if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+            
+            UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:presence.fromStr message:message delegate:self cancelButtonTitle:@"拒绝" otherButtonTitles:@"同意", nil];
+            alertView.tag = tag_subcribe_alertView;
+            [alertView show];
+        }else{
+            UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+            localNotification.alertAction = @"OK";
+            localNotification.alertBody = message;
+            localNotification.soundName = UILocalNotificationDefaultSoundName;
+            localNotification.applicationIconBadgeNumber += 1;
+            [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+
+        }
+
     }
 }
+
+
+
+-(void)xmppRoster:(XMPPRoster *)sender didReceiveRosterItem:(DDXMLElement *)item
+{
+    NSLog(@"%@",item);
+}
+
+//- (void)xmppRoster:(XMPPRoster *)sender didReceiveBuddyRequest:(XMPPPresence *)presence
+//{
+//    NSLog(@"%@",[presence description]);
+//    
+//}
+
 
 - (void)xmppStream:(XMPPStream *)sender didReceiveError:(id)error
 {
@@ -1386,9 +1427,12 @@ static XMPPManager *s_XMPPManager = nil;
 #pragma mark - UIAlertView Delegate
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+     XMPPJID *jid = [XMPPJID jidWithString:alertView.title];
     if (alertView.tag == tag_subcribe_alertView && buttonIndex == 1) {
-        XMPPJID *jid = [XMPPJID jidWithString:alertView.title];
+        
         [[self xmppRoster] acceptPresenceSubscriptionRequestFrom:jid andAddToRoster:YES];
+    }else{
+        [[self xmppRoster] rejectPresenceSubscriptionRequestFrom:jid];
     }
 }
 #pragma mark - my method

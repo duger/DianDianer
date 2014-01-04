@@ -13,7 +13,7 @@
 #import "DDLog.h"
 
 @interface FriendsViewController ()
-@property (nonatomic, strong) NSMutableArray *dataArray;
+
 @end
 
 @implementation FriendsViewController
@@ -31,8 +31,6 @@
     if (self) {
         // Custom initialization
         
-        //        self.view.backgroundColor = [UIColor lightGrayColor];
-        
     }
     return self;
 }
@@ -41,17 +39,16 @@
 {
     [super awakeFromNib];
     self.title = @"好友";
-    self.friendsList = [[NSMutableArray alloc]init];
-//    self.friendsTableView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"background2.png"]];
+  
+
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+    //注册自定义tableCell
     [self.friendsTableView registerNib:[UINib nibWithNibName:@"FriendCell" bundle:[NSBundle mainBundle]] forCellReuseIdentifier:@"FriendCell"];
-    
-    [[XMPPManager instence]setFriendsHeadImage];
+
     
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"iPhone5-backpic2.png"]];
     self.friendsTableView.backgroundColor = [UIColor clearColor];
@@ -63,19 +60,14 @@
     newFriend.delegate = self;
     newFriend.userInteractionEnabled = NO;
     [self.topView addSubview:newFriend];
-    self.dataArray = [[NSMutableArray alloc]init];
-//    [self getData];
-//    [self uploadRoser];
-//    [self.friendsList addObject:@"测试"];
 
-//    [self reloadFriendList];
-    NSLog(@"好友列表%@",self.friendsList);
-//    [self.friendsTableView reloadData];
-    [XMPPManager instence].delegate = self;
+
+
     
 //    //随意点击去键盘
 //    UITapGestureRecognizer *tapGes = [[UITapGestureRecognizer alloc]initWithTarget:newFriend action:@selector(resignFirstResponder)];
 //    [self.view addGestureRecognizer:tapGes];
+
 
 }
 
@@ -94,19 +86,8 @@
     [super viewDidUnload];
 }
 
-- (void)getData{
-    NSManagedObjectContext *context = [[XMPPManager instence] managedObjectContext_roster];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPUserCoreDataStorageObject" inManagedObjectContext:context];
-    NSFetchRequest *request = [[NSFetchRequest alloc]init];
-    [request setEntity:entity];
-    NSError *error ;
-    NSArray *friends = [context executeFetchRequest:request error:&error];
-    [self.dataArray removeAllObjects];
-    [self.dataArray addObjectsFromArray:friends];
-    NSLog(@"%@",friends);
-}
 
-
+#pragma mark - AKTabBarCtr Methods
 - (NSString *)tabImageName
 {
 	return @"image-1";
@@ -126,18 +107,38 @@
 
 
 #pragma mark - private method
--(void)uploadRoser
+//-(void)uploadRoser
+//{
+//    [self.friendsList removeAllObjects];
+//    [self.friendsList addObjectsFromArray:[XMPPManager instence].roster];
+//    
+//}
+
+- (void)configurePhotoForCell:(FriendCell *)cell user:(XMPPUserCoreDataStorageObject *)user
 {
-    [self.friendsList removeAllObjects];
-    [self.friendsList addObjectsFromArray:[XMPPManager instence].roster];
-    
+	// Our xmppRosterStorage will cache photos as they arrive from the xmppvCardAvatarModule.
+	// We only need to ask the avatar module for a photo, if the roster doesn't have it.
+	
+	if (user.photo != nil)
+	{
+		cell.headImage.image = user.photo;
+	}
+	else
+	{
+		NSData *photoData = [[[XMPPManager instence] xmppvCardAvatarModule] photoDataForJID:user.jid];
+        
+		if (photoData != nil)
+			cell.headImage.image = [UIImage imageWithData:photoData];
+		else
+			cell.headImage.image = [UIImage imageNamed:@"Icon-72.png"];
+	}
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
+
     return [[[self fetchedResultsController]sections]count];
 }
 
@@ -185,52 +186,25 @@
     static NSString *CellIdentifier = @"FriendCell";
     FriendCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
     
-//    [cell.imageView setContentMode:UIViewContentModeScaleAspectFill];
-    // Configure the cell...
-//    XMPPUserCoreDataStorageObject *object = [self.dataArray objectAtIndex:indexPath.row];
-//    NSString *name = [object displayName];
-//    if (!name) {
-//        name = [object nickname];
-//    }
-//    if (!name) {
-//        name = [object jidStr];
-//    }
-//    cell.textLabel.text = name;
-//    cell.detailTextLabel.text = [[[object primaryResource] presence] status];
-//    cell.tag = indexPath.row;
 
     XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     
     
-//    cell.nameLabel.text = self.friendsList[indexPath.row];
-    cell.nameLabel.text = user.displayName;
+    NSString *name = [user displayName];
+        if (!name) {
+            name = [user nickname];
+       }
+       if (!name) {
+            name = [user jidStr];
+        }
+    cell.nameLabel.text = name;
+    cell.ideaLabel.text = [[[user primaryResource] presence] status];
     [self configurePhotoForCell:cell user:user];
-
-//    [cell insertSubview:cell.textLabel aboveSubview:cell.imageView];
     
     return cell;
 }
 
 
-- (void)configurePhotoForCell:(FriendCell *)cell user:(XMPPUserCoreDataStorageObject *)user
-{
-	// Our xmppRosterStorage will cache photos as they arrive from the xmppvCardAvatarModule.
-	// We only need to ask the avatar module for a photo, if the roster doesn't have it.
-	
-	if (user.photo != nil)
-	{
-		cell.headImage.image = user.photo;
-	}
-	else
-	{
-		NSData *photoData = [[[XMPPManager instence] xmppvCardAvatarModule] photoDataForJID:user.jid];
-        
-		if (photoData != nil)
-			cell.headImage.image = [UIImage imageWithData:photoData];
-		else
-			cell.headImage.image = [UIImage imageNamed:@"Icon-72.png"];
-	}
-}
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -244,31 +218,21 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [XMPPManager instence].toSomeOne = self.friendsList[indexPath.row];
+    XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController]objectAtIndexPath:indexPath];
+    NSString *name = [user displayName];
+    if (!name) {
+        name = [user nickname];
+    }
+    if (!name) {
+        name = [user jidStr];
+    }
+
+    [XMPPManager instence].toSomeOne = name;
     NSLog(@"%@",[XMPPManager instence].toSomeOne);
     [self.delegate goToChartroom];
 }
-//- (void)prepareForSegue:(UIStoryboardPopoverSegue *)segue sender:(id)sender
-//{
-//    UITableViewCell *cell = (UITableViewCell *)sender;
-//    if ([[segue destinationViewController] isKindOfClass:[ChartViewController class] ]) {
-//        XMPPUserCoreDataStorageObject *object = [self.dataArray objectAtIndex:cell.tag];
-//        ChartViewController *chat = segue.destinationViewController;
-//        chat.xmppUserObject = object;
-//    }
-//}
 
 
-
-#pragma mark - XMPPManager Delegate
--(void)reloadTableView
-{
-    [self.friendsList removeAllObjects];
-    [self.friendsList addObjectsFromArray:[XMPPManager instence].roster];
-
-    NSLog(@"fwfwf好友列表%@",self.friendsList);
-    [self.friendsTableView reloadData];
-}
 
 #pragma mark - TextField Delegate
 -(BOOL)textFieldShouldReturn:(UITextField *)textField
@@ -311,7 +275,7 @@
 		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
 		[fetchRequest setEntity:entity];
 		[fetchRequest setSortDescriptors:sortDescriptors];
-		[fetchRequest setFetchBatchSize:10];
+//		[fetchRequest setFetchBatchSize:10];
 		
 		fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
 		                                                               managedObjectContext:moc
@@ -331,6 +295,9 @@
 	
 	return fetchedResultsController;
 }
+
+
+#pragma mark - NSFetchedResultsController Delegate
 
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
