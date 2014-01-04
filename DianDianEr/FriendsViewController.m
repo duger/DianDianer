@@ -13,6 +13,7 @@
 #import "DDLog.h"
 
 @interface FriendsViewController ()
+@property (nonatomic, strong) NSMutableArray *dataArray;
 
 @end
 
@@ -39,6 +40,7 @@
 {
     [super awakeFromNib];
     self.title = @"好友";
+    self.friendsList = [[NSMutableArray alloc]init];
   
 
 }
@@ -60,8 +62,10 @@
     newFriend.delegate = self;
     newFriend.userInteractionEnabled = NO;
     [self.topView addSubview:newFriend];
-
-
+    
+    [self uploadRoser];
+    
+    [XMPPManager instence].delegate = self;
 
     
 //    //随意点击去键盘
@@ -107,12 +111,12 @@
 
 
 #pragma mark - private method
-//-(void)uploadRoser
-//{
-//    [self.friendsList removeAllObjects];
-//    [self.friendsList addObjectsFromArray:[XMPPManager instence].roster];
-//    
-//}
+-(void)uploadRoser
+{
+    [self.friendsList removeAllObjects];
+    [self.friendsList addObjectsFromArray:[XMPPManager instence].roster];
+    
+}
 
 - (void)configurePhotoForCell:(FriendCell *)cell user:(XMPPUserCoreDataStorageObject *)user
 {
@@ -226,7 +230,7 @@
     if (!name) {
         name = [user jidStr];
     }
-
+    NSLog(@"%@",name);
     [XMPPManager instence].toSomeOne = name;
     NSLog(@"%@",[XMPPManager instence].toSomeOne);
     [self.delegate goToChartroom];
@@ -252,6 +256,17 @@
     newFriend.text = @"";
     }
 }
+
+#pragma mark - XMPPManager Delegate
+-(void)reloadTableView
+{
+    [self.friendsList removeAllObjects];
+    [self.friendsList addObjectsFromArray:[XMPPManager instence].roster];
+    
+    NSLog(@"fwfwf好友列表%@",self.friendsList);
+    [self.friendsTableView reloadData];
+}
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

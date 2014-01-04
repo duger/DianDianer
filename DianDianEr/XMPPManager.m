@@ -1005,7 +1005,7 @@ static XMPPManager *s_XMPPManager = nil;
 //        [self.delegate reloadTableView];
 //    }
 //    //将好友列表写入数据库
-//    [[DiandianCoreDataManager shareDiandianCoreDataManager]addChartListFromFriends:self.roster];
+    [[DiandianCoreDataManager shareDiandianCoreDataManager]addChartListFromFriends:self.roster];
     
     
 	return YES;
@@ -1448,6 +1448,7 @@ static XMPPManager *s_XMPPManager = nil;
 -(NSArray *)startLoadMessages:(NSString *)toJid
 {
     NSString *currentCLTitle = [NSString stringWithFormat:@"%@+%@",[[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID],toJid];
+    NSLog(@"%@",currentCLTitle);
     //所有消息
     NSArray *currentCL;
     //获得当前的聊天记录

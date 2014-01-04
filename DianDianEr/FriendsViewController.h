@@ -11,8 +11,9 @@
 -(void)goToChartroom;
 @end
 
-@interface FriendsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,NSFetchedResultsControllerDelegate>
+@interface FriendsViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,NSFetchedResultsControllerDelegate,XMPPManagerDelegate>
 @property (strong, nonatomic) IBOutlet UITableView *friendsTableView;
+@property(retain,nonatomic) NSMutableArray *friendsList;
 
 
 - (IBAction)didClikAddFriendsButton:(UIButton *)sender;
