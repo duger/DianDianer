@@ -10,7 +10,7 @@
 #import "XMPPFramework.h"
 #import "MJRefresh.h"
 
-@interface ChartViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,XMPPRosterDelegate,MJRefreshBaseViewDelegate>
+@interface ChartViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,XMPPRosterDelegate,MJRefreshBaseViewDelegate,XMPPManagerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (retain, nonatomic) IBOutlet UITextField *enterTextField;
@@ -32,5 +32,7 @@
 - (IBAction)didClickBack:(UIButton *)sender;
 
 @property (strong, nonatomic) IBOutlet UIView *topView;
+//消息列表
+@property (strong, nonatomic) NSFetchedResultsController *fetchedMessageResultsController;
 
 @end

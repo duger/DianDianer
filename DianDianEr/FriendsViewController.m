@@ -195,14 +195,22 @@
     
     
     NSString *name = [user displayName];
-        if (!name) {
+        if ( [name isEqualToString:@"null"]) {
             name = [user nickname];
        }
-       if (!name) {
+       if ([name isEqualToString:@"null"]) {
             name = [user jidStr];
         }
     cell.nameLabel.text = name;
     cell.ideaLabel.text = [[[user primaryResource] presence] status];
+//    NSLog(@"%@",[user ask]);
+//    NSLog(@"%@",[user jidStr]);
+//    NSLog(@"%@",[user subscription]);
+//    NSLog(@"%d",[[user unreadMessages]integerValue]);
+//    NSLog(@"%d",[[[user primaryResource]priorityNum]integerValue]);
+//    NSLog(@"%@",[[user primaryResource]show]);
+//    NSLog(@"%d",[[[user primaryResource]showNum]integerValue]);
+    
     [self configurePhotoForCell:cell user:user];
     
     return cell;
@@ -219,17 +227,16 @@
 
 
 #pragma mark - Table view delegate
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 25.0f;
+}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController]objectAtIndexPath:indexPath];
-    NSString *name = [user displayName];
-    if (!name) {
-        name = [user nickname];
-    }
-    if (!name) {
-        name = [user jidStr];
-    }
+    NSString *name = [user jidStr];
+    
     NSLog(@"%@",name);
     [XMPPManager instence].toSomeOne = name;
     NSLog(@"%@",[XMPPManager instence].toSomeOne);
@@ -275,49 +282,22 @@
 
 - (NSFetchedResultsController *)fetchedResultsController
 {
-	if (fetchedResultsController == nil)
-	{
-		NSManagedObjectContext *moc = [[XMPPManager instence] managedObjectContext_roster];
-		
-		NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPUserCoreDataStorageObject"
-		                                          inManagedObjectContext:moc];
-		
-		NSSortDescriptor *sd1 = [[NSSortDescriptor alloc] initWithKey:@"sectionNum" ascending:YES];
-		NSSortDescriptor *sd2 = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES];
-		
-		NSArray *sortDescriptors = [NSArray arrayWithObjects:sd1, sd2, nil];
-		
-		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-		[fetchRequest setEntity:entity];
-		[fetchRequest setSortDescriptors:sortDescriptors];
-//		[fetchRequest setFetchBatchSize:10];
-		
-		fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
-		                                                               managedObjectContext:moc
-		                                                                 sectionNameKeyPath:@"sectionNum"
-		                                                                          cacheName:nil];
-		[fetchedResultsController setDelegate:self];
-		
-		
-		NSError *error = nil;
-		if (![fetchedResultsController performFetch:&error])
-		{
-//			DDLogError(@"Error performing fetch: %@", error);
-            NSLog(@"Error performing fetch: %@", error);
-		}
-        
-	}
-	
-	return fetchedResultsController;
+   
+        fetchedResultsController = [[XMPPManager instence]XMPPRosterFetchedResultsController];
+    
+    
+    return fetchedResultsController;
 }
 
 
-#pragma mark - NSFetchedResultsController Delegate
-
-- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+#pragma mark - XMPPManger Delegate
+//查询XMPPROSTER成功返回fentchControll
+-(void)controllerDidChangedWithFetchedResult:(NSFetchedResultsController *)fetchedResultsController
 {
-	[[self friendsTableView] reloadData];
+    [[self friendsTableView] reloadData];
+    
 }
+
 
 
 @end

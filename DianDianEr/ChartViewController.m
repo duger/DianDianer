@@ -61,6 +61,8 @@
     
 }
 
+@synthesize fetchedMessageResultsController;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -87,9 +89,10 @@
     
     self.toSomeOne = [XMPPManager instence].toSomeOne;
 
-    self.xmppMessageArchivingCoreDataStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
-    self.xmppStream = [XMPPManager instence].xmppStream;
-    [self.xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
+//    self.xmppMessageArchivingCoreDataStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
+//    self.xmppStream = [XMPPManager instence].xmppStream;
+//    [self.xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
+    [[XMPPManager instence]setDelegate:self];
     
     //头像
     selfHeadImage =[[UIImage alloc]init];
@@ -206,8 +209,16 @@
     
 }
 
-
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark XMPPMessageArching Methods
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+-(void)getMessagesFromFetchedRequest
+{
+    fetchedMessageResultsController = [[XMPPManager instence]fetchedMessageArchivingResultsController];
+    id<NSFetchedResultsSectionInfo> messages = [[fetchedMessageResultsController sections]objectAtIndex:0];
+    NSArray *arr = [messages objects];
+    [self getPopChartList:arr];
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark XMPPStream Delegate
@@ -748,13 +759,13 @@
 {
     [self.chatArray removeAllObjects];
     
-    for (Messages *aMessage in allMessagesArr) {
-        if ([aMessage.to_jid isEqualToString:self.toSomeOne]) {
-            UIView *chatView = [self bubbleView:[NSString stringWithFormat:@"%@",aMessage.chart_content]from:YES];
-            [self.chatArray addObject:[NSDictionary dictionaryWithObjectsAndKeys:aMessage.chart_content, @"text", @"self", @"speaker", chatView, @"view", nil]];
+    for (XMPPMessageArchiving_Message_CoreDataObject *aMessage in allMessagesArr) {
+        if (![aMessage isOutgoing]) {
+            UIView *chatView = [self bubbleView:[NSString stringWithFormat:@"%@",aMessage.body]from:YES];
+            [self.chatArray addObject:[NSDictionary dictionaryWithObjectsAndKeys:aMessage.body, @"text", @"self", @"speaker", chatView, @"view", nil]];
         }else{
-            UIView *chatView = [self bubbleView:[NSString stringWithFormat:@"%@",  aMessage.chart_content]from:NO];
-            [self.chatArray addObject:[NSDictionary dictionaryWithObjectsAndKeys:aMessage.chart_content, @"text", @"other", @"speaker", chatView, @"view", nil]];
+            UIView *chatView = [self bubbleView:[NSString stringWithFormat:@"%@",  aMessage.body]from:NO];
+            [self.chatArray addObject:[NSDictionary dictionaryWithObjectsAndKeys:aMessage.body, @"text", @"other", @"speaker", chatView, @"view", nil]];
         }
     }
     
