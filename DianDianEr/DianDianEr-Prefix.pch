@@ -22,6 +22,8 @@
 #define kGUEST @"guest"
 #define kGUESTPASSWORD @"123456"
 
+#define kLoginOrNot @"LoginOrNot"
+
 #import "IphoneScreen.h"
 #import "Define.h"
 

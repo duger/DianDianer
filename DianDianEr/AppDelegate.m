@@ -19,8 +19,10 @@
     NSLog(@"系统版本%f",[[[UIDevice  currentDevice]systemVersion]floatValue]);
     [[SelectManager defaultManager]downloadDateFromServiceToLocal:1];
 
-    
     [[XMPPManager instence]setupStream];
+    
+    
+    
     return YES;
 }
 							

@@ -92,6 +92,8 @@
         }];
     }
     else if (indexPath.row == 2){
+        
+        [[NSUserDefaults standardUserDefaults]setBool:NO forKey:kLoginOrNot];
         LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kXMPPmyJID];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kXMPPmyPassword];

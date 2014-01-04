@@ -36,44 +36,20 @@
 }
 
 
--(void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
 
-        
-        [self.topView setFrame: CGRectMake(0, 203, 320, 330)];
-        [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"iphone5-background.png"]]];
-        
-        if (!IS_IPHONE5SCREEN) {
-            
-            self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"iphone4-background.png"]];
-            [self.topView setFrame: CGRectMake(0, 170, 320, 330)];
-        }
-
-    [XMPPManager instence].delegate = self;
-    
-    
-    
-    
-    
-    /*
-     if (![[XMPPManager instence]connect]) {
-     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error connecting"
-     message:@"See console for error details."
-     delegate:nil
-     cancelButtonTitle:@"Ok"
-     otherButtonTitles:nil];
-     [alertView show];
-     }
-     
-     */
-    
-    
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    if ([[NSUserDefaults standardUserDefaults]boolForKey:kLoginOrNot]) {
+        [[XMPPManager instence]connect];
+        SidebarViewController *sidebarVC = [self.storyboard instantiateViewControllerWithIdentifier:@"SidebarViewController"];
+        [self.navigationController pushViewController:sidebarVC animated:YES];
+        
+    }
+    
+    
     if ([[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID]) {
         self.userName.text = [[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID];
     }
@@ -100,6 +76,27 @@
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     //键盘收回
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
+    
+}
+
+
+-(void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    
+    [self.topView setFrame: CGRectMake(0, 203, 320, 330)];
+    [self.view setBackgroundColor:[UIColor colorWithPatternImage:[UIImage imageNamed:@"iphone5-background.png"]]];
+    
+    if (!IS_IPHONE5SCREEN) {
+        
+        self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"iphone4-background.png"]];
+        [self.topView setFrame: CGRectMake(0, 170, 320, 330)];
+    }
+    
+    [XMPPManager instence].delegate = self;
+    
+    
+    
     
 }
 
@@ -210,6 +207,9 @@
 {
     [MMProgressHUD dismissWithSuccess:@"Enjoy!"];
     
+    if (![[NSUserDefaults standardUserDefaults]boolForKey:kLoginOrNot]) {
+        [[NSUserDefaults standardUserDefaults]setBool:YES forKey:kLoginOrNot];
+    }
     
     SidebarViewController *sidebarVC = [self.storyboard instantiateViewControllerWithIdentifier:@"SidebarViewController"];
     [self.navigationController pushViewController:sidebarVC animated:YES];
