@@ -67,6 +67,7 @@ static XMPPManager *s_XMPPManager = nil;
 @synthesize headImages;
 
 @synthesize fetchedResultsController;
+@synthesize fetchedMessageArchivingResultsController;
 
 #define tag_subcribe_alertView 10
 
@@ -78,12 +79,7 @@ static XMPPManager *s_XMPPManager = nil;
         proxyPort = [[NSString alloc]init];
         proxyJID = [[NSString alloc]init];
         
-        if ([[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID]) {
-            self.userNameTextField.text = [[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID];
-        }
-        if ([[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyPassword]) {
-            self.passwordTextField.text = [[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyPassword];
-        }
+        
         jidWithResouce = [[NSString alloc] init];
         
         self.roster = [[NSMutableArray alloc]init];
@@ -442,7 +438,7 @@ static XMPPManager *s_XMPPManager = nil;
     
     NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
     [message addAttributeWithName:@"type" stringValue:@"chat"];
-    [message addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",self.toTextField.text,kDOMAINWITHSOURCE]];
+    [message addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",@"tosomeone",kDOMAINWITHSOURCE]];
     [message addChild:body];
     [message addChild:attachment];
     [self.xmppStream sendElement:message];
@@ -471,7 +467,7 @@ static XMPPManager *s_XMPPManager = nil;
     [xmlBody setStringValue:sound];
     NSXMLElement *xmlMessage = [NSXMLElement elementWithName:@"message"];
     [xmlMessage addAttributeWithName:@"type" stringValue:@"chat"];
-    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",self.toTextField.text,kDOMAIN]];
+    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",self.toSomeOne,kDOMAIN]];
     [xmlMessage addChild:xmlBody];
     [self.xmppStream sendElement:xmlMessage];
     
@@ -714,8 +710,8 @@ static XMPPManager *s_XMPPManager = nil;
     [si addChild:feature];
     [si addChild:file];
     NSXMLElement *iq = [NSXMLElement elementWithName:@"iq"];
-    [iq addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",self.toTextField.text,kDOMAIN]];//
-    [iq addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@%@",self.userNameTextField.text,kDOMAIN]];
+    [iq addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",@"tosomeon",kDOMAIN]];//
+    [iq addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@%@",@"fromsomeone",kDOMAIN]];
     [iq addAttributeWithName:@"type" stringValue:@"set"];
     [iq addAttributeWithName:@"id" stringValue:@"iq_13"];
     [iq addChild:si];
@@ -730,10 +726,10 @@ static XMPPManager *s_XMPPManager = nil;
 
 - (void)sendMessage:(id)sender {
     NSXMLElement *xmlBody = [NSXMLElement elementWithName:@"body"];
-    [xmlBody setStringValue:self.messageTextField.text];
+    [xmlBody setStringValue:@"messages"];
     NSXMLElement *xmlMessage = [NSXMLElement elementWithName:@"message"];
     [xmlMessage addAttributeWithName:@"type" stringValue:@"chat"];
-    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",self.toTextField.text,kDOMAIN]];
+    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",self.toSomeOne,kDOMAIN]];
     [xmlMessage addChild:xmlBody];
     [self.xmppStream sendElement:xmlMessage];
     
@@ -742,7 +738,7 @@ static XMPPManager *s_XMPPManager = nil;
     //    [msgAsDictionary setObject:self.messageTextField.text forKey:@"message"];
     //    [msgAsDictionary setObject:@"you" forKey:@"sender"];
     //    [self.messages addObject:msgAsDictionary];
-    NSLog(@"From: You, Message: %@", self.messageTextField.text);
+    NSLog(@"From: You, Message: %@", @"messages");
     
 }
 
@@ -824,6 +820,118 @@ static XMPPManager *s_XMPPManager = nil;
 	}
 }
 
+- (NSManagedObjectContext *)managedObjectContext_messageArchiving
+{
+    managedObjectContext_messageArchiving = [xmppMessageArchivingCoreDataStorage mainThreadManagedObjectContext];
+    return managedObjectContext_messageArchiving;
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - XMPPROSTER Method
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (NSFetchedResultsController *)XMPPRosterFetchedResultsController
+{
+	if (fetchedResultsController == nil)
+	{
+		NSManagedObjectContext *moc = [self managedObjectContext_roster];
+		
+		NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPUserCoreDataStorageObject"
+		                                          inManagedObjectContext:moc];
+		
+        //按状态分组和按名字排序
+		NSSortDescriptor *sd1 = [[NSSortDescriptor alloc] initWithKey:@"sectionNum" ascending:YES];
+		NSSortDescriptor *sd2 = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES];
+		NSArray *sortDescriptors = [NSArray arrayWithObjects:sd1, sd2, nil];
+        
+        //添加按条件查询 剔除自己
+        NSString *JID = [[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID];
+        JID = [JID stringByAppendingFormat:@"@%@",kDOMAIN];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"jidStr != %@",JID];
+		
+		NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+		[fetchRequest setEntity:entity];
+		[fetchRequest setSortDescriptors:sortDescriptors];
+        [fetchRequest setPredicate:predicate];
+        //		[fetchRequest setFetchBatchSize:10];
+		
+		fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+		                                                               managedObjectContext:moc
+		                                                                 sectionNameKeyPath:@"sectionNum"
+		                                                                          cacheName:nil];
+		[fetchedResultsController setDelegate:self];
+		
+		
+		NSError *error = nil;
+		if (![fetchedResultsController performFetch:&error])
+		{
+            			DDLogError(@"Error performing fetch: %@", error);
+//            NSLog(@"Error performing fetch: %@", error);
+		}
+        
+	}
+	
+	return fetchedResultsController;
+}
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - NSFetchedResultsController Delegate
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+
+    if (controller == fetchedResultsController) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(controllerDidChangedWithFetchedResult:)]) {
+            [self.delegate controllerDidChangedWithFetchedResult:controller];
+        }
+    }
+    
+    if (controller == fetchedMessageArchivingResultsController) {
+        if (self.delegate && [self.delegate respondsToSelector:@selector(controllerDidChangedWithFetchedMessageArchingResult:)]) {
+            [self.delegate controllerDidChangedWithFetchedMessageArchingResult:controller];
+        }
+        
+    }
+    
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - XMPPMessage Method
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//查询消息记录
+- (NSFetchedResultsController *)XMPPMessageArchivingFetchedResultsController
+{
+    if (fetchedMessageArchivingResultsController == nil) {
+        NSManagedObjectContext *moc = [self managedObjectContext_messageArchiving];
+        
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPMessageArchiving_Message_CoreDataObject" inManagedObjectContext:moc];
+        //添加按条件查询
+        NSString *JID = [[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID];
+        JID = [JID stringByAppendingFormat:@"@%@",kDOMAIN];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"streamBareJidStr == %@ AND bareJidStr == %@",JID,self.toSomeOne];
+        //按时间 和 好友排序
+        NSSortDescriptor *sd1 = [[NSSortDescriptor alloc]initWithKey:@"bareJidStr" ascending:YES];
+        NSSortDescriptor *sd2 = [[NSSortDescriptor alloc]initWithKey:@"timestamp" ascending:YES];
+        
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc]init];
+        [fetchRequest setEntity:entity];
+        [fetchRequest setPredicate:predicate];
+        [fetchRequest setFetchBatchSize:10];
+        
+        fetchedMessageArchivingResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:moc sectionNameKeyPath:@"bareJidStr" cacheName:@"fetchedMessages"];
+
+        [fetchedMessageArchivingResultsController setDelegate:self];
+        
+        NSError *error = nil;
+        if (![fetchedResultsController performFetch:&error]) {
+            DDLogError(@"Error performing fetch:%@",error);
+        }
+        
+    }
+    return fetchedMessageArchivingResultsController;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark XMPPStream Delegate
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1060,7 +1168,7 @@ static XMPPManager *s_XMPPManager = nil;
                             //进入XEP-0065协议阶段
                             //初始方给服务器发送信息，请求提供代理服务器
                             
-                            XMPPJID *jid = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@@%@/XMPP",self.toTextField.text,self.hostTextField.text]];
+                            XMPPJID *jid = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@@%@/XMPP",self.toSomeOne,kDOMAIN]];
                             [TURNSocket setProxyCandidates:[NSArray arrayWithObjects:@"124.205.147.26", nil]];
                             turnSocket = [[TURNSocket alloc] initWithStream:xmppStream toJID:jid];
                             [turnSocket startWithDelegate:self delegateQueue:dispatch_get_main_queue()];

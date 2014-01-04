@@ -20,9 +20,14 @@
 -(void)authenticateFailed;
 -(void)leaveRegister;
 
+//查询XMPPROSTER成功返回fentchControll
+-(void)controllerDidChangedWithFetchedResult:(NSFetchedResultsController *)fetchedResultsController;
+//查询xmppmessageachiving聊天列表成功
+- (void)controllerDidChangedWithFetchedMessageArchingResult:(NSFetchedResultsController *)fetchedMessageArchivingResultsController;
+
 @end
 
-@interface XMPPManager : NSObject<XMPPRosterDelegate,XMPPvCardTempModuleDelegate>
+@interface XMPPManager : NSObject<XMPPRosterDelegate,XMPPvCardTempModuleDelegate,NSFetchedResultsControllerDelegate>
 {
 	XMPPStream *xmppStream;
 	XMPPReconnect *xmppReconnect;
@@ -33,12 +38,18 @@
 	XMPPvCardAvatarModule *xmppvCardAvatarModule;
 	XMPPCapabilities *xmppCapabilities;
 	XMPPCapabilitiesCoreDataStorage *xmppCapabilitiesStorage;
-
+    XMPPMessageArchiving *xmppMessageArchivingModule;
+    XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;
+    
 	TURNSocket * turnSocket;
 	NSString *password;
     XMPPSearch *xmppSearch;
     NSManagedObjectContext *managedObjectContext_roster;
 	NSManagedObjectContext *managedObjectContext_capabilities;
+    NSManagedObjectContext *managedObjectContext_messageArchiving;
+    
+    NSFetchedResultsController *fetchedResultsController;
+    NSFetchedResultsController *fetchedMessageArchivingResultsController;
 	
 	BOOL allowSelfSignedCertificates;
 	BOOL allowSSLHostNameMismatch;
@@ -53,9 +64,69 @@
     AVAudioRecorder *recorder;
     NSURL *urlPlay;
     
-    NSFetchedResultsController *fetchedResultsController;
+    
     
 }
+
+@property (retain, nonatomic) AVAudioPlayer *avPlay;
+
+//-----------------------------------------------------------------------------------------
+@property (nonatomic, strong, readonly) XMPPStream *xmppStream;
+@property (nonatomic, strong, readonly) XMPPReconnect *xmppReconnect;
+@property (nonatomic, strong, readonly) XMPPRoster *xmppRoster;
+@property (nonatomic, strong, readonly) XMPPRosterCoreDataStorage *xmppRosterStorage;
+@property (nonatomic, strong, readonly) XMPPvCardTempModule *xmppvCardTempModule;
+@property (nonatomic, strong, readonly) XMPPvCardAvatarModule *xmppvCardAvatarModule;
+@property (nonatomic, strong, readonly) XMPPCapabilities *xmppCapabilities;
+@property (nonatomic, strong, readonly) XMPPCapabilitiesCoreDataStorage *xmppCapabilitiesStorage;
+@property (nonatomic, strong) XMPPMessageArchiving *xmppMessageArchivingModule;
+@property (nonatomic, strong) XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;
+
+//查询roster结果
+@property (nonatomic,strong) NSFetchedResultsController *fetchedResultsController;
+//查询MessagerArchiving聊天记录结果
+@property (nonatomic,strong) NSFetchedResultsController *fetchedMessageArchivingResultsController;
+
+@property (nonatomic, strong, readonly) TURNSocket *turnSocket;
+@property (nonatomic,strong) NSString *jidWithResouce;
+
+
+- (NSManagedObjectContext *)managedObjectContext_roster;
+- (NSManagedObjectContext *)managedObjectContext_capabilities;
+- (NSManagedObjectContext *)managedObjectContext_messageArchiving;
+
+- (BOOL)connect;
+- (void)disconnect;
+- (void)setupStream;
+- (void)teardownStream;
+- (void)goOnline;
+- (void)goOffline;
+-(BOOL)authenticate;
+//------------------------------------------------------------------------------------------
+
+
+
+//-----------------------------------------------------------------------------------------
+//@property (strong, nonatomic) IBOutlet UITextField *hostTextField;
+//@property (strong, nonatomic) IBOutlet UITextField *portTextField;
+//@property (strong, nonatomic) IBOutlet UITextField *messageTextField;
+//@property (strong, nonatomic) IBOutlet UITextField *userNameTextField;
+//@property (strong, nonatomic) IBOutlet UITextField *passwordTextField;
+//@property (strong, nonatomic) IBOutlet UITextField *toTextField;
+//@property (strong, nonatomic) IBOutlet UITextField *addFriendTextField;
+//@property (strong, nonatomic) IBOutlet UITextView *informationTextView;
+- (IBAction)sendAttechment:(id)sender;
+- (IBAction)connectXMPP:(id)sender;
+- (IBAction)sendMessage:(id)sender;
+- (IBAction)registerInSide:(NSString *)userName andPassword:(NSString *)thePassword;
+- (IBAction)addNewFriend:(NSString*)newFriendName;
+- (IBAction)uploadAudio:(id)sender;
+- (IBAction)play:(id)sender;
+- (IBAction)printCoreData:(id)sender;
+
+
+//-----------------------------------------------------------------------------------------
+
 ///单例
 +(XMPPManager *)instence;
 //聊天记录
@@ -76,61 +147,16 @@
 //为所有好友设置头像
 -(void)setFriendsHeadImage;
 
-@property (retain, nonatomic) AVAudioPlayer *avPlay;
-
-//-----------------------------------------------------------------------------------------
-@property (nonatomic, strong, readonly) XMPPStream *xmppStream;
-@property (nonatomic, strong, readonly) XMPPReconnect *xmppReconnect;
-@property (nonatomic, strong, readonly) XMPPRoster *xmppRoster;
-@property (nonatomic, strong, readonly) XMPPRosterCoreDataStorage *xmppRosterStorage;
-@property (nonatomic, strong, readonly) XMPPvCardTempModule *xmppvCardTempModule;
-@property (nonatomic, strong, readonly) XMPPvCardAvatarModule *xmppvCardAvatarModule;
-@property (nonatomic, strong, readonly) XMPPCapabilities *xmppCapabilities;
-@property (nonatomic, strong, readonly) XMPPCapabilitiesCoreDataStorage *xmppCapabilitiesStorage;
-@property (nonatomic, strong, readonly) TURNSocket *turnSocket;
-@property (nonatomic,strong) NSString *jidWithResouce;
-- (NSManagedObjectContext *)managedObjectContext_roster;
-- (NSManagedObjectContext *)managedObjectContext_capabilities;
-
-- (BOOL)connect;
-- (void)disconnect;
-- (void)setupStream;
-- (void)teardownStream;
-- (void)goOnline;
-- (void)goOffline;
--(BOOL)authenticate;
-//------------------------------------------------------------------------------------------
-
-@property (nonatomic, strong) XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;
-@property (nonatomic, strong) XMPPMessageArchiving *xmppMessageArchivingModule;
-
-//-----------------------------------------------------------------------------------------
-@property (strong, nonatomic) IBOutlet UITextField *hostTextField;
-@property (strong, nonatomic) IBOutlet UITextField *portTextField;
-@property (strong, nonatomic) IBOutlet UITextField *messageTextField;
-@property (strong, nonatomic) IBOutlet UITextField *userNameTextField;
-@property (strong, nonatomic) IBOutlet UITextField *passwordTextField;
-@property (strong, nonatomic) IBOutlet UITextField *toTextField;
-@property (strong, nonatomic) IBOutlet UITextField *addFriendTextField;
-@property (strong, nonatomic) IBOutlet UITextView *informationTextView;
-- (IBAction)sendAttechment:(id)sender;
-- (IBAction)connectXMPP:(id)sender;
-- (IBAction)sendMessage:(id)sender;
-- (IBAction)registerInSide:(NSString *)userName andPassword:(NSString *)thePassword;
-- (IBAction)addNewFriend:(NSString*)newFriendName;
-- (IBAction)uploadAudio:(id)sender;
-- (IBAction)play:(id)sender;
-- (IBAction)printCoreData:(id)sender;
 
 
-//------------------------------------------------------------------------------------------
 ///my method
 -(void)showAlertView:(NSString *)message;
 
 @property (nonatomic,weak) id<XMPPManagerDelegate> delegate;
 
 
-@property(nonatomic,strong) NSFetchedResultsController *fetchedResultsController;
+//查询XMPPROSTER返回fentchControll
+- (NSFetchedResultsController *)XMPPRosterFetchedResultsController;
 
 @end
 
