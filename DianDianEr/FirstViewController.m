@@ -29,7 +29,7 @@
 
 
 @interface FirstViewController ()<NCMusicEngineDelegate>
-
+-(AwesomeMenu *)_createAnAwesomeMenu;
 @end
 
 static int line = 5;
@@ -98,6 +98,9 @@ static int indexCount = 1;
     aTableView.dataSource = self;
     aTableView.delegate = self;
     
+    
+    
+    
     // 下拉刷新
     _header = [[MJRefreshHeaderView alloc] init];
     _header.delegate = self;
@@ -112,59 +115,13 @@ static int indexCount = 1;
     
     self.shareArray = [NSMutableArray arrayWithArray:[[DiandianCoreDataManager shareDiandianCoreDataManager] all_share]];
     indexCount = self.shareArray.count;
-    
-    
-    
+
     self.navigationController.navigationBar.hidden = YES;
     // Do any additional setup after loading the view from its nib.
-    UIImage *storyMenuItemImage = [UIImage imageNamed:@"bg-menuitem.png"];
-    UIImage *storyMenuItemImagePressed = [UIImage imageNamed:@"bg-menuitem-highlighted.png"];
     
-    UIImage *star1 = [UIImage imageNamed:@"chart.png"];
-    UIImage *star2 = [UIImage imageNamed:@"photo.png"];
-    UIImage *star3 = [UIImage imageNamed:@"audio.png"];
-    UIImage *star4 = [UIImage imageNamed:@"paint.png"];
-    
-    starMenuItem1 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
-                                          highlightedImage:storyMenuItemImagePressed
-                                              ContentImage:star1
-                                   highlightedContentImage:nil];
-    starMenuItem2 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
-                                          highlightedImage:storyMenuItemImagePressed
-                                              ContentImage:star2
-                                   highlightedContentImage:nil];
-    starMenuItem3 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
-                                          highlightedImage:storyMenuItemImagePressed
-                                              ContentImage:star3
-                                   highlightedContentImage:nil];
-    starMenuItem4 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
-                                          highlightedImage:storyMenuItemImagePressed
-                                              ContentImage:star4
-                                   highlightedContentImage:nil];
-    UITapGestureRecognizer *TapGesturRecognizer1 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureRecognizer_1)];
-    
-    [starMenuItem1 addGestureRecognizer:TapGesturRecognizer1 ];
-    UITapGestureRecognizer *TapGesturRecognizer2 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureRecognizer_2)];
-    
-    [starMenuItem2 addGestureRecognizer:TapGesturRecognizer2 ];
-    UITapGestureRecognizer *TapGesturRecognizer3 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureRecognizer_3)];
-    
-    [starMenuItem3 addGestureRecognizer:TapGesturRecognizer3 ];
-    UITapGestureRecognizer *TapGesturRecognizer4 = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapGestureRecognizer_4)];
-    
-    [starMenuItem4 addGestureRecognizer:TapGesturRecognizer4 ];
-    
-    
-    
-    NSArray *menus = [NSArray arrayWithObjects:starMenuItem1, starMenuItem2, starMenuItem3, starMenuItem4, nil];
-    
-    AwesomeMenuItem *startItem = [[AwesomeMenuItem alloc] initWithImage:[UIImage imageNamed:@"bg-addbutton.png"]
-                                                       highlightedImage:[UIImage imageNamed:@"bg-addbutton-highlighted.png"]
-                                                           ContentImage:[UIImage imageNamed:@"icon-plus.png"]
-                                                highlightedContentImage:[UIImage imageNamed:@"icon-plus-highlighted.png"]];
-    
-    menu = [[AwesomeMenu alloc] initWithFrame:self.view.bounds startItem:startItem optionMenus:menus];
-    menu.delegate = self;
+    //多功能菜单
+     menu = [self _createAnAwesomeMenu];
+    [menu setDelegate:self];
     [self.view addSubview:menu];
     
 }
@@ -181,86 +138,6 @@ static int indexCount = 1;
 //    self.commentArray = [NSMutableArray arrayWithArray:[[DiandianCoreDataManager shareDiandianCoreDataManager] allComment]];
 }
 
--(void)tapGestureRecognizer_1
-{
-    
-    [menu AwesomeMenuItemTouchesEnd:starMenuItem1];
-    [self performSelector:@selector(push_1) withObject:nil afterDelay:0.5f];
-    [starMenuItem1 setHighlighted:YES];
-}
--(void)push_1
-{
-    ShareViewController *shareVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ShareViewController"];
-    [self presentViewController:shareVC animated:YES completion:^{
-        nil;
-    }];
-    //    [self.navigationController pushViewController:shareVC animated:YES];
-}
-
--(void)goToShare
-{
-    [Singleton instance].fromCamera = ![Singleton instance].fromCamera;
-    [self push_1];
-    
-}
--(void)tuYaGoToShare
-{
-    [Singleton instance].fromTuYa = ![Singleton instance].fromTuYa;
-    ShareViewController *shareVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ShareViewController"];
-    [self presentViewController:shareVC animated:YES completion:^{
-        nil;
-    }];
-}
--(void)recordGoToShare
-{
-    [Singleton instance].fromRecord = ![Singleton instance].fromRecord;
-    ShareViewController *shareVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ShareViewController"];
-    [self presentViewController:shareVC animated:YES completion:^{
-        nil;
-    }];
-    
-}
--(void)tapGestureRecognizer_2
-{
-    
-    [menu AwesomeMenuItemTouchesEnd:starMenuItem2];
-    [self performSelector:@selector(push_2) withObject:nil afterDelay:0.5f];
-    [starMenuItem2 setHighlighted:YES];
-    
-}
--(void)push_2
-{
-    [Singleton instance].fromCamera = ![Singleton instance].fromCamera;
-    CameraViewController *photoVC = [self.storyboard instantiateViewControllerWithIdentifier:@"CameraViewController"];
-    photoVC.delegate = self;
-    [self presentViewController:photoVC animated:YES completion:nil];
-}
--(void)tapGestureRecognizer_3
-{
-    [menu AwesomeMenuItemTouchesEnd:starMenuItem3];
-    [self performSelector:@selector(push_3) withObject:nil afterDelay:0.5f];
-    [starMenuItem3 setHighlighted:YES];
-}
--(void)push_3
-{
-    [Singleton instance].fromRecord = ![Singleton instance].fromRecord;
-    RecordViewController *recordVC = [self.storyboard instantiateViewControllerWithIdentifier:@"RecordViewController"];
-    recordVC.delegate = self;
-    [self presentViewController:recordVC animated:YES completion:nil];
-}
--(void)tapGestureRecognizer_4
-{
-    [menu AwesomeMenuItemTouchesEnd:starMenuItem4];
-    [self performSelector:@selector(push_4) withObject:nil afterDelay:0.5f];
-    [starMenuItem4 setHighlighted:YES];
-}
--(void)push_4
-{
-    [Singleton instance].fromTuYa = ![Singleton instance].fromTuYa;
-    TuYaViewController *tuYaVC = [self.storyboard instantiateViewControllerWithIdentifier:@"TuYaViewController"];
-    tuYaVC.delegate = self;
-    [self.navigationController presentViewController:tuYaVC animated:YES completion:nil];
-}
 
 
 - (void)didReceiveMemoryWarning
@@ -383,6 +260,132 @@ static int indexCount = 1;
     MapViewController *mapVC = [self.storyboard instantiateViewControllerWithIdentifier:@"MapViewController"];
     [self.navigationController pushViewController:mapVC animated:YES];
 }
+
+#pragma mark - AwesomeMenu Methods
+-(AwesomeMenu *)_createAnAwesomeMenu
+{
+    UIImage *storyMenuItemImage = [UIImage imageNamed:@"bg-menuitem.png"];
+    UIImage *storyMenuItemImagePressed = [UIImage imageNamed:@"bg-menuitem-highlighted.png"];
+    
+    UIImage *star1 = [UIImage imageNamed:@"chart.png"];
+    UIImage *star2 = [UIImage imageNamed:@"photo.png"];
+    UIImage *star3 = [UIImage imageNamed:@"audio.png"];
+    UIImage *star4 = [UIImage imageNamed:@"paint.png"];
+    
+    starMenuItem1 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
+                                          highlightedImage:storyMenuItemImagePressed
+                                              ContentImage:star1
+                                   highlightedContentImage:nil];
+    starMenuItem2 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
+                                          highlightedImage:storyMenuItemImagePressed
+                                              ContentImage:star2
+                                   highlightedContentImage:nil];
+    starMenuItem3 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
+                                          highlightedImage:storyMenuItemImagePressed
+                                              ContentImage:star3
+                                   highlightedContentImage:nil];
+    starMenuItem4 = [[AwesomeMenuItem alloc] initWithImage:storyMenuItemImage
+                                          highlightedImage:storyMenuItemImagePressed
+                                              ContentImage:star4
+                                   highlightedContentImage:nil];
+    
+    
+    
+    NSArray *menus = [NSArray arrayWithObjects:starMenuItem1, starMenuItem2, starMenuItem3, starMenuItem4, nil];
+    
+    AwesomeMenuItem *startItem = [[AwesomeMenuItem alloc] initWithImage:[UIImage imageNamed:@"bg-addbutton.png"]
+                                                       highlightedImage:[UIImage imageNamed:@"bg-addbutton-highlighted.png"]
+                                                           ContentImage:[UIImage imageNamed:@"icon-plus.png"]
+                                                highlightedContentImage:[UIImage imageNamed:@"icon-plus-highlighted.png"]];
+    
+    AwesomeMenu *kMenu = [[AwesomeMenu alloc] initWithFrame:self.view.bounds startItem:startItem optionMenus:menus];
+   
+    
+    return kMenu;
+}
+
+
+- (void)awesomeMenu:(AwesomeMenu *)menu didSelectIndex:(NSInteger)idx
+{
+    NSLog(@"选的功能%d",idx);
+    switch (idx) {
+        case 0:
+            [self performSelector:@selector(push_1) withObject:nil afterDelay:0.5f];
+            break;
+        case 1:
+            [self performSelector:@selector(push_2) withObject:nil afterDelay:0.5f];
+            break;
+        case 2:
+            [self performSelector:@selector(push_3) withObject:nil afterDelay:0.5f];
+            break;
+        case 3:
+            [self performSelector:@selector(push_4) withObject:nil afterDelay:0.5f];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+
+-(void)push_1
+{
+    ShareViewController *shareVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ShareViewController"];
+    [self presentViewController:shareVC animated:YES completion:^{
+        nil;
+    }];
+
+}
+
+-(void)goToShare
+{
+    [Singleton instance].fromCamera = ![Singleton instance].fromCamera;
+    [self push_1];
+    
+}
+-(void)tuYaGoToShare
+{
+    [Singleton instance].fromTuYa = ![Singleton instance].fromTuYa;
+    ShareViewController *shareVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ShareViewController"];
+    [self presentViewController:shareVC animated:YES completion:^{
+        nil;
+    }];
+}
+-(void)recordGoToShare
+{
+    [Singleton instance].fromRecord = ![Singleton instance].fromRecord;
+    ShareViewController *shareVC = [self.storyboard instantiateViewControllerWithIdentifier:@"ShareViewController"];
+    [self presentViewController:shareVC animated:YES completion:^{
+        nil;
+    }];
+    
+}
+
+-(void)push_2
+{
+    [Singleton instance].fromCamera = ![Singleton instance].fromCamera;
+    CameraViewController *photoVC = [self.storyboard instantiateViewControllerWithIdentifier:@"CameraViewController"];
+    photoVC.delegate = self;
+    [self presentViewController:photoVC animated:YES completion:nil];
+}
+
+-(void)push_3
+{
+    [Singleton instance].fromRecord = ![Singleton instance].fromRecord;
+    RecordViewController *recordVC = [self.storyboard instantiateViewControllerWithIdentifier:@"RecordViewController"];
+    recordVC.delegate = self;
+    [self presentViewController:recordVC animated:YES completion:nil];
+}
+
+-(void)push_4
+{
+    [Singleton instance].fromTuYa = ![Singleton instance].fromTuYa;
+    TuYaViewController *tuYaVC = [self.storyboard instantiateViewControllerWithIdentifier:@"TuYaViewController"];
+    tuYaVC.delegate = self;
+    [self.navigationController presentViewController:tuYaVC animated:YES completion:nil];
+}
+
+
 
 #pragma mark - Table view data source
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
