@@ -118,24 +118,26 @@
     
 }
 
-- (void)configurePhotoForCell:(FriendCell *)cell user:(XMPPUserCoreDataStorageObject *)user
+- (UIImage *)configurePhotoForCell:(XMPPUserCoreDataStorageObject *)user
 {
 	// Our xmppRosterStorage will cache photos as they arrive from the xmppvCardAvatarModule.
 	// We only need to ask the avatar module for a photo, if the roster doesn't have it.
-	
+	UIImage *headImage = [[UIImage alloc]init];
+    
 	if (user.photo != nil)
 	{
-		cell.headImage.image = user.photo;
+		headImage = user.photo;
 	}
 	else
 	{
 		NSData *photoData = [[[XMPPManager instence] xmppvCardAvatarModule] photoDataForJID:user.jid];
         
 		if (photoData != nil)
-			cell.headImage.image = [UIImage imageWithData:photoData];
+			headImage = [UIImage imageWithData:photoData];
 		else
-			cell.headImage.image = [UIImage imageNamed:@"Icon-72.png"];
+			headImage = [UIImage imageNamed:@"Icon-72.png"];
 	}
+    return headImage;
 }
 
 #pragma mark - Table view data source
@@ -203,6 +205,7 @@
         }
     cell.nameLabel.text = name;
     cell.ideaLabel.text = [[[user primaryResource] presence] status];
+    [cell setUnReadMessage:@(13)];
 //    NSLog(@"%@",[user ask]);
 //    NSLog(@"%@",[user jidStr]);
 //    NSLog(@"%@",[user subscription]);
@@ -210,8 +213,8 @@
 //    NSLog(@"%d",[[[user primaryResource]priorityNum]integerValue]);
 //    NSLog(@"%@",[[user primaryResource]show]);
 //    NSLog(@"%d",[[[user primaryResource]showNum]integerValue]);
-    
-    [self configurePhotoForCell:cell user:user];
+    cell.headImage.image = [self configurePhotoForCell:user];
+//    [self configurePhotoForCell:cell user:user];
     
     return cell;
 }
@@ -239,6 +242,7 @@
     
     NSLog(@"%@",name);
     [XMPPManager instence].toSomeOne = name;
+    [XMPPManager instence].friendHeadImage = [self configurePhotoForCell:user];
     NSLog(@"%@",[XMPPManager instence].toSomeOne);
     [self.delegate goToChartroom];
 }

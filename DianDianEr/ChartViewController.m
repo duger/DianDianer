@@ -89,6 +89,8 @@
     
     self.toSomeOne = [XMPPManager instence].toSomeOne;
 
+    NSLog(@"对方名字%@",self.toSomeOne);
+    self.toSomeOneLabel.text = self.toSomeOne;
 //    self.xmppMessageArchivingCoreDataStorage = [XMPPMessageArchivingCoreDataStorage sharedInstance];
 //    self.xmppStream = [XMPPManager instence].xmppStream;
 //    [self.xmppStream addDelegate:self delegateQueue:dispatch_get_main_queue()];
@@ -96,13 +98,13 @@
     
     //头像
     selfHeadImage =[[UIImage alloc]init];
-    selfHeadImage = [[XMPPManager instence].headImages objectForKey:[[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID]];
+    selfHeadImage = [[XMPPManager instence] selfHeadImage];
     friendHeadImage = [[UIImage alloc]init];
-    friendHeadImage = [[XMPPManager instence].headImages objectForKey:self.toSomeOne];
+    friendHeadImage = [[XMPPManager instence] friendHeadImage];
     NSLog(@"%@",self.toSomeOne);
     
     //获得好友聊天记录
-    NSArray *allMessagesArr = [[XMPPManager instence] startLoadMessages:self.toSomeOne];
+//    NSArray *allMessagesArr = [[XMPPManager instence] startLoadMessages:self.toSomeOne];
 //    [self getPopChartList:allMessagesArr];
     [self getMessagesFromFetchedRequest];
     
@@ -111,6 +113,7 @@
     [_header setScrollView:self.tableView];
     _header.delegate = self;
     [_header.arrowImage removeFromSuperview];
+    _header.backgroundColor = [UIColor clearColor];
 
 
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"iPhone5-backpic.png"]];
@@ -184,22 +187,22 @@
 }
 
 
-- (void)saveHistory:(XMPPMessage *)message {
-    NSManagedObjectContext *context = [self.xmppMessageArchivingCoreDataStorage mainThreadManagedObjectContext];
-    XMPPMessageArchiving_Message_CoreDataObject *messageObject = [NSEntityDescription insertNewObjectForEntityForName:@"XMPPMessageArchiving_Message_CoreDataObject" inManagedObjectContext:context];//NSManagedObject
-    [messageObject setBareJid:message.to];
-    [messageObject setBareJidStr:message.toStr];
-    [messageObject setBody:message.body];
-    [messageObject setMessage:message];
-    [messageObject setTimestamp:[NSDate date]];
-    [messageObject setIsOutgoing:YES];
-    [messageObject setStreamBareJidStr:message.body];
-    NSError *error ;
-    if (![context save:&error]) {
-        NSLog(@"data not save to database : %@",error.description);
-    }
-    
-}
+//- (void)saveHistory:(XMPPMessage *)message {
+//    NSManagedObjectContext *context = [self.xmppMessageArchivingCoreDataStorage mainThreadManagedObjectContext];
+//    XMPPMessageArchiving_Message_CoreDataObject *messageObject = [NSEntityDescription insertNewObjectForEntityForName:@"XMPPMessageArchiving_Message_CoreDataObject" inManagedObjectContext:context];//NSManagedObject
+//    [messageObject setBareJid:message.to];
+//    [messageObject setBareJidStr:message.toStr];
+//    [messageObject setBody:message.body];
+//    [messageObject setMessage:message];
+//    [messageObject setTimestamp:[NSDate date]];
+//    [messageObject setIsOutgoing:YES];
+//    [messageObject setStreamBareJidStr:message.body];
+//    NSError *error ;
+//    if (![context save:&error]) {
+//        NSLog(@"data not save to database : %@",error.description);
+//    }
+//    
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - XMPPMessageArching Methods
@@ -397,47 +400,6 @@
 }
 
 
-/*
- 生成泡泡UIView
- */
-#pragma mark - Table view methods  生成泡泡UIView
-- (UIView *)bubbleView:(NSString *)text from:(BOOL)fromSelf {
-	// build single chat bubble cell with given text
-    UIView *returnView =  [self assembleMessageAtIndex:text from:fromSelf];
-    returnView.backgroundColor = [UIColor clearColor];
-    UIView *cellView = [[UIView alloc] initWithFrame:CGRectZero];
-    cellView.backgroundColor = [UIColor clearColor];
-    
-	UIImage *bubble = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:fromSelf?@"bubbleSelf":@"bubble" ofType:@"png"]];
-	UIImageView *bubbleImageView = [[UIImageView alloc] initWithImage:[bubble stretchableImageWithLeftCapWidth:20 topCapHeight:14]];
-    
-    UIImageView *headImageView = [[UIImageView alloc] init];
-    
-    if(fromSelf){
-        [headImageView setImage:selfHeadImage];
-        returnView.frame= CGRectMake(9.0f, 15.0f, returnView.frame.size.width, returnView.frame.size.height);
-        bubbleImageView.frame = CGRectMake(0.0f, 14.0f, returnView.frame.size.width+24.0f, returnView.frame.size.height+24.0f );
-        cellView.frame = CGRectMake(265.0f-bubbleImageView.frame.size.width, 0.0f,bubbleImageView.frame.size.width+50.0f, bubbleImageView.frame.size.height+30.0f);
-        headImageView.frame = CGRectMake(bubbleImageView.frame.size.width, cellView.frame.size.height-50.0f, 50.0f, 50.0f);
-    }
-	else{
-        [headImageView setImage:friendHeadImage];
-        returnView.frame= CGRectMake(65.0f, 15.0f, returnView.frame.size.width, returnView.frame.size.height);
-        bubbleImageView.frame = CGRectMake(50.0f, 14.0f, returnView.frame.size.width+24.0f, returnView.frame.size.height+24.0f);
-		cellView.frame = CGRectMake(0.0f, 0.0f, bubbleImageView.frame.size.width+30.0f,bubbleImageView.frame.size.height+30.0f);
-        headImageView.frame = CGRectMake(0.0f, cellView.frame.size.height-50.0f, 50.0f, 50.0f);
-    }
-    
-    
-    
-    [cellView addSubview:bubbleImageView];
-    [cellView addSubview:headImageView];
-    [cellView addSubview:returnView];
-    
-    
-	return cellView;
-    
-}
 
 
 
@@ -559,34 +521,49 @@
 
 
 
-//图文混排
 
--(void)getImageRange:(NSString*)message : (NSMutableArray*)array {
-    NSRange range=[message rangeOfString: BEGIN_FLAG];
-    NSRange range1=[message rangeOfString: END_FLAG];
-    //判断当前字符串是否还有表情的标志。
-    if (range.length>0 && range1.length>0) {
-        if (range.location > 0) {
-            [array addObject:[message substringToIndex:range.location]];
-            [array addObject:[message substringWithRange:NSMakeRange(range.location, range1.location+1-range.location)]];
-            NSString *str=[message substringFromIndex:range1.location+1];
-            [self getImageRange:str :array];
-        }else {
-            NSString *nextstr=[message substringWithRange:NSMakeRange(range.location, range1.location+1-range.location)];
-            //排除文字是“”的
-            if (![nextstr isEqualToString:@""]) {
-                [array addObject:nextstr];
-                NSString *str=[message substringFromIndex:range1.location+1];
-                [self getImageRange:str :array];
-            }else {
-                return;
-            }
-        }
-        
-    } else if (message != nil) {
-        [array addObject:message];
+
+
+
+#pragma mark -  生成泡泡UIView
+- (UIView *)bubbleView:(NSString *)text from:(BOOL)fromSelf {
+	// build single chat bubble cell with given text
+    UIView *returnView =  [self assembleMessageAtIndex:text from:fromSelf];
+    returnView.backgroundColor = [UIColor clearColor];
+    UIView *cellView = [[UIView alloc] initWithFrame:CGRectZero];
+    cellView.backgroundColor = [UIColor clearColor];
+    
+	UIImage *bubble = [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:fromSelf?@"bubbleSelf":@"bubble" ofType:@"png"]];
+	UIImageView *bubbleImageView = [[UIImageView alloc] initWithImage:[bubble stretchableImageWithLeftCapWidth:20 topCapHeight:14]];
+    
+    UIImageView *headImageView = [[UIImageView alloc] init];
+    
+    if(fromSelf){
+        [headImageView setImage:selfHeadImage];
+        returnView.frame= CGRectMake(10.0f, 18.0f, returnView.frame.size.width, returnView.frame.size.height);
+        bubbleImageView.frame = CGRectMake(0.0f, 14.0f, returnView.frame.size.width+28.0f, returnView.frame.size.height+28.0f );
+        cellView.frame = CGRectMake(265.0f-bubbleImageView.frame.size.width, 0.0f,bubbleImageView.frame.size.width+50.0f, bubbleImageView.frame.size.height+30.0f);
+        headImageView.frame = CGRectMake(bubbleImageView.frame.size.width, cellView.frame.size.height-50.0f, 50.0f, 50.0f);
     }
+	else{
+        [headImageView setImage:friendHeadImage];
+        returnView.frame= CGRectMake(66.0f, 18.0f, returnView.frame.size.width, returnView.frame.size.height);
+        bubbleImageView.frame = CGRectMake(50.0f, 14.0f, returnView.frame.size.width+28.0f, returnView.frame.size.height+28.0f);
+		cellView.frame = CGRectMake(0.0f, 0.0f, bubbleImageView.frame.size.width+30.0f,bubbleImageView.frame.size.height+30.0f);
+        headImageView.frame = CGRectMake(0.0f, cellView.frame.size.height-50.0f, 50.0f, 50.0f);
+    }
+    
+    
+    
+    [cellView addSubview:bubbleImageView];
+    [cellView addSubview:headImageView];
+    [cellView addSubview:returnView];
+    
+    
+	return cellView;
+    
 }
+
 
 #define KFacialSizeWidth  18
 #define KFacialSizeHeight 18
@@ -655,6 +632,34 @@
     return returnView;
 }
 
+//图文混排
+
+-(void)getImageRange:(NSString*)message : (NSMutableArray*)array {
+    NSRange range=[message rangeOfString: BEGIN_FLAG];
+    NSRange range1=[message rangeOfString: END_FLAG];
+    //判断当前字符串是否还有表情的标志。
+    if (range.length>0 && range1.length>0) {
+        if (range.location > 0) {
+            [array addObject:[message substringToIndex:range.location]];
+            [array addObject:[message substringWithRange:NSMakeRange(range.location, range1.location+1-range.location)]];
+            NSString *str=[message substringFromIndex:range1.location+1];
+            [self getImageRange:str :array];
+        }else {
+            NSString *nextstr=[message substringWithRange:NSMakeRange(range.location, range1.location+1-range.location)];
+            //排除文字是“”的
+            if (![nextstr isEqualToString:@""]) {
+                [array addObject:nextstr];
+                NSString *str=[message substringFromIndex:range1.location+1];
+                [self getImageRange:str :array];
+            }else {
+                return;
+            }
+        }
+        
+    } else if (message != nil) {
+        [array addObject:message];
+    }
+}
 
 
 - (IBAction)didClickSendButton:(UIBarButtonItem *)sender {
@@ -741,6 +746,7 @@
 - (IBAction)didClickBack:(UIButton *)sender {
 //    [self dismissViewControllerAnimated:YES completion:nil];
     [self.navigationController popViewControllerAnimated:YES];
+    [self.chatArray removeAllObjects];
     
 }
 

@@ -16,6 +16,7 @@
 @property (retain, nonatomic) IBOutlet UITextField *enterTextField;
 
 @property (retain, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet UILabel *toSomeOneLabel;
 
 //@property (nonatomic, retain) IBOutlet FaceViewController   *phraseViewController;
 @property (nonatomic, retain) NSString               *phraseString;
@@ -29,6 +30,9 @@
 @property (nonatomic, strong) XMPPStream *xmppStream;
 @property (nonatomic,strong) XMPPUserCoreDataStorageObject *xmppUserObject;
 
+//头像
+@property (nonatomic, strong) UIImage *selfHeadImage;
+@property (nonatomic, strong) UIImage *friendHeadImage;
 
 //发送消息
 - (IBAction)didClickSendButton:(UIBarButtonItem *)sender;

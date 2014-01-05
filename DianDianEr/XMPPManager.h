@@ -135,7 +135,9 @@
 @property (nonatomic, retain) NSArray *chartListsForCurrentUser;
 @property(retain,nonatomic) NSMutableArray *roster;
 @property (nonatomic,retain) NSString *toSomeOne;
-@property(nonatomic ,retain) NSMutableDictionary *headImages;
+//头像
+@property (nonatomic, strong) UIImage *selfHeadImage;
+@property (nonatomic, strong) UIImage *friendHeadImage;
 //好友列表
 @property(nonatomic,retain) NSMutableArray *friendList;
 //@property(nonatomic,assign) id<XMPPViewControllerDelegate> delegate;

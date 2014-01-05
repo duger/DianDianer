@@ -105,6 +105,13 @@
                                             <action selector="didClickBack:" destination="Yms-NC-204" eventType="touchUpInside" id="w9k-x9-l25"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="xingming" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Jd0-T5-kDT">
+                                        <rect key="frame" x="60" y="4" width="208" height="35"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -114,13 +121,14 @@
                     <connections>
                         <outlet property="enterTextField" destination="xWD-Bc-XqA" id="bft-gl-EFs"/>
                         <outlet property="tableView" destination="V7K-Uy-oEB" id="Y6b-YV-7Uc"/>
+                        <outlet property="toSomeOneLabel" destination="Jd0-T5-kDT" id="f9v-fN-9Ro"/>
                         <outlet property="toolbar" destination="xcu-hP-CgJ" id="E5t-9N-GLn"/>
                         <outlet property="topView" destination="zPJ-Qp-bQ9" id="3y5-Qg-UD8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PvA-9g-9Oh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1936" y="2325"/>
+            <point key="canvasLocation" x="-1936" y="2329"/>
         </scene>
         <!--Charting View Controller-->
         <scene sceneID="VSV-Ms-f7Z">

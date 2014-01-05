@@ -34,6 +34,14 @@ static const int ddLogLevel = LOG_LEVEL_INFO;
 
 #define kMessageStep 20
 
+@interface XMPPManager ()
+//获得自己的头像
+- (void)_getMyselfHeadImage;
+
+@end
+
+
+
 @implementation XMPPManager
 static XMPPManager *s_XMPPManager = nil;
 +(XMPPManager *)instence
@@ -64,7 +72,7 @@ static XMPPManager *s_XMPPManager = nil;
 @synthesize xmppMessageArchivingModule;
 @synthesize chartListsForCurrentUser;
 @synthesize friendList;
-@synthesize headImages;
+
 
 @synthesize fetchedResultsController;
 @synthesize fetchedMessageArchivingResultsController;
@@ -83,7 +91,8 @@ static XMPPManager *s_XMPPManager = nil;
         jidWithResouce = [[NSString alloc] init];
         
         self.roster = [[NSMutableArray alloc]init];
-        headImages = [[NSMutableDictionary alloc]init];
+
+        self.friendHeadImage = [[UIImage alloc]init];
 //        chartListsForCurrentUser = [[NSMutableArray alloc]init];
     }
     return self;
@@ -219,6 +228,54 @@ static XMPPManager *s_XMPPManager = nil;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark User Info
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//获得自己的头像
+- (void)_getMyselfHeadImage
+{
+    NSManagedObjectContext *moc = [self managedObjectContext_roster];
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPUserCoreDataStorageObject"
+                                              inManagedObjectContext:moc];
+ 
+    //查询自己
+    NSString *JID = [[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID];
+    JID = [JID stringByAppendingFormat:@"@%@",kDOMAIN];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"jidStr == %@",JID];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entity];
+    [fetchRequest setPredicate:predicate];
+    //		[fetchRequest setFetchBatchSize:10];
+    
+    
+    NSError *error = nil;
+    NSArray *arr = [moc executeFetchRequest:fetchRequest error:&error];
+    XMPPUserCoreDataStorageObject *user;
+    if (arr.count != 0) {
+        user = [arr lastObject];
+    }
+    
+
+    if (error)
+    {
+        DDLogError(@"Error performing fetch: %@", error);
+        //            NSLog(@"Error performing fetch: %@", error);
+    }
+    if (user.photo != nil)
+	{
+		self.selfHeadImage = user.photo;
+	}
+	else
+	{
+		NSData *photoData = [[self xmppvCardAvatarModule] photoDataForJID:user.jid];
+        
+		if (photoData != nil)
+			self.selfHeadImage = [UIImage imageWithData:photoData];
+		else
+			self.selfHeadImage = [UIImage imageNamed:@"Icon-72.png"];
+	}
+
+}
+
 //设置备注名
 -(void)setRemak:(NSString *)remark forJID:(XMPPJID *)jid
 {
@@ -306,7 +363,7 @@ static XMPPManager *s_XMPPManager = nil;
 {
     XMPPvCardTemp *user = xmppvCardTempModule.myvCardTemp;
     //    [headImages setObject:[self resizeImage:[UIImage imageWithData:user.photo]] forKey:xmppStream.myJID.user];
-    [headImages setObject:[self showOneselfHeadImage] forKey:xmppStream.myJID.user];
+//    [headImages setObject:[self showOneselfHeadImage] forKey:xmppStream.myJID.user];
 }
 
 //设置某一用户头像
@@ -329,7 +386,7 @@ static XMPPManager *s_XMPPManager = nil;
         
     }
     
-    [headImages setObject:image_ forKey:JID.user];
+//    [headImages setObject:image_ forKey:JID.user];
     //    };
     //
     //    if(dispatch_get_current_queue() == dispatch_get_main_queue())
@@ -882,14 +939,15 @@ static XMPPManager *s_XMPPManager = nil;
 //查询消息记录
 - (NSFetchedResultsController *)xmppMessageArchivingFetchedResultsController
 {
-    if (fetchedMessageArchivingResultsController == nil) {
+//    if (fetchedMessageArchivingResultsController == nil) {
         NSManagedObjectContext *moc = [self managedObjectContext_messageArchiving];
         
         NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPMessageArchiving_Message_CoreDataObject" inManagedObjectContext:moc];
         //添加按条件查询
         NSString *JID = [[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID];
         JID = [JID stringByAppendingFormat:@"@%@",kDOMAIN];
-        NSLog(@"%@",JID);
+        NSLog(@"查询的自己%@",JID);
+        NSLog(@"查询的别人%@",self.toSomeOne);
         NSPredicate *predicate = [NSPredicate predicateWithFormat:@"streamBareJidStr = %@ AND bareJidStr = %@",JID,self.toSomeOne];
         //按时间 和 好友排序
         NSSortDescriptor *sd1 = [[NSSortDescriptor alloc]initWithKey:@"bareJidStr" ascending:YES];
@@ -913,7 +971,7 @@ static XMPPManager *s_XMPPManager = nil;
         
         [fetchedMessageArchivingResultsController setDelegate:self];
         
-    }
+//    }
     return fetchedMessageArchivingResultsController;
 }
 
@@ -1057,9 +1115,10 @@ static XMPPManager *s_XMPPManager = nil;
         }
         
     }
-    
+    //上线
 	[self goOnline];
-    
+    //获得自己的头像
+    [self _getMyselfHeadImage];
     
     
 }
