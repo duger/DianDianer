@@ -265,14 +265,14 @@
 }
 
 #pragma mark - XMPPManager Delegate
--(void)reloadTableView
-{
-    [self.friendsList removeAllObjects];
-    [self.friendsList addObjectsFromArray:[XMPPManager instence].roster];
-    
-    NSLog(@"fwfwf好友列表%@",self.friendsList);
-    [self.friendsTableView reloadData];
-}
+//-(void)reloadTableView
+//{
+//    [self.friendsList removeAllObjects];
+//    [self.friendsList addObjectsFromArray:[XMPPManager instence].roster];
+//    
+//    NSLog(@"fwfwf好友列表%@",self.friendsList);
+//    [self.friendsTableView reloadData];
+//}
 
 
 

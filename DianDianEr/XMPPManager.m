@@ -720,16 +720,14 @@ static XMPPManager *s_XMPPManager = nil;
     
 }
 
-- (IBAction)connectXMPP:(id)sender {
-    [self connect];
-}
 
-- (void)sendMessage:(id)sender {
+
+- (void)sendMessage:(NSString *)message {
     NSXMLElement *xmlBody = [NSXMLElement elementWithName:@"body"];
-    [xmlBody setStringValue:@"messages"];
+    [xmlBody setStringValue:message];
     NSXMLElement *xmlMessage = [NSXMLElement elementWithName:@"message"];
     [xmlMessage addAttributeWithName:@"type" stringValue:@"chat"];
-    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",self.toSomeOne,kDOMAIN]];
+    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@",self.toSomeOne]];
     [xmlMessage addChild:xmlBody];
     [self.xmppStream sendElement:xmlMessage];
     
@@ -738,7 +736,7 @@ static XMPPManager *s_XMPPManager = nil;
     //    [msgAsDictionary setObject:self.messageTextField.text forKey:@"message"];
     //    [msgAsDictionary setObject:@"you" forKey:@"sender"];
     //    [self.messages addObject:msgAsDictionary];
-    NSLog(@"From: You, Message: %@", @"messages");
+    NSLog(@"From: You, Message: %@", message);
     
 }
 
@@ -822,6 +820,8 @@ static XMPPManager *s_XMPPManager = nil;
 
 - (NSManagedObjectContext *)managedObjectContext_messageArchiving
 {
+    NSAssert([NSThread isMainThread],
+	         @"NSManagedObjectContext is not thread safe. It must always be used on the same thread/queue");
     managedObjectContext_messageArchiving = [xmppMessageArchivingCoreDataStorage mainThreadManagedObjectContext];
     return managedObjectContext_messageArchiving;
 }
@@ -877,11 +877,54 @@ static XMPPManager *s_XMPPManager = nil;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - XMPPMessage Method
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//查询消息记录
+- (NSFetchedResultsController *)xmppMessageArchivingFetchedResultsController
+{
+    if (fetchedMessageArchivingResultsController == nil) {
+        NSManagedObjectContext *moc = [self managedObjectContext_messageArchiving];
+        
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPMessageArchiving_Message_CoreDataObject" inManagedObjectContext:moc];
+        //添加按条件查询
+        NSString *JID = [[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID];
+        JID = [JID stringByAppendingFormat:@"@%@",kDOMAIN];
+        NSLog(@"%@",JID);
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"streamBareJidStr = %@ AND bareJidStr = %@",JID,self.toSomeOne];
+        //按时间 和 好友排序
+        NSSortDescriptor *sd1 = [[NSSortDescriptor alloc]initWithKey:@"bareJidStr" ascending:YES];
+        NSSortDescriptor *sd2 = [[NSSortDescriptor alloc]initWithKey:@"timestamp" ascending:YES];
+        NSArray *sortDescriptors = [NSArray arrayWithObjects:sd1, sd2, nil];
+        
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc]init];
+        [fetchRequest setEntity:entity];
+        [fetchRequest setPredicate:predicate];
+        [fetchRequest setSortDescriptors:sortDescriptors];
+        [fetchRequest setFetchBatchSize:10];
+        
+        fetchedMessageArchivingResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
+
+        NSError *error = nil;
+
+        
+        if (![fetchedMessageArchivingResultsController performFetch:&error]) {
+            DDLogError(@"Error performing fetch:%@",error);
+        }
+        
+        [fetchedMessageArchivingResultsController setDelegate:self];
+        
+    }
+    return fetchedMessageArchivingResultsController;
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - NSFetchedResultsController Delegate
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
 {
-
+    
+    NSLog(@"%@",controller.cacheName);
     if (controller == fetchedResultsController) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(controllerDidChangedWithFetchedResult:)]) {
             [self.delegate controllerDidChangedWithFetchedResult:controller];
@@ -897,41 +940,10 @@ static XMPPManager *s_XMPPManager = nil;
     
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark - XMPPMessage Method
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//查询消息记录
-- (NSFetchedResultsController *)XMPPMessageArchivingFetchedResultsController
-{
-    if (fetchedMessageArchivingResultsController == nil) {
-        NSManagedObjectContext *moc = [self managedObjectContext_messageArchiving];
-        
-        NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPMessageArchiving_Message_CoreDataObject" inManagedObjectContext:moc];
-        //添加按条件查询
-        NSString *JID = [[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID];
-        JID = [JID stringByAppendingFormat:@"@%@",kDOMAIN];
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"streamBareJidStr == %@ AND bareJidStr == %@",JID,self.toSomeOne];
-        //按时间 和 好友排序
-        NSSortDescriptor *sd1 = [[NSSortDescriptor alloc]initWithKey:@"bareJidStr" ascending:YES];
-        NSSortDescriptor *sd2 = [[NSSortDescriptor alloc]initWithKey:@"timestamp" ascending:YES];
-        
-        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc]init];
-        [fetchRequest setEntity:entity];
-        [fetchRequest setPredicate:predicate];
-        [fetchRequest setFetchBatchSize:10];
-        
-        fetchedMessageArchivingResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:moc sectionNameKeyPath:@"bareJidStr" cacheName:@"fetchedMessages"];
 
-        [fetchedMessageArchivingResultsController setDelegate:self];
-        
-        NSError *error = nil;
-        if (![fetchedResultsController performFetch:&error]) {
-            DDLogError(@"Error performing fetch:%@",error);
-        }
-        
-    }
-    return fetchedMessageArchivingResultsController;
-}
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark XMPPStream Delegate
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1322,8 +1334,8 @@ static XMPPManager *s_XMPPManager = nil;
 //=======================================================================================================================
 - (void)xmppStream:(XMPPStream *)sender didSendMessage:(XMPPMessage *)message
 {
-    NSLog(@"did send message : %@",message.description);
-    [self saveHistory:message];
+//    NSLog(@"did send message : %@",message.description);
+//    [self saveHistory:message];
 }
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
 {

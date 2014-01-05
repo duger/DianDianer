@@ -57,7 +57,7 @@
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="SeA-a0-jdr"/>
                                     <barButtonItem title="发送" id="MBp-Q6-fXg">
                                         <connections>
-                                            <action selector="didClickButton:" destination="Yms-NC-204" id="7cb-6g-pFa"/>
+                                            <action selector="didClickSendButton:" destination="Yms-NC-204" id="H0Y-BQ-rfo"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>

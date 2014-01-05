@@ -15,7 +15,7 @@
 
 @protocol XMPPManagerDelegate <NSObject>
 @optional
--(void)reloadTableView;
+//-(void)reloadTableView;
 -(void)authenticateSuccessed;
 -(void)authenticateFailed;
 -(void)leaveRegister;
@@ -116,8 +116,10 @@
 //@property (strong, nonatomic) IBOutlet UITextField *addFriendTextField;
 //@property (strong, nonatomic) IBOutlet UITextView *informationTextView;
 - (IBAction)sendAttechment:(id)sender;
-- (IBAction)connectXMPP:(id)sender;
-- (IBAction)sendMessage:(id)sender;
+
+
+//发送消息
+- (void)sendMessage:(NSString *)message;
 - (IBAction)registerInSide:(NSString *)userName andPassword:(NSString *)thePassword;
 - (IBAction)addNewFriend:(NSString*)newFriendName;
 - (IBAction)uploadAudio:(id)sender;
@@ -157,7 +159,8 @@
 
 //查询XMPPROSTER返回fentchControll
 - (NSFetchedResultsController *)XMPPRosterFetchedResultsController;
-
+//查询XMPPmessageArching返回fentchControll
+- (NSFetchedResultsController *)xmppMessageArchivingFetchedResultsController;
 @end
 
 

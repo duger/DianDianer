@@ -103,7 +103,8 @@
     
     //获得好友聊天记录
     NSArray *allMessagesArr = [[XMPPManager instence] startLoadMessages:self.toSomeOne];
-    [self getPopChartList:allMessagesArr];
+//    [self getPopChartList:allMessagesArr];
+    [self getMessagesFromFetchedRequest];
     
     //下拉查看更多
     _header = [[MJRefreshHeaderView alloc]init];
@@ -114,17 +115,8 @@
 
     self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"iPhone5-backpic.png"]];
     self.topView.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"topviewBackground.png"]];
-    UIImage *image = [UIImage imageNamed:@"backitem.png"];
-    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    backBtn.frame = CGRectMake(0, 0, image.size.width, image.size.height);
-    [backBtn setBackgroundImage:image forState:UIControlStateNormal];
-    [backBtn setTitle:@"返回" forState:UIControlStateNormal];
-    [backBtn addTarget:self action:@selector(dismissSelf) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc ] initWithCustomView:backBtn ];
-    self.navigationItem.leftBarButtonItem = backItem;
-    
-    
-    //    self.phraseViewController.chatViewController = self;
+
+
 	UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithTitle:@"资料"
 																  style:UIBarButtonItemStylePlain
 																 target:self
@@ -210,118 +202,117 @@
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark XMPPMessageArching Methods
+#pragma mark - XMPPMessageArching Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 -(void)getMessagesFromFetchedRequest
 {
-    fetchedMessageResultsController = [[XMPPManager instence]fetchedMessageArchivingResultsController];
-    id<NSFetchedResultsSectionInfo> messages = [[fetchedMessageResultsController sections]objectAtIndex:0];
-    NSArray *arr = [messages objects];
+    fetchedMessageResultsController = [[XMPPManager instence]xmppMessageArchivingFetchedResultsController];
+//    NSDictionary<NSFetchedResultsSectionInfo> *messages = [[fetchedMessageResultsController sections]objectAtIndex:0];
+//    NSArray *arr = [messages objects];
+    NSArray *arr = [fetchedMessageResultsController fetchedObjects];
+    NSLog(@"%d",arr.count);
     [self getPopChartList:arr];
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark XMPPStream Delegate
+#pragma mark - XMPPManager Methods
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-- (void)xmppStream:(XMPPStream *)sender didSendMessage:(XMPPMessage *)message
+//XMPPMessageAching中查询聊天列表
+//fetchedResultsController接到消息改变时回调此方法
+-(void)controllerDidChangedWithFetchedMessageArchingResult:(NSFetchedResultsController *)fetchedMessageArchivingResultsController
 {
-    NSLog(@"did send message : %@",message.description);
-    [self saveHistory:message];
+    [self getMessagesFromFetchedRequest];
 }
 
-- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
-{
-    NSLog(@"didReceiveMessage ： %@",message.description);
-	// A simple example of inbound message handling.
-    
-    
-	if ([message isChatMessageWithBody])
-	{
-		XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:[message from]
-		                                                         xmppStream:xmppStream
-		                                               managedObjectContext:[self managedObjectContext_roster]];
-		
-		NSString *body = [[message elementForName:@"body"] stringValue];
-		NSString *displayName = [user displayName];
-        
-        Messages *aMessage = [[DiandianCoreDataManager shareDiandianCoreDataManager]createAMessage];
-        [aMessage setChart_content:body];
-        [aMessage setChart_date:[NSDate date]];
-        [aMessage setFrom_jid:[message from].user];
-        [aMessage setTo_jid:[message to].user];
-        [[DiandianCoreDataManager shareDiandianCoreDataManager]addMessage:aMessage intoChartLists:[XMPPManager instence].chartListsForCurrentUser];
-        
-        
-        if ([message isOfflineMessageWithBody]) {
-            
-        }
-        
-        
-        if ([body base64DecodedData]) {
-            NSData *data = [body base64DecodedData];
-            NSString *path = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/test.amr"];
-            NSLog(@"path : %@",path);
-            BOOL write = [data writeToFile:path atomically:YES];
-            if (write) {
-                NSLog(@"yes");
-            }else{
-                NSLog(@"no");
-            }
-        }
-        
-		if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
-		{
-            //			UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:displayName
-            //                                                                message:body
-            //                                                               delegate:nil
-            //                                                      cancelButtonTitle:@"Ok"
-            //                                                      otherButtonTitles:nil];
-            //			[alertView show];
-            UIView *chatView = [self bubbleView:[NSString stringWithFormat:@"%@",body]
-                                           from:NO];
-            [self.chatArray addObject:[NSDictionary dictionaryWithObjectsAndKeys:self.toSomeOne, @"text", @"other", @"speaker", chatView, @"view", nil]];
-            
-            [self.tableView reloadData];
-            if (self.chatArray.count > 5) {
-            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chatArray count]-1 inSection:0]
-                                  atScrollPosition: UITableViewScrollPositionBottom
-                                          animated:YES];
-            }
-            
-		}
-		else
-		{
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:kDidReceiveChat
-                                                                object:self userInfo:nil];
-            
-			// We are not active, so use a local notification instead
-			UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-			localNotification.alertAction = @"Ok";
-			localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",displayName,body];
-            
-			[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
-		}
-	}
-}
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark Core Data
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-- (NSManagedObjectContext *)managedObjectContext_roster
-{
-	return [xmppRosterStorage mainThreadManagedObjectContext];
-}
-
-//- (NSManagedObjectContext *)managedObjectContext_capabilities
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//#pragma mark - XMPPStream Delegate
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//- (void)xmppStream:(XMPPStream *)sender didSendMessage:(XMPPMessage *)message
 //{
-//	return [xmppCapabilitiesStorage mainThreadManagedObjectContext];
+//    NSLog(@"did send message : %@",message.description);
+//    [self saveHistory:message];
 //}
+//
+//- (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message
+//{
+//    NSLog(@"didReceiveMessage ： %@",message.description);
+//	// A simple example of inbound message handling.
+//    
+//    
+//	if ([message isChatMessageWithBody])
+//	{
+//		XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:[message from]
+//		                                                         xmppStream:xmppStream
+//		                                               managedObjectContext:nil];
+//		
+//		NSString *body = [[message elementForName:@"body"] stringValue];
+//		NSString *displayName = [user displayName];
+//        
+//        Messages *aMessage = [[DiandianCoreDataManager shareDiandianCoreDataManager]createAMessage];
+//        [aMessage setChart_content:body];
+//        [aMessage setChart_date:[NSDate date]];
+//        [aMessage setFrom_jid:[message from].user];
+//        [aMessage setTo_jid:[message to].user];
+//        [[DiandianCoreDataManager shareDiandianCoreDataManager]addMessage:aMessage intoChartLists:[XMPPManager instence].chartListsForCurrentUser];
+//        
+//        
+//        if ([message isOfflineMessageWithBody]) {
+//            
+//        }
+//        
+//        
+//        if ([body base64DecodedData]) {
+//            NSData *data = [body base64DecodedData];
+//            NSString *path = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/test.amr"];
+//            NSLog(@"path : %@",path);
+//            BOOL write = [data writeToFile:path atomically:YES];
+//            if (write) {
+//                NSLog(@"yes");
+//            }else{
+//                NSLog(@"no");
+//            }
+//        }
+//        
+//		if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
+//		{
+//            //			UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:displayName
+//            //                                                                message:body
+//            //                                                               delegate:nil
+//            //                                                      cancelButtonTitle:@"Ok"
+//            //                                                      otherButtonTitles:nil];
+//            //			[alertView show];
+//            UIView *chatView = [self bubbleView:[NSString stringWithFormat:@"%@",body]
+//                                           from:NO];
+//            [self.chatArray addObject:[NSDictionary dictionaryWithObjectsAndKeys:self.toSomeOne, @"text", @"other", @"speaker", chatView, @"view", nil]];
+//            
+//            [self.tableView reloadData];
+//            if (self.chatArray.count > 5) {
+//            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chatArray count]-1 inSection:0]
+//                                  atScrollPosition: UITableViewScrollPositionBottom
+//                                          animated:YES];
+//            }
+//            
+//		}
+//		else
+//		{
+//            
+//            [[NSNotificationCenter defaultCenter] postNotificationName:kDidReceiveChat
+//                                                                object:self userInfo:nil];
+//            
+//			// We are not active, so use a local notification instead
+//			UILocalNotification *localNotification = [[UILocalNotification alloc] init];
+//			localNotification.alertAction = @"Ok";
+//			localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",displayName,body];
+//            
+//			[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
+//		}
+//	}
+//}
+//
 
 
-
-#pragma mark Table View DataSource Methods
+#pragma mark - Table View DataSource Methods
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
     
@@ -352,7 +343,7 @@
         [cell prepareForReuse];
         
 	}
-    NSLog(@"%d",cell.kContentView.subviews.count);
+//    NSLog(@"%d",cell.kContentView.subviews.count);
     
     if (cell.kContentView.subviews.count != 0) {
         for (id obj in cell.kContentView.subviews) {
@@ -450,7 +441,7 @@
 
 
 
-#pragma mark TextField Delegate Methods
+#pragma mark - TextField Delegate Methods
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField
 {
 	return YES;
@@ -469,14 +460,14 @@
     return YES;
 }
 
-#pragma mark MJRefresh Delegate -进入刷新状态就会调用
+#pragma mark - MJRefresh Delegate -进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
 {
     if (refreshView == _header) {
         
         
         // 2秒后刷新表格
-        [self performSelector:@selector(reloadChartList) withObject:nil afterDelay:2];
+        [self performSelector:@selector(mjReloadChartList) withObject:nil afterDelay:2];
     }
    
 //    [header endRefreshing];
@@ -484,17 +475,17 @@
     
 }
 
--(void)reloadChartList
+-(void)mjReloadChartList
 {
     NSInteger currentIndex = self.chatArray.count;
-    NSArray *allMessagesArr = [[XMPPManager instence] loadMoreMessages:currentIndex andToJid:self.toSomeOne];
+//    NSArray *allMessagesArr = [[XMPPManager instence] loadMoreMessages:currentIndex andToJid:self.toSomeOne];
     NSLog(@"%@",self.toSomeOne);
-    [self getPopChartList:allMessagesArr];
+//    [self getPopChartList:allMessagesArr];
     if (currentIndex > 5) {
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chatArray count] - 1 - currentIndex inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
     }
     
-//    [self.tableView reloadData];
+
     [_header endRefreshing];
 }
 
@@ -666,10 +657,10 @@
 
 
 
-- (IBAction)didClickButton:(UIBarButtonItem *)sender {
+- (IBAction)didClickSendButton:(UIBarButtonItem *)sender {
     NSString *messageStr = self.enterTextField.text;
-    //气泡内文字
-    [self.messageString appendString:self.enterTextField.text];
+//    //气泡内文字
+//    [self.messageString appendString:self.enterTextField.text];
     if ([messageStr isEqualToString:@""])
     {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"发送失败！" message:@"发送的内容不能为空！" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles: nil];
@@ -678,18 +669,18 @@
     }else
     {
         [self sendMessage:messageStr];
-        if (self.chatArray.count > 5) {
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chatArray count]-1 inSection:0]
-                              atScrollPosition: UITableViewScrollPositionBottom
-                                      animated:YES];
-        }
+//        if (self.chatArray.count > 5) {
+//        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chatArray count]-1 inSection:0]
+//                              atScrollPosition: UITableViewScrollPositionBottom
+//                                      animated:YES];
+//        }
     }
     
     
     self.enterTextField.text = @"";
-    [self.messageString setString:@""];
+//    [self.messageString setString:@""];
     
-    [self.enterTextField resignFirstResponder];
+//    [self.enterTextField resignFirstResponder];
     
     
 }
@@ -700,23 +691,23 @@
     //当前时间
     NSDate *nowTime = [NSDate date];
     
-        Messages *aMessage = [[DiandianCoreDataManager shareDiandianCoreDataManager]createAMessage];
-        [aMessage setChart_content:messageStr];
-        [aMessage setChart_date:nowTime];
-        [aMessage setFrom_jid:[XMPPManager instence].xmppStream.myJID.user];
-        [aMessage setTo_jid:self.toSomeOne];
-        NSLog(@"%@",[XMPPManager instence].xmppStream.myJID.user);
+//        Messages *aMessage = [[DiandianCoreDataManager shareDiandianCoreDataManager]createAMessage];
+//        [aMessage setChart_content:messageStr];
+//        [aMessage setChart_date:nowTime];
+//        [aMessage setFrom_jid:[XMPPManager instence].xmppStream.myJID.user];
+//        [aMessage setTo_jid:self.toSomeOne];
+//        NSLog(@"%@",[XMPPManager instence].xmppStream.myJID.user);
+    
+//        NSXMLElement *xmlBody = [NSXMLElement elementWithName:@"body"];
+//        [xmlBody setStringValue:self.enterTextField.text];
+//        NSXMLElement *xmlMessage = [NSXMLElement elementWithName:@"message"];
+//        [xmlMessage addAttributeWithName:@"type" stringValue:@"chat"];
+//        [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@124.205.147.26",self.toSomeOne]];
+//        [xmlMessage addChild:xmlBody];
+    
+        [[XMPPManager instence]sendMessage:messageStr];
         
-        NSXMLElement *xmlBody = [NSXMLElement elementWithName:@"body"];
-        [xmlBody setStringValue:self.enterTextField.text];
-        NSXMLElement *xmlMessage = [NSXMLElement elementWithName:@"message"];
-        [xmlMessage addAttributeWithName:@"type" stringValue:@"chat"];
-        [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@124.205.147.26",self.toSomeOne]];
-        [xmlMessage addChild:xmlBody];
-        
-        [self.xmppStream sendElement:xmlMessage];
-        
-        [[DiandianCoreDataManager shareDiandianCoreDataManager]addMessage:aMessage intoChartLists:[XMPPManager instence].chartListsForCurrentUser];
+//        [[DiandianCoreDataManager shareDiandianCoreDataManager]addMessage:aMessage intoChartLists:[XMPPManager instence].chartListsForCurrentUser];
         //    NSMutableDictionary *msgAsDictionary = [[NSMutableDictionary alloc] init];
         //    [msgAsDictionary setObject:self.messageTextField.text forKey:@"message"];
         //    [msgAsDictionary setObject:@"you" forKey:@"sender"];
@@ -724,23 +715,24 @@
         NSLog(@"From: You, Message: %@", self.enterTextField.text);
     
 
-    if ([self.chatArray lastObject] == nil) {
-		self.lastTime = nowTime;
-		[self.chatArray addObject:nowTime];
-	}
+//    if ([self.chatArray lastObject] == nil) {
+//		self.lastTime = nowTime;
+//		[self.chatArray addObject:nowTime];
+//	}
 	
     
-    // 发送后生成泡泡显示出来
-	NSTimeInterval timeInterval = [nowTime timeIntervalSinceDate:self.lastTime];
-	if (timeInterval >5) {
-		self.lastTime = nowTime;
-		[self.chatArray addObject:nowTime];
-	}
-    UIView *chatView = [self bubbleView:[NSString stringWithFormat:@"%@",messageStr]
-								   from:YES];
-	[self.chatArray addObject:[NSDictionary dictionaryWithObjectsAndKeys:messageStr, @"text", @"self", @"speaker", chatView, @"view", nil]];
-    NSLog(@"个数 %d %@",self.chatArray.count ,self.chatArray);
-	[self.tableView reloadData];
+//    // 发送后生成泡泡显示出来
+//	NSTimeInterval timeInterval = [nowTime timeIntervalSinceDate:self.lastTime];
+//	if (timeInterval >5) {
+//		self.lastTime = nowTime;
+//		[self.chatArray addObject:nowTime];
+//	}
+//    UIView *chatView = [self bubbleView:[NSString stringWithFormat:@"%@",messageStr]
+//								   from:YES];
+//	[self.chatArray addObject:[NSDictionary dictionaryWithObjectsAndKeys:messageStr, @"text", @"self", @"speaker", chatView, @"view", nil]];
+//    NSLog(@"个数 %d %@",self.chatArray.count ,self.chatArray);
+    
+//	[self reloadChartList];
 
 }
 
@@ -752,7 +744,7 @@
     
 }
 
-#pragma mark -private method
+#pragma mark - Private Methods
 
 //获得初始
 -(void)getPopChartList:(NSArray *)allMessagesArr
@@ -760,7 +752,7 @@
     [self.chatArray removeAllObjects];
     
     for (XMPPMessageArchiving_Message_CoreDataObject *aMessage in allMessagesArr) {
-        if (![aMessage isOutgoing]) {
+        if ([aMessage isOutgoing]) {
             UIView *chatView = [self bubbleView:[NSString stringWithFormat:@"%@",aMessage.body]from:YES];
             [self.chatArray addObject:[NSDictionary dictionaryWithObjectsAndKeys:aMessage.body, @"text", @"self", @"speaker", chatView, @"view", nil]];
         }else{
@@ -768,8 +760,21 @@
             [self.chatArray addObject:[NSDictionary dictionaryWithObjectsAndKeys:aMessage.body, @"text", @"other", @"speaker", chatView, @"view", nil]];
         }
     }
-    
     [self.tableView reloadData];
+    [self reloadChartList];
+}
+
+
+-(void)reloadChartList
+{
+    NSInteger currentIndex = self.chatArray.count;
+
+    if (currentIndex > 5) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.chatArray count]-1 inSection:0]
+                                      atScrollPosition: UITableViewScrollPositionBottom
+                                              animated:YES];
+    }
+   [_header endRefreshing];
 }
 
 
