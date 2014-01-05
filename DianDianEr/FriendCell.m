@@ -15,9 +15,20 @@
     self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
     if (self) {
         // Initialization code
+       
     }
     return self;
 }
+
+
+
+-(void)awakeFromNib
+{
+    [super awakeFromNib];
+    self.headImage.layer.cornerRadius = 10;
+    self.headImage.layer.masksToBounds = YES;
+}
+
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated
 {
