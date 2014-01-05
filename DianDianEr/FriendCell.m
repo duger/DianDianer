@@ -27,6 +27,8 @@
     [super awakeFromNib];
     self.headImage.layer.cornerRadius = 10;
     self.headImage.layer.masksToBounds = YES;
+    self.unReadMessageCount.layer.cornerRadius = 9;
+    self.unReadMessageCount.layer.masksToBounds = YES;
 }
 
 
@@ -36,5 +38,17 @@
 
     // Configure the view for the selected state
 }
+
+//设置未读消息数量
+- (void)setUnReadMessage:(NSNumber *)count
+{
+    self.unReadMessageCount.hidden = YES;
+    if (count.integerValue > 0) {
+        self.unReadMessageCount.text = [count stringValue];
+        self.unReadMessageCount.hidden = NO;
+    }
+    
+}
+
 
 @end

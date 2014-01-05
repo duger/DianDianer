@@ -17,5 +17,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *ideaLabel;
 //聊天的图标
 @property (weak, nonatomic) IBOutlet UIImageView *chatImage;
+//未读消息数量
+@property (strong, nonatomic) IBOutlet UILabel *unReadMessageCount;
 
+//设置未读消息数量
+- (void)setUnReadMessage:(NSNumber *)count;
 @end
