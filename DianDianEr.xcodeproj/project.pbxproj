@@ -2690,6 +2690,7 @@
 			children = (
 				8AC93E631818391A0086B869 /* XMPPManager.h */,
 				8AC93E641818391A0086B869 /* XMPPManager.m */,
+				8A2844CE1818E78500DBB3DC /* Base64 */,
 				8AC93E6618183DFB0086B869 /* XMPP */,
 			);
 			name = XMPPManager;
@@ -3942,7 +3943,6 @@
 		8AEAD8041817F82400BB9970 /* ChartingView */ = {
 			isa = PBXGroup;
 			children = (
-				8A2844CE1818E78500DBB3DC /* Base64 */,
 				8AEAD8051817F9AE00BB9970 /* AKTabBarController */,
 				30CF102518110BF400C25ABE /* RightSideBarViewController.h */,
 				30CF102618110BF400C25ABE /* RightSideBarViewController.m */,

@@ -23,6 +23,7 @@
 #define kGUESTPASSWORD @"123456"
 
 #define kLoginOrNot @"LoginOrNot"
+#define kPageCount 20
 
 #import "IphoneScreen.h"
 #import "Define.h"
@@ -30,3 +31,4 @@
 #import "XMPPManager.h"
 #import "DiandianCoreDataManager.h"
 #import "SelectManager.h"
+#import "Singleton.h"

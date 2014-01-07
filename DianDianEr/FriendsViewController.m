@@ -42,7 +42,7 @@
     self.title = @"好友";
     self.friendsList = [[NSMutableArray alloc]init];
   
-
+    self.fetchedResultsController = [XMPPManager instence].XMPPRosterFetchedResultsController;
 }
 
 - (void)viewDidLoad
@@ -65,7 +65,7 @@
     
     [self uploadRoser];
     
-    [XMPPManager instence].delegate = self;
+    [[XMPPManager instence]setDelegate:self];
 
     
 //    //随意点击去键盘
@@ -74,6 +74,9 @@
 
 
 }
+
+
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -205,7 +208,10 @@
         }
     cell.nameLabel.text = name;
     cell.ideaLabel.text = [[[user primaryResource] presence] status];
-    [cell setUnReadMessage:@(13)];
+    cell.headImage.image = [self configurePhotoForCell:user];
+    [cell setUnReadMessage:[user unreadMessages]];
+//    [cell setUnReadMessage:@(13)];
+    NSLog(@"%d",[[user unreadMessages]integerValue]);
 //    NSLog(@"%@",[user ask]);
 //    NSLog(@"%@",[user jidStr]);
 //    NSLog(@"%@",[user subscription]);
@@ -213,7 +219,7 @@
 //    NSLog(@"%d",[[[user primaryResource]priorityNum]integerValue]);
 //    NSLog(@"%@",[[user primaryResource]show]);
 //    NSLog(@"%d",[[[user primaryResource]showNum]integerValue]);
-    cell.headImage.image = [self configurePhotoForCell:user];
+    
 //    [self configurePhotoForCell:cell user:user];
     
     return cell;
@@ -238,10 +244,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController]objectAtIndexPath:indexPath];
-    NSString *name = [user jidStr];
     
-    NSLog(@"%@",name);
-    [XMPPManager instence].toSomeOne = name;
+    
+
+    [XMPPManager instence].toSomeOne = [user.jid copy];
+    
     [XMPPManager instence].friendHeadImage = [self configurePhotoForCell:user];
     NSLog(@"%@",[XMPPManager instence].toSomeOne);
     [self.delegate goToChartroom];
@@ -280,10 +287,11 @@
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark NSFetchedResultsController
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//#pragma mark NSFetchedResultsController
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+/*
 - (NSFetchedResultsController *)fetchedResultsController
 {
    
@@ -292,7 +300,7 @@
     
     return fetchedResultsController;
 }
-
+*/
 
 #pragma mark - XMPPManger Delegate
 //查询XMPPROSTER成功返回fentchControll

@@ -10,7 +10,7 @@
 #import "XMPPFramework.h"
 #import "MJRefresh.h"
 
-@interface ChartViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,XMPPRosterDelegate,MJRefreshBaseViewDelegate,XMPPManagerDelegate>
+@interface ChartViewController : UIViewController<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,MJRefreshBaseViewDelegate,XMPPManagerMessageDelegate>
 
 @property (strong, nonatomic) IBOutlet UIToolbar *toolbar;
 @property (retain, nonatomic) IBOutlet UITextField *enterTextField;
@@ -25,10 +25,8 @@
 @property (nonatomic, retain) NSMutableArray		 *chatArray;
 
 @property (nonatomic, retain) NSDate                 *lastTime;
-@property (nonatomic,retain) NSString *toSomeOne;  
-@property (nonatomic, strong) XMPPMessageArchivingCoreDataStorage *xmppMessageArchivingCoreDataStorage;    //单例获得
-@property (nonatomic, strong) XMPPStream *xmppStream;
-@property (nonatomic,strong) XMPPUserCoreDataStorageObject *xmppUserObject;
+@property (nonatomic,retain) XMPPJID *toSomeOne;
+
 
 //头像
 @property (nonatomic, strong) UIImage *selfHeadImage;

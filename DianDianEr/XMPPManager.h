@@ -22,10 +22,17 @@
 
 //查询XMPPROSTER成功返回fentchControll
 -(void)controllerDidChangedWithFetchedResult:(NSFetchedResultsController *)fetchedResultsController;
+
+
+@end
+
+@protocol XMPPManagerMessageDelegate <NSObject>
+@optional
 //查询xmppmessageachiving聊天列表成功
 - (void)controllerDidChangedWithFetchedMessageArchingResult:(NSFetchedResultsController *)fetchedMessageArchivingResultsController;
 
 @end
+
 
 @interface XMPPManager : NSObject<XMPPRosterDelegate,XMPPvCardTempModuleDelegate,NSFetchedResultsControllerDelegate>
 {
@@ -131,10 +138,19 @@
 
 ///单例
 +(XMPPManager *)instence;
+
+//代理
+@property ( nonatomic, weak) id<XMPPManagerDelegate> delegate;
+//消息代理
+@property ( nonatomic, weak) id<XMPPManagerMessageDelegate> messageDelegate;
+
 //聊天记录
 @property (nonatomic, retain) NSArray *chartListsForCurrentUser;
 @property(retain,nonatomic) NSMutableArray *roster;
-@property (nonatomic,retain) NSString *toSomeOne;
+
+@property (nonatomic,retain) XMPPJID *toSomeOne;
+//聊天显示条数
+@property (nonatomic, assign) NSInteger pageCount;
 //头像
 @property (nonatomic, strong) UIImage *selfHeadImage;
 @property (nonatomic, strong) UIImage *friendHeadImage;
@@ -152,17 +168,23 @@
 -(void)setFriendsHeadImage;
 
 
+//添加未读消息标记
+-(void)addUnReadMessageMark:(XMPPJID *)jid;
+//删除未读消息
+-(void)removeUnReadMessageMark;
 
-///my method
--(void)showAlertView:(NSString *)message;
-
-@property (nonatomic,weak) id<XMPPManagerDelegate> delegate;
 
 
 //查询XMPPROSTER返回fentchControll
 - (NSFetchedResultsController *)XMPPRosterFetchedResultsController;
 //查询XMPPmessageArching返回fentchControll
 - (NSFetchedResultsController *)xmppMessageArchivingFetchedResultsController;
+
+
+
+
+///my method
+-(void)showAlertView:(NSString *)message;
 @end
 
 

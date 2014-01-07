@@ -93,6 +93,9 @@ static XMPPManager *s_XMPPManager = nil;
         self.roster = [[NSMutableArray alloc]init];
 
         self.friendHeadImage = [[UIImage alloc]init];
+        
+        //默认聊天界面显示消息数
+        self.pageCount = kPageCount;
 //        chartListsForCurrentUser = [[NSMutableArray alloc]init];
     }
     return self;
@@ -530,6 +533,91 @@ static XMPPManager *s_XMPPManager = nil;
     
 }
 
+- (void)sendImage
+{
+        UIImage *selectedImage = [[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"camer" ofType:@"png"]];
+        NSData *dataObjww = UIImageJPEGRepresentation(selectedImage,0);
+    
+        NSString *strMessage;
+    
+        strMessage = [dataObjww base64EncodedString];
+    
+    
+        NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+       [body setStringValue:@"image"];
+    
+        NSXMLElement *attachment = [NSXMLElement elementWithName:@"attachment"];
+   [attachment setStringValue:strMessage];
+    
+        NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
+        [message addAttributeWithName:@"type" stringValue:@"chat"];
+        [message addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@",self.toSomeOne.bare]];
+        [message addChild:body];
+        [message addChild:attachment];
+        [self.xmppStream sendElement:message];
+
+}
+
+
+- (void)sendAttechment:(id)sender {
+    NSXMLElement *value1 = [NSXMLElement elementWithName:@"value" stringValue:@"http://jabber.org/protocol/bytestreams"];
+    NSXMLElement *value2 = [NSXMLElement elementWithName:@"value" stringValue:@"http://jabber.org/protocol/ibb"];
+    NSXMLElement *option1 = [NSXMLElement elementWithName:@"option"];
+    [option1 addChild:value1];
+    NSXMLElement *option2 = [NSXMLElement elementWithName:@"option"];
+    [option2 addChild:value2];
+    NSXMLElement *field = [NSXMLElement elementWithName:@"field"];
+    [field addAttributeWithName:@"var" stringValue:@"stream-method"];
+    [field addAttributeWithName:@"type" stringValue:@"list-single"];
+    [field addChild:option1];
+    [field addChild:option2];
+    NSXMLElement *x = [NSXMLElement elementWithName:@"x" xmlns:@"jabber:x:data"];
+    [x addAttributeWithName:@"type" stringValue:@"form"];
+    [x addChild:field];
+    NSXMLElement *feature = [NSXMLElement elementWithName:@"feature" xmlns:@"http://jabber.org/protocol/feature-neg"];
+    [feature addChild:x];
+    NSXMLElement *desc = [NSXMLElement elementWithName:@"desc" stringValue:@"send"];
+    NSXMLElement *file = [NSXMLElement elementWithName:@"file" xmlns:@"http://jabber.org/protocol/si/profile/file-transfer"];
+    [file addAttributeWithName:@"name" stringValue:@"camer.tex"];
+    [file addAttributeWithName:@"size" stringValue:@"888"];
+    [file addChild:desc];
+    NSXMLElement *si = [NSXMLElement elementWithName:@"si" xmlns:@"http://jabber.org/protocol/si"];
+    [si addAttributeWithName:@"profile" stringValue:@"http://jabber.org/protocol/si/profile/file-transfer"];
+    [si addAttributeWithName:@"mime-type" stringValue:@"text/plain"];
+    [si addAttributeWithName:@"id" stringValue:@"82B0C697-C1DE-93F9-103E-481C8E7A3BD8"];
+    [si addChild:feature];
+    [si addChild:file];
+    NSXMLElement *iq = [NSXMLElement elementWithName:@"iq"];
+    [iq addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",@"tosomeon",kDOMAIN]];//
+    [iq addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@%@",@"fromsomeone",kDOMAIN]];
+    [iq addAttributeWithName:@"type" stringValue:@"set"];
+    [iq addAttributeWithName:@"id" stringValue:@"iq_13"];
+    [iq addChild:si];
+    [self.xmppStream sendElement:iq];
+    
+    
+}
+
+
+
+- (void)sendMessage:(NSString *)message {
+    NSXMLElement *xmlBody = [NSXMLElement elementWithName:@"body"];
+    [xmlBody setStringValue:message];
+    NSXMLElement *xmlMessage = [NSXMLElement elementWithName:@"message"];
+    [xmlMessage addAttributeWithName:@"type" stringValue:@"chat"];
+    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@",self.toSomeOne]];
+    [xmlMessage addChild:xmlBody];
+    [self.xmppStream sendElement:xmlMessage];
+    
+}
+
+-(void)sendMyMessage:(NSXMLElement *)message
+{
+    
+    [self.xmppStream sendElement:message];
+}
+
+
 //播放声音
 - (IBAction)play:(id)sender {
     //    NSString *strUrl = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
@@ -721,7 +809,37 @@ static XMPPManager *s_XMPPManager = nil;
     
     
 }
-#pragma mark XMPPvCardTempModuleDelegate
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - UnReadMessagers Methods
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//添加未读消息标记
+-(void)addUnReadMessageMark:(XMPPJID *)jid
+{
+    NSManagedObjectContext *moc = [self managedObjectContext_roster];
+    XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:jid     xmppStream:xmppStream
+                                                   managedObjectContext:moc];
+    NSLog(@"%d",[user.unreadMessages integerValue]);
+  
+    user.unreadMessages = [NSNumber numberWithInteger:([user.unreadMessages integerValue] + 1)];
+}
+//删除未读消息
+-(void)removeUnReadMessageMark
+{
+    NSLog(@"%@",self.toSomeOne);
+    NSManagedObjectContext *moc = [self managedObjectContext_roster];
+    XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:self.toSomeOne xmppStream:xmppStream
+                                                   managedObjectContext:moc];
+    NSLog(@"%d",[user.unreadMessages integerValue]);
+    
+    user.unreadMessages = @0;
+    NSLog(@"%d",[user.unreadMessages integerValue]);
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#pragma mark - XMPPvCardTempModuleDelegate
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)xmppvCardTempModule:(XMPPvCardTempModule *)vCardTempModule didReceivevCardTemp:(XMPPvCardTemp *)vCardTemp forJID:(XMPPJID *)jid
 {
@@ -737,73 +855,9 @@ static XMPPManager *s_XMPPManager = nil;
     [textField resignFirstResponder];
     return YES;
 }
-#pragma mark - button tapped methods
-- (IBAction)sendAttechment:(id)sender {
-    NSXMLElement *value1 = [NSXMLElement elementWithName:@"value" stringValue:@"http://jabber.org/protocol/bytestreams"];
-    NSXMLElement *value2 = [NSXMLElement elementWithName:@"value" stringValue:@"http://jabber.org/protocol/ibb"];
-    NSXMLElement *option1 = [NSXMLElement elementWithName:@"option"];
-    [option1 addChild:value1];
-    NSXMLElement *option2 = [NSXMLElement elementWithName:@"option"];
-    [option2 addChild:value2];
-    NSXMLElement *field = [NSXMLElement elementWithName:@"field"];
-    [field addAttributeWithName:@"var" stringValue:@"stream-method"];
-    [field addAttributeWithName:@"type" stringValue:@"list-single"];
-    [field addChild:option1];
-    [field addChild:option2];
-    NSXMLElement *x = [NSXMLElement elementWithName:@"x" xmlns:@"jabber:x:data"];
-    [x addAttributeWithName:@"type" stringValue:@"form"];
-    [x addChild:field];
-    NSXMLElement *feature = [NSXMLElement elementWithName:@"feature" xmlns:@"http://jabber.org/protocol/feature-neg"];
-    [feature addChild:x];
-    NSXMLElement *desc = [NSXMLElement elementWithName:@"desc" stringValue:@"send"];
-    NSXMLElement *file = [NSXMLElement elementWithName:@"file" xmlns:@"http://jabber.org/protocol/si/profile/file-transfer"];
-    [file addAttributeWithName:@"name" stringValue:@"camer.tex"];
-    [file addAttributeWithName:@"size" stringValue:@"888"];
-    [file addChild:desc];
-    NSXMLElement *si = [NSXMLElement elementWithName:@"si" xmlns:@"http://jabber.org/protocol/si"];
-    [si addAttributeWithName:@"profile" stringValue:@"http://jabber.org/protocol/si/profile/file-transfer"];
-    [si addAttributeWithName:@"mime-type" stringValue:@"text/plain"];
-    [si addAttributeWithName:@"id" stringValue:@"82B0C697-C1DE-93F9-103E-481C8E7A3BD8"];
-    [si addChild:feature];
-    [si addChild:file];
-    NSXMLElement *iq = [NSXMLElement elementWithName:@"iq"];
-    [iq addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",@"tosomeon",kDOMAIN]];//
-    [iq addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@%@",@"fromsomeone",kDOMAIN]];
-    [iq addAttributeWithName:@"type" stringValue:@"set"];
-    [iq addAttributeWithName:@"id" stringValue:@"iq_13"];
-    [iq addChild:si];
-    [self.xmppStream sendElement:iq];
-    
-    
-}
 
-
-
-- (void)sendMessage:(NSString *)message {
-    NSXMLElement *xmlBody = [NSXMLElement elementWithName:@"body"];
-    [xmlBody setStringValue:message];
-    NSXMLElement *xmlMessage = [NSXMLElement elementWithName:@"message"];
-    [xmlMessage addAttributeWithName:@"type" stringValue:@"chat"];
-    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@",self.toSomeOne]];
-    [xmlMessage addChild:xmlBody];
-    [self.xmppStream sendElement:xmlMessage];
-    
-    //    [XMPPManager instence].toSomeOne = self.toTextField.text;
-    //    NSMutableDictionary *msgAsDictionary = [[NSMutableDictionary alloc] init];
-    //    [msgAsDictionary setObject:self.messageTextField.text forKey:@"message"];
-    //    [msgAsDictionary setObject:@"you" forKey:@"sender"];
-    //    [self.messages addObject:msgAsDictionary];
-    NSLog(@"From: You, Message: %@", message);
-    
-}
-
--(void)sendMyMessage:(NSXMLElement *)message
-{
-    
-    [self.xmppStream sendElement:message];
-}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark Core Data
+#pragma mark - Core Data
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (NSManagedObjectContext *)managedObjectContext_roster
@@ -897,8 +951,9 @@ static XMPPManager *s_XMPPManager = nil;
 		
         //按状态分组和按名字排序
 		NSSortDescriptor *sd1 = [[NSSortDescriptor alloc] initWithKey:@"sectionNum" ascending:YES];
-		NSSortDescriptor *sd2 = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES];
-		NSArray *sortDescriptors = [NSArray arrayWithObjects:sd1, sd2, nil];
+        NSSortDescriptor *sd2 = [[NSSortDescriptor alloc]initWithKey:@"unreadMessages" ascending:NO];
+		NSSortDescriptor *sd3 = [[NSSortDescriptor alloc] initWithKey:@"displayName" ascending:YES];
+		NSArray *sortDescriptors = [NSArray arrayWithObjects:sd1, sd2, sd3, nil];
         
         //添加按条件查询 剔除自己
         NSString *JID = [[NSUserDefaults standardUserDefaults]objectForKey:kXMPPmyJID];
@@ -909,9 +964,9 @@ static XMPPManager *s_XMPPManager = nil;
 		[fetchRequest setEntity:entity];
 		[fetchRequest setSortDescriptors:sortDescriptors];
         [fetchRequest setPredicate:predicate];
-        //		[fetchRequest setFetchBatchSize:10];
+//        [fetchRequest setFetchBatchSize:10];
 		
-		fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
+        fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest
 		                                                               managedObjectContext:moc
 		                                                                 sectionNameKeyPath:@"sectionNum"
 		                                                                          cacheName:nil];
@@ -939,7 +994,7 @@ static XMPPManager *s_XMPPManager = nil;
 //查询消息记录
 - (NSFetchedResultsController *)xmppMessageArchivingFetchedResultsController
 {
-//    if (fetchedMessageArchivingResultsController == nil) {
+    
         NSManagedObjectContext *moc = [self managedObjectContext_messageArchiving];
         
         NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPMessageArchiving_Message_CoreDataObject" inManagedObjectContext:moc];
@@ -948,31 +1003,56 @@ static XMPPManager *s_XMPPManager = nil;
         JID = [JID stringByAppendingFormat:@"@%@",kDOMAIN];
         NSLog(@"查询的自己%@",JID);
         NSLog(@"查询的别人%@",self.toSomeOne);
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"streamBareJidStr = %@ AND bareJidStr = %@",JID,self.toSomeOne];
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"streamBareJidStr = %@ AND bareJidStr = %@",JID,self.toSomeOne.bare];
+
         //按时间 和 好友排序
         NSSortDescriptor *sd1 = [[NSSortDescriptor alloc]initWithKey:@"bareJidStr" ascending:YES];
-        NSSortDescriptor *sd2 = [[NSSortDescriptor alloc]initWithKey:@"timestamp" ascending:YES];
+        NSSortDescriptor *sd2 = [[NSSortDescriptor alloc]initWithKey:@"timestamp" ascending:NO];
         NSArray *sortDescriptors = [NSArray arrayWithObjects:sd1, sd2, nil];
         
         NSFetchRequest *fetchRequest = [[NSFetchRequest alloc]init];
         [fetchRequest setEntity:entity];
         [fetchRequest setPredicate:predicate];
         [fetchRequest setSortDescriptors:sortDescriptors];
-        [fetchRequest setFetchBatchSize:10];
-        
+
+        [fetchRequest setFetchLimit:self.pageCount];
+//        [fetchRequest setFetchBatchSize:20];
+    
+    if (fetchedMessageArchivingResultsController == nil) {
         fetchedMessageArchivingResultsController = [[NSFetchedResultsController alloc]initWithFetchRequest:fetchRequest managedObjectContext:moc sectionNameKeyPath:nil cacheName:nil];
 
+    }else{
+        [fetchedMessageArchivingResultsController setValue:fetchRequest forKey:@"fetchRequest"];
+    }
+    
+    [fetchedMessageArchivingResultsController setDelegate:self];
+    
         NSError *error = nil;
 
-        
         if (![fetchedMessageArchivingResultsController performFetch:&error]) {
             DDLogError(@"Error performing fetch:%@",error);
         }
         
-        [fetchedMessageArchivingResultsController setDelegate:self];
-        
-//    }
+    
+    
+    [self desortFetchedMessageResultsController:fetchedMessageArchivingResultsController];
+    
+    
+    
+    
     return fetchedMessageArchivingResultsController;
+}
+
+-(void)desortFetchedMessageResultsController:(NSFetchedResultsController *)control
+{
+    
+    NSArray *Arr = [control fetchedObjects];
+    NSMutableArray *tempArr = [[NSMutableArray alloc]init];
+    for (id item in Arr) {
+        [tempArr insertObject:item atIndex:0];
+    }
+    [control setValue:tempArr forKey:@"fetchedObjects"];
+
 }
 
 
@@ -984,14 +1064,16 @@ static XMPPManager *s_XMPPManager = nil;
     
     NSLog(@"%@",controller.cacheName);
     if (controller == fetchedResultsController) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(controllerDidChangedWithFetchedResult:)]) {
+
+        if (self.delegate && [self.delegate respondsToSelector:@selector(controllerDidChangedWithFetchedResult:)])
+        {
             [self.delegate controllerDidChangedWithFetchedResult:controller];
         }
     }
     
     if (controller == fetchedMessageArchivingResultsController) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(controllerDidChangedWithFetchedMessageArchingResult:)]) {
-            [self.delegate controllerDidChangedWithFetchedMessageArchingResult:controller];
+        if (self.messageDelegate && [self.messageDelegate respondsToSelector:@selector(controllerDidChangedWithFetchedMessageArchingResult:)]) {
+            [self.messageDelegate controllerDidChangedWithFetchedMessageArchingResult:controller];
         }
         
     }
@@ -1003,7 +1085,7 @@ static XMPPManager *s_XMPPManager = nil;
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark XMPPStream Delegate
+#pragma mark - XMPPStream Delegate
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)xmppStreamDidRegister:(XMPPStream *)sender
 {
@@ -1404,12 +1486,22 @@ static XMPPManager *s_XMPPManager = nil;
     //    [self.delegate showMessage:message];
 	if ([message isChatMessageWithBody])
 	{
+        NSManagedObjectContext *moc = [self managedObjectContext_roster];
 		XMPPUserCoreDataStorageObject *user = [xmppRosterStorage userForJID:[message from]
 		                                                         xmppStream:xmppStream
-		                                               managedObjectContext:[self managedObjectContext_roster]];
-		
+		                                               managedObjectContext:moc];
+        
+		NSLog(@"%d",[user.unreadMessages integerValue]);
 		NSString *body = [[message elementForName:@"body"] stringValue];
 		NSString *displayName = [user displayName];
+        
+       //添加未读标记
+        [self addUnReadMessageMark:[message from]];
+        
+        
+        NSLog(@"%d",[user.unreadMessages integerValue]);
+//        [moc save:nil];
+        
         if ([message isOfflineMessageWithBody]) {
             
         }
