@@ -88,6 +88,48 @@ static XMPPRosterCoreDataStorage *sharedInstance;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark Utilities
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//删除所有状态 duger添加
+- (void)_clearAllPresentsForXMPPStream:(XMPPStream *)stream
+{
+    XMPPLogTrace();
+	AssertPrivateQueue();
+	
+	NSManagedObjectContext *moc = [self managedObjectContext];
+	
+	NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPResourceCoreDataStorageObject"
+	                                          inManagedObjectContext:moc];
+	
+	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+	[fetchRequest setEntity:entity];
+	[fetchRequest setFetchBatchSize:saveThreshold];
+	
+	if (stream)
+	{
+		NSPredicate *predicate;
+		predicate = [NSPredicate predicateWithFormat:@"streamBareJidStr == %@",
+                     [[self myJIDForXMPPStream:stream] bare]];
+		NSLog(@"%@",[[self myJIDForXMPPStream:stream]bare]);
+		[fetchRequest setPredicate:predicate];
+	}
+	
+	NSArray *allResources = [moc executeFetchRequest:fetchRequest error:nil];
+	
+	NSUInteger unsavedCount = [self numberOfUnsavedChanges];
+	
+	for (XMPPResourceCoreDataStorageObject *resource in allResources)
+	{
+        XMPPPresence *presence = [XMPPPresence presence];
+       
+        [resource updateWithPresence:presence];
+		
+		if (++unsavedCount >= saveThreshold)
+		{
+			[self save];
+			unsavedCount = 0;
+		}
+	}
+
+}
 
 - (void)_clearAllResourcesForXMPPStream:(XMPPStream *)stream
 {
@@ -440,6 +482,17 @@ static XMPPRosterCoreDataStorage *sharedInstance;
 		{
 			user.photo = photo;
 		}
+	}];
+}
+
+//删除所有状态 duger添加
+- (void)clearAllPresentsForXMPPStream:(XMPPStream *)stream
+{
+    XMPPLogTrace();
+	
+	[self scheduleBlock:^{
+		
+		[self _clearAllPresentsForXMPPStream:stream];
 	}];
 }
 

@@ -92,12 +92,13 @@
         }];
     }
     else if (indexPath.row == 2){
-        
+        //注销用户
         [[NSUserDefaults standardUserDefaults]setBool:NO forKey:kLoginOrNot];
         LoginViewController *loginVC = [self.storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kXMPPmyJID];
         [[NSUserDefaults standardUserDefaults] removeObjectForKey:kXMPPmyPassword];
-        [[XMPPManager instence] disconnect];
+        //注销
+        [[XMPPManager instence] loginOut];
 
         [self.navigationController pushViewController:loginVC animated:YES];
     }

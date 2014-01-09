@@ -256,7 +256,14 @@
 // And since you're free to plug-n-play storage classes, and customize them as much as you want.
 // This is where you can really tailor the xmpp stack to meet the needs of your application.
 // 
-// 
+//
+
+/**
+ *删除好友列表
+ *
+ **/
+- (void)removeAllUsersAndResources;
+
 
 @end
 
@@ -318,6 +325,8 @@
 
 @optional
 
+//删除所有状态  duger修改
+- (void)clearAllPresentsForXMPPStream:(XMPPStream *)stream;
 /**
  * When XMPPvCardAvatarModule is included in the framework, the roster will integrate with it.
  * Implement this method to provide support for storing the downloaded user photos.

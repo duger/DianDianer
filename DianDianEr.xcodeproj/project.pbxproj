@@ -227,7 +227,6 @@
 		79A6F4FC18124DC6007062A8 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A6F4FB18124DC6007062A8 /* CoreGraphics.framework */; };
 		79A6F4FE18124DD0007062A8 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A6F4FD18124DD0007062A8 /* UIKit.framework */; };
 		79A6F50018124DDC007062A8 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A6F4FF18124DDC007062A8 /* QuartzCore.framework */; };
-		79A6F50218124DE6007062A8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A6F50118124DE6007062A8 /* Foundation.framework */; };
 		79A6F50418124E1D007062A8 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A6F50318124E1C007062A8 /* CoreText.framework */; };
 		79B517DB18225E3100F776B9 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 79B517AD18225E3100F776B9 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		79B517DF18225E3100F776B9 /* EGOCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 79B517B818225E3100F776B9 /* EGOCache.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -278,7 +277,6 @@
 		8A0BD02C1872BFE900906A9A /* personal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A0BD0261872BFE900906A9A /* personal@2x.png */; };
 		8A0BD02D1872BFE900906A9A /* setting.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A0BD0271872BFE900906A9A /* setting.png */; };
 		8A0BD02E1872BFE900906A9A /* setting@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A0BD0281872BFE900906A9A /* setting@2x.png */; };
-		8A2844C71818E04400DBB3DC /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A2844C61818E04400DBB3DC /* libxml2.dylib */; };
 		8A2844C91818E0C300DBB3DC /* libresolv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A2844C81818E0C300DBB3DC /* libresolv.dylib */; };
 		8A2844CD1818E70B00DBB3DC /* ChartCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A2844CC1818E70B00DBB3DC /* ChartCell.m */; };
 		8A2C396C18488BC7007A221C /* commint.png in Resources */ = {isa = PBXBuildFile; fileRef = 8A2C396A18488BC7007A221C /* commint.png */; };
@@ -517,6 +515,8 @@
 		8ABC0AB5183A432900E47DE7 /* DiandianCoreDataManager.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC0AB3183A432900E47DE7 /* DiandianCoreDataManager.xcdatamodeld */; };
 		8ABC0AB8183A446700E47DE7 /* Messages.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC0AB7183A446700E47DE7 /* Messages.m */; };
 		8ABC0ABE183A449100E47DE7 /* ChartList.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ABC0ABD183A449100E47DE7 /* ChartList.m */; };
+		8AC43ACF187E980E0042A276 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A2844C61818E04400DBB3DC /* libxml2.dylib */; };
+		8AC43AD0187E98410042A276 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 79A6F50118124DE6007062A8 /* Foundation.framework */; };
 		8AC93E651818391A0086B869 /* XMPPManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC93E641818391A0086B869 /* XMPPManager.m */; };
 		8AC93FA618183DFC0086B869 /* XMPPAnonymousAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC93E6A18183DFB0086B869 /* XMPPAnonymousAuthentication.m */; };
 		8AC93FA718183DFC0086B869 /* XMPPDeprecatedDigestAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC93E6D18183DFB0086B869 /* XMPPDeprecatedDigestAuthentication.m */; };
@@ -676,7 +676,6 @@
 		8AC9F72A181E8960006378BA /* ShareManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AC9F71B181E8960006378BA /* ShareManager.m */; };
 		8ACE511E182292D5001E9132 /* 2013-10-31 13:20:41 +0000.aac in Resources */ = {isa = PBXBuildFile; fileRef = 8ACE511D182292D5001E9132 /* 2013-10-31 13:20:41 +0000.aac */; };
 		8AE944EA181FE663001490C0 /* Singleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AE944E9181FE663001490C0 /* Singleton.m */; };
-		8AE944ED181FE66C001490C0 /* test.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8AE944EB181FE66C001490C0 /* test.mp3 */; };
 		8AE944EE181FE66C001490C0 /* test.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AE944EC181FE66C001490C0 /* test.png */; };
 		8AEAD8131817F9EC00BB9970 /* AKTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AEAD8071817F9EC00BB9970 /* AKTabBarController.m */; };
 		8AEAD8141817F9EC00BB9970 /* AKTab.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AEAD8091817F9EC00BB9970 /* AKTab.m */; };
@@ -1789,7 +1788,6 @@
 		8ACE511F18229BA0001E9132 /* lame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lame.h; sourceTree = "<group>"; };
 		8AE944E8181FE663001490C0 /* Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
 		8AE944E9181FE663001490C0 /* Singleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Singleton.m; sourceTree = "<group>"; };
-		8AE944EB181FE66C001490C0 /* test.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = test.mp3; sourceTree = "<group>"; };
 		8AE944EC181FE66C001490C0 /* test.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test.png; sourceTree = "<group>"; };
 		8AEAD8061817F9EC00BB9970 /* AKTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AKTabBarController.h; sourceTree = "<group>"; };
 		8AEAD8071817F9EC00BB9970 /* AKTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AKTabBarController.m; sourceTree = "<group>"; };
@@ -1830,6 +1828,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8AC43AD0187E98410042A276 /* Foundation.framework in Frameworks */,
+				8AC43ACF187E980E0042A276 /* libxml2.dylib in Frameworks */,
 				300E6EBC18239098006F4F0D /* ImageIO.framework in Frameworks */,
 				79B517ED18225F9600F776B9 /* MobileCoreServices.framework in Frameworks */,
 				8A6878AC1818F82E00F77266 /* CoreLocation.framework in Frameworks */,
@@ -1839,7 +1839,6 @@
 				8A6878B01818F85500F77266 /* Security.framework in Frameworks */,
 				8A2844C91818E0C300DBB3DC /* libresolv.dylib in Frameworks */,
 				8A6878AE1818F83900F77266 /* SystemConfiguration.framework in Frameworks */,
-				8A2844C71818E04400DBB3DC /* libxml2.dylib in Frameworks */,
 				79731D0C181631090013ABBC /* CoreData.framework in Frameworks */,
 				79E5B67C1833AFFD00D9AB05 /* libmp3lame.a in Frameworks */,
 				8A7D4FC31815188100C1351D /* AssetsLibrary.framework in Frameworks */,
@@ -1847,7 +1846,6 @@
 				8A7D4FBF1815183600C1351D /* CoreMedia.framework in Frameworks */,
 				8A7D4FBD181515FC00C1351D /* CoreImage.framework in Frameworks */,
 				79A6F50418124E1D007062A8 /* CoreText.framework in Frameworks */,
-				79A6F50218124DE6007062A8 /* Foundation.framework in Frameworks */,
 				79A6F50018124DDC007062A8 /* QuartzCore.framework in Frameworks */,
 				79A6F4FE18124DD0007062A8 /* UIKit.framework in Frameworks */,
 				79A6F4FC18124DC6007062A8 /* CoreGraphics.framework in Frameworks */,
@@ -3926,7 +3924,6 @@
 				8AC9F71B181E8960006378BA /* ShareManager.m */,
 				79E5B67B1833AFFD00D9AB05 /* libmp3lame.a */,
 				8ACE511D182292D5001E9132 /* 2013-10-31 13:20:41 +0000.aac */,
-				8AE944EB181FE66C001490C0 /* test.mp3 */,
 				8AE944EC181FE66C001490C0 /* test.png */,
 			);
 			name = ShareManager;
@@ -4225,7 +4222,6 @@
 				30D77317181BB840007C0A10 /* Settings-bg.png in Resources */,
 				30D77319181BB84B007C0A10 /* List-icon.png in Resources */,
 				79FC4182181E3E29000BB108 /* CustomMapCell.xib in Resources */,
-				8AE944ED181FE66C001490C0 /* test.mp3 in Resources */,
 				8AE944EE181FE66C001490C0 /* test.png in Resources */,
 				8AC98AA01820F31A009125AE /* compose_camerabutton_background_highlighted.png in Resources */,
 				8AC98AA11820F31A009125AE /* compose_camerabutton_background.png in Resources */,

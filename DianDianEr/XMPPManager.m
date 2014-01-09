@@ -9,21 +9,22 @@
 #import "XMPPManager.h"
 #import "GCDAsyncSocket.h"
 #import "XMPP.h"
-#import "XMPPReconnect.h"
-#import "XMPPCapabilitiesCoreDataStorage.h"
-#import "XMPPRosterCoreDataStorage.h"
-#import "XMPPvCardAvatarModule.h"
-#import "XMPPvCardCoreDataStorage.h"
-#import "XMPPRosterMemoryStorage.h"
-#import "XMPPvCardTemp.h"
-#import "XMPPSearch.h"
+
+
+#import "ShareManager.h"
+
 
 #import "DDLog.h"
 #import "DDTTYLogger.h"
 #import "NSData+Base64.h"
 #import "NSString+Base64.h"
+
 #import "XMPPManager.h"
 #import "Singleton.h"
+
+#import "NSXMLElement+XMPP.h"
+
+
 
 #import <CFNetwork/CFNetwork.h>
 #if DEBUG
@@ -476,11 +477,14 @@ static XMPPManager *s_XMPPManager = nil;
 - (IBAction)uploadAudio:(id)sender {
     //ca9f3948472ebbe940fbc16f76bccb95
     //    NSURL *recordedFile = [NSURL URLWithString:[[NSBundle mainBundle]pathForResource:@"endgame" ofType:@"wav"]];
-    NSData * soundData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"msg" ofType:@"amr"]];
+    NSString *mp3FileName = @"test.mp3";
+    
+    NSString *mp3FilePath = [[self soundsAtDocumentPath] stringByAppendingPathComponent:mp3FileName];
+    NSData * soundData = [[NSData alloc]initWithContentsOfFile:mp3FilePath];
     NSLog(@"%d",soundData.length);
     NSString *sound=[soundData base64EncodedString];
     NSLog(@"%d",sound.length);
-    NSString *path = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/msg.amr"];
+    NSString *path = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/msg.mp3"];
     NSError *error = nil;
     BOOL write = [sound writeToFile:path atomically:YES encoding: NSUTF8StringEncoding error:&error];
     if (write) {
@@ -491,14 +495,14 @@ static XMPPManager *s_XMPPManager = nil;
     //    NSLog(@"%@",sound);
     
     NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
-    // [body setStringValue:@"image"];
+    [body setStringValue:@"sound"];
     
     NSXMLElement *attachment = [NSXMLElement elementWithName:@"attachment"];
     [attachment setStringValue:sound];
     
     NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
     [message addAttributeWithName:@"type" stringValue:@"chat"];
-    [message addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",@"tosomeone",kDOMAINWITHSOURCE]];
+    [message addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@",@"duger@lanouserver"]];
     [message addChild:body];
     [message addChild:attachment];
     [self.xmppStream sendElement:message];
@@ -523,21 +527,24 @@ static XMPPManager *s_XMPPManager = nil;
     //    [message addChild:attachment];
     //    [self.xmppStream sendElement:message];
     
-    NSXMLElement *xmlBody = [NSXMLElement elementWithName:@"body"];
-    [xmlBody setStringValue:sound];
-    NSXMLElement *xmlMessage = [NSXMLElement elementWithName:@"message"];
-    [xmlMessage addAttributeWithName:@"type" stringValue:@"chat"];
-    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",self.toSomeOne,kDOMAIN]];
-    [xmlMessage addChild:xmlBody];
-    [self.xmppStream sendElement:xmlMessage];
+//    NSXMLElement *xmlBody = [NSXMLElement elementWithName:@"body"];
+//    [xmlBody setStringValue:sound];
+//    NSXMLElement *xmlMessage = [NSXMLElement elementWithName:@"message"];
+//    [xmlMessage addAttributeWithName:@"type" stringValue:@"chat"];
+//    [xmlMessage addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@",@"duger@lanouserver"]];
+//    [xmlMessage addChild:xmlBody];
+//    [self.xmppStream sendElement:xmlMessage];
     
 }
 
 - (void)sendImage
 {
-        UIImage *selectedImage = [[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"camer" ofType:@"png"]];
-        NSData *dataObjww = UIImageJPEGRepresentation(selectedImage,0);
-    
+        UIImage *selectedImage = [[UIImage alloc]initWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"Icon-60" ofType:@"png"]];
+//        UIImage *selectedImage = [UIImage imageNamed:@"renren.png"];
+
+//        NSData *dataObjww = UIImageJPEGRepresentation(selectedImage,0);
+    NSData *dataObjww = UIImagePNGRepresentation(selectedImage);
+
         NSString *strMessage;
     
         strMessage = [dataObjww base64EncodedString];
@@ -547,11 +554,11 @@ static XMPPManager *s_XMPPManager = nil;
        [body setStringValue:@"image"];
     
         NSXMLElement *attachment = [NSXMLElement elementWithName:@"attachment"];
-   [attachment setStringValue:strMessage];
+        [attachment setStringValue:strMessage];
     
         NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
         [message addAttributeWithName:@"type" stringValue:@"chat"];
-        [message addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@",self.toSomeOne.bare]];
+        [message addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@",@"duger@lanouserver"]];
         [message addChild:body];
         [message addChild:attachment];
         [self.xmppStream sendElement:message];
@@ -940,11 +947,21 @@ static XMPPManager *s_XMPPManager = nil;
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - XMPPROSTER Method
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//退出登录 删除好友列表
+-(void)loginOut
+{
+    [xmppRoster removeAllUsersAndResources];
+    [self goOffline];
+	[xmppStream disconnect];
+}
+
+
 - (NSFetchedResultsController *)XMPPRosterFetchedResultsController
 {
 	if (fetchedResultsController == nil)
 	{
 		NSManagedObjectContext *moc = [self managedObjectContext_roster];
+        
 		
 		NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPUserCoreDataStorageObject"
 		                                          inManagedObjectContext:moc];
@@ -1484,6 +1501,8 @@ static XMPPManager *s_XMPPManager = nil;
 	// A simple example of inbound message handling.
     
     //    [self.delegate showMessage:message];
+    
+    
 	if ([message isChatMessageWithBody])
 	{
         NSManagedObjectContext *moc = [self managedObjectContext_roster];
@@ -1505,6 +1524,28 @@ static XMPPManager *s_XMPPManager = nil;
         if ([message isOfflineMessageWithBody]) {
             
         }
+        
+        if ([message elementForName:@"attachment"] != nil) {
+            NSLog(@"能识别啦");
+            if ([[[message elementForName:@"body"]stringValue]isEqualToString:@"image"]) {
+                NSLog(@"收到图片");
+                NSString *imageStr = [[message elementForName:@"attachment"]stringValue];
+                NSData *imageData = [imageStr base64DecodedData];
+                UIImage *image = [[UIImage alloc]initWithData:imageData];
+            }
+            
+            if ([[[message elementForName:@"body"]stringValue]isEqualToString:@"body"]) {
+                NSString *soundStr = [[message elementForName:@"attachment"]stringValue];
+                NSData *soundData = [soundStr base64DecodedData];
+                NSString *path = [[self soundsAtDocumentPath] stringByAppendingString:@"/receieved.mp3"];
+                if ([soundData writeToFile:path atomically:YES]) {
+                    NSLog(@"写入成功");
+                }
+                
+            }
+        }
+        
+        
         
         
         if ([body base64DecodedData]) {
@@ -1541,6 +1582,18 @@ static XMPPManager *s_XMPPManager = nil;
 			[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
 		}
 	}
+}
+
+//创建sounds文件夹
+-(NSString *)soundsAtDocumentPath
+{
+    NSArray *documents = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [documents lastObject];
+    NSString *soundsPath = [documentsPath stringByAppendingString:@"/sounds"];
+    if (![[NSFileManager defaultManager]fileExistsAtPath:soundsPath]) {
+        [[NSFileManager defaultManager] createDirectoryAtPath:soundsPath withIntermediateDirectories:NO attributes:nil error:nil];
+    }
+    return soundsPath;
 }
 
 - (void)xmppStream:(XMPPStream *)sender didReceivePresence:(XMPPPresence *)presence
@@ -1609,7 +1662,7 @@ static XMPPManager *s_XMPPManager = nil;
 //    return @"XMPP";
 //}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#pragma mark XMPPRosterDelegate
+#pragma mark - XMPPRosterDelegate
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 - (void)xmppRoster:(XMPPRoster *)sender didReceiveBuddyRequest:(XMPPPresence *)presence

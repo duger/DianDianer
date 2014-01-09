@@ -180,11 +180,16 @@
 //查询XMPPmessageArching返回fentchControll
 - (NSFetchedResultsController *)xmppMessageArchivingFetchedResultsController;
 
-
+//退出登录 删除好友列表
+-(void)loginOut;
 
 
 ///my method
 -(void)showAlertView:(NSString *)message;
+
+
+
+- (void)sendImage;
 @end
 
 

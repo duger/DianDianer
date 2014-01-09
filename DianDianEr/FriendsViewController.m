@@ -199,7 +199,7 @@
     XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     
     
-    NSString *name = [user displayName];
+    NSString *name = [[user jid]user];
         if ( [name isEqualToString:@"null"]) {
             name = [user nickname];
        }
@@ -265,7 +265,9 @@
 
 - (IBAction)didClikAddFriendsButton:(UIButton *)sender {
     //打印聊天列表
-    [[XMPPManager instence]printCoreData:nil];
+//    [[XMPPManager instence]printCoreData:nil];
+//    [[XMPPManager instence]sendImage];
+    [[XMPPManager instence]uploadAudio:nil];
 
     if ([newFriend.text isEqualToString:@""]) {
         return;

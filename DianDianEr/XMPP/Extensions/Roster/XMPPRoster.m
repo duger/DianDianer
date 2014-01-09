@@ -817,13 +817,26 @@ enum XMPPRosterFlags
 	// This method is invoked on the moduleQueue.
 	
 	XMPPLogTrace();
-	
-	[xmppRosterStorage clearAllUsersAndResourcesForXMPPStream:xmppStream];
+    
+    [xmppRosterStorage clearAllResourcesForXMPPStream:xmppStream];
+    //删除所有状态 置为unviavage
+//    [xmppRosterStorage clearAllPresentsForXMPPStream:xmppStream];
+//	[xmppRosterStorage clearAllUsersAndResourcesForXMPPStream:xmppStream];
 	
 	[self _setRequestedRoster:NO];
 	[self _setHasRoster:NO];
 	
 	[earlyPresenceElements removeAllObjects];
+}
+
+//删除好友列表记录 DUGER修改
+- (void)removeAllUsersAndResources
+{
+    [xmppRosterStorage clearAllUsersAndResourcesForXMPPStream:xmppStream];
+	
+
+	
+//	[earlyPresenceElements removeAllObjects];
 }
 
 #ifdef _XMPP_MUC_H

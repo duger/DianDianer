@@ -10,6 +10,15 @@
 #import "XMPPPresence.h"
 #import "XMPPModule.h"
 
+#import "XMPPReconnect.h"
+#import "XMPPCapabilitiesCoreDataStorage.h"
+#import "XMPPRosterCoreDataStorage.h"
+#import "XMPPvCardAvatarModule.h"
+#import "XMPPvCardCoreDataStorage.h"
+#import "XMPPRosterMemoryStorage.h"
+#import "XMPPvCardTemp.h"
+#import "XMPPSearch.h"
+
 // 
 // Authentication
 // 
@@ -21,6 +30,10 @@
 #import "XMPPAnonymousAuthentication.h"
 #import "XMPPDeprecatedPlainAuthentication.h"
 #import "XMPPDeprecatedDigestAuthentication.h"
+
+
+
+
 
 // 
 // Categories
