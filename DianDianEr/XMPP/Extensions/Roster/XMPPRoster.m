@@ -818,9 +818,9 @@ enum XMPPRosterFlags
 	
 	XMPPLogTrace();
     
-    [xmppRosterStorage clearAllResourcesForXMPPStream:xmppStream];
+//    [xmppRosterStorage clearAllResourcesForXMPPStream:xmppStream];
     //删除所有状态 置为unviavage
-//    [xmppRosterStorage clearAllPresentsForXMPPStream:xmppStream];
+    [xmppRosterStorage clearAllPresentsForXMPPStream:xmppStream];
 //	[xmppRosterStorage clearAllUsersAndResourcesForXMPPStream:xmppStream];
 	
 	[self _setRequestedRoster:NO];

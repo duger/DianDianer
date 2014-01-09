@@ -95,40 +95,38 @@ static XMPPRosterCoreDataStorage *sharedInstance;
 	AssertPrivateQueue();
 	
 	NSManagedObjectContext *moc = [self managedObjectContext];
-	
-	NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPResourceCoreDataStorageObject"
-	                                          inManagedObjectContext:moc];
-	
-	NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	[fetchRequest setEntity:entity];
-	[fetchRequest setFetchBatchSize:saveThreshold];
-	
-	if (stream)
-	{
-		NSPredicate *predicate;
-		predicate = [NSPredicate predicateWithFormat:@"streamBareJidStr == %@",
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"XMPPUserCoreDataStorageObject"
+                                              inManagedObjectContext:moc];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    [fetchRequest setEntity:entity];
+    [fetchRequest setFetchBatchSize:saveThreshold];
+    
+    if (stream)
+    {
+        NSPredicate *predicate;
+        predicate = [NSPredicate predicateWithFormat:@"streamBareJidStr == %@",
                      [[self myJIDForXMPPStream:stream] bare]];
-		NSLog(@"%@",[[self myJIDForXMPPStream:stream]bare]);
-		[fetchRequest setPredicate:predicate];
-	}
-	
-	NSArray *allResources = [moc executeFetchRequest:fetchRequest error:nil];
-	
-	NSUInteger unsavedCount = [self numberOfUnsavedChanges];
-	
-	for (XMPPResourceCoreDataStorageObject *resource in allResources)
-	{
-        XMPPPresence *presence = [XMPPPresence presence];
-       
-        [resource updateWithPresence:presence];
-		
-		if (++unsavedCount >= saveThreshold)
-		{
-			[self save];
-			unsavedCount = 0;
-		}
-	}
+        
+        [fetchRequest setPredicate:predicate];
+    }
+    
+    NSArray *allUsers = [moc executeFetchRequest:fetchRequest error:nil];
+    
+    NSUInteger unsavedCount = [self numberOfUnsavedChanges];
+    
+    for (XMPPUserCoreDataStorageObject *user in allUsers)
+    {
 
+        [[user primaryResource]setPresence:[XMPPPresence presenceWithType:@"unavailable"]];
+        [user setSectionNum:@(0)];
+        if (++unsavedCount >= saveThreshold)
+        {
+            [self save];
+            unsavedCount = 0;
+        }
+    }
 }
 
 - (void)_clearAllResourcesForXMPPStream:(XMPPStream *)stream
