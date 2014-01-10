@@ -198,8 +198,8 @@
 
     XMPPUserCoreDataStorageObject *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     
-    
-    NSString *name = [[user jid]user];
+    NSLog(@"%@",user.jid.user);
+    NSString *name = [user displayName];
         if ( [name isEqualToString:@"null"]) {
             name = [user nickname];
        }
