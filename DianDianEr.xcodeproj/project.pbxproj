@@ -447,6 +447,7 @@
 		8A7D4FBF1815183600C1351D /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7D4FBE1815183600C1351D /* CoreMedia.framework */; };
 		8A7D4FC11815185000C1351D /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7D4FC01815185000C1351D /* CoreVideo.framework */; };
 		8A7D4FC31815188100C1351D /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7D4FC21815188100C1351D /* AssetsLibrary.framework */; };
+		8A89CB03188A149C008A01DD /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A89CB02188A149C008A01DD /* Parse.framework */; };
 		8AA4C8BC182CB47E00F3280E /* leftBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AA4C8BB182CB47E00F3280E /* leftBackground.png */; };
 		8AA651361845926900EE5E02 /* MMHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AA651221845926900EE5E02 /* MMHud.m */; };
 		8AA651371845926900EE5E02 /* MMLinearProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AA651241845926900EE5E02 /* MMLinearProgressView.m */; };
@@ -1367,6 +1368,7 @@
 		8A7D4FBE1815183600C1351D /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		8A7D4FC01815185000C1351D /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		8A7D4FC21815188100C1351D /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		8A89CB02188A149C008A01DD /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		8AA4C8BB182CB47E00F3280E /* leftBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = leftBackground.png; sourceTree = "<group>"; };
 		8AA651211845926900EE5E02 /* MMHud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MMHud.h; sourceTree = "<group>"; };
 		8AA651221845926900EE5E02 /* MMHud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MMHud.m; sourceTree = "<group>"; };
@@ -1757,6 +1759,7 @@
 				8A6878B21818F86300F77266 /* CFNetwork.framework in Frameworks */,
 				8A6878B01818F85500F77266 /* Security.framework in Frameworks */,
 				8A2844C91818E0C300DBB3DC /* libresolv.dylib in Frameworks */,
+				8A89CB03188A149C008A01DD /* Parse.framework in Frameworks */,
 				8A6878AE1818F83900F77266 /* SystemConfiguration.framework in Frameworks */,
 				79731D0C181631090013ABBC /* CoreData.framework in Frameworks */,
 				79E5B67C1833AFFD00D9AB05 /* libmp3lame.a in Frameworks */,
@@ -2111,6 +2114,7 @@
 		30CF0F46180F659E00C25ABE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				8A89CB02188A149C008A01DD /* Parse.framework */,
 				300E6EBB18239098006F4F0D /* ImageIO.framework */,
 				79B517EC18225F9600F776B9 /* MobileCoreServices.framework */,
 				8A6878B11818F86300F77266 /* CFNetwork.framework */,
@@ -3889,6 +3893,12 @@
 							com.apple.GameCenter = {
 								enabled = 0;
 							};
+							com.apple.InAppPurchase = {
+								enabled = 0;
+							};
+							com.apple.iOS = {
+								enabled = 1;
+							};
 						};
 					};
 				};
@@ -4658,7 +4668,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Lan Ou Technology Co., Ltd.(BeiJing) (GJEL3SJ9F8)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Lan Ou Technology Co., Ltd.(BeiJing) (GJEL3SJ9F8)";
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = /Users/duger/Developer/Github/DianDianer;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DianDianEr/DianDianEr-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -4696,7 +4706,7 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Lan Ou Technology Co., Ltd.(BeiJing) (GJEL3SJ9F8)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Lan Ou Technology Co., Ltd.(BeiJing) (GJEL3SJ9F8)";
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = /Users/duger/Developer/Github/DianDianer;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DianDianEr/DianDianEr-Prefix.pch";
 				HEADER_SEARCH_PATHS = (

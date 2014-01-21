@@ -141,7 +141,7 @@ static inline NSString * dateFormatter(NSDate *aDate)
     NSDateFormatter *format = [[NSDateFormatter alloc] init];
     [format setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
     NSString *shareID = [shareDic objectForKey:@"share_id"];
-    NSLog(@"%@",[shareDic description]);
+//    NSLog(@"%@",[shareDic description]);
     NSFetchRequest *request = [NSFetchRequest fetchRequestWithEntityName:@"Share"];
     request.predicate = [NSPredicate predicateWithFormat:@"s_id==%@",shareID];
     
@@ -165,7 +165,7 @@ static inline NSString * dateFormatter(NSDate *aDate)
         share.s_locationName = [shareDic objectForKey:@"share_locationName"];
         share.s_user_id = [shareDic objectForKey:@"share_user_id"];
         
-        NSLog(@"%@",[shareDic objectForKey:@"comment_id"]);
+//        NSLog(@"%@",[shareDic objectForKey:@"comment_id"]);
         if ([shareDic objectForKey:@"comment_id"] != [NSNull null]) {
             //写入评论
             Comment *theComment = [[Comment alloc]initWithEntity:[NSEntityDescription entityForName:@"Comment" inManagedObjectContext:self.context] insertIntoManagedObjectContext:self.context];
@@ -177,7 +177,7 @@ static inline NSString * dateFormatter(NSDate *aDate)
             theComment.share_id = [NSString stringWithFormat:@"%@",[shareDic objectForKey:@"share_id"]];
             [share addShareToCommentObject:theComment];
             
-            NSLog(@"%@",[shareDic objectForKey:@"reply_id"]);
+//            NSLog(@"%@",[shareDic objectForKey:@"reply_id"]);
             if ([shareDic objectForKey:@"reply_id"] != [NSNull null]) {
                 //写入回复
                 Reply *theReply = [[Reply alloc]initWithEntity:[NSEntityDescription entityForName:@"Reply" inManagedObjectContext:self.context] insertIntoManagedObjectContext:self.context];
@@ -200,7 +200,7 @@ static inline NSString * dateFormatter(NSDate *aDate)
         //获得那条分享
         Share *tempshare = [resultArr lastObject];
 
-        NSLog(@"%@",[shareDic objectForKey:@"comment_id"]);
+//        NSLog(@"%@",[shareDic objectForKey:@"comment_id"]);
         if ([shareDic objectForKey:@"comment_id"] == [NSNull null]) {
             return tempshare;
         }
@@ -210,7 +210,7 @@ static inline NSString * dateFormatter(NSDate *aDate)
         NSError *error2;
         NSArray *commentArr = [self.context executeFetchRequest:request error:&error2];
         
-        NSLog(@"%d",[self.context countForFetchRequest:request error:nil]);
+//        NSLog(@"%d",[self.context countForFetchRequest:request error:nil]);
         if (![self.context countForFetchRequest:request error:nil]) {
             Comment *theComment = [[Comment alloc]initWithEntity:[NSEntityDescription entityForName:@"Comment" inManagedObjectContext:self.context] insertIntoManagedObjectContext:self.context];
             
@@ -223,7 +223,7 @@ static inline NSString * dateFormatter(NSDate *aDate)
             theComment.share_id = [NSString stringWithFormat:@"%@",[shareDic objectForKey:@"share_id"]];
             [tempshare addShareToCommentObject:theComment];
             
-            NSLog(@"%@",[shareDic objectForKey:@"reply_id"]);
+//            NSLog(@"%@",[shareDic objectForKey:@"reply_id"]);
             if ([shareDic objectForKey:@"reply_id"] != [NSNull null]) {
                 //写入回复
                 Reply *theReply = [[Reply alloc]initWithEntity:[NSEntityDescription entityForName:@"Reply" inManagedObjectContext:self.context] insertIntoManagedObjectContext:self.context];
@@ -243,7 +243,7 @@ static inline NSString * dateFormatter(NSDate *aDate)
                 //获得相同的评论
             Comment *tempComment = [commentArr lastObject];
             
-            NSLog(@"%@",[shareDic objectForKey:@"reply_id"]);
+//            NSLog(@"%@",[shareDic objectForKey:@"reply_id"]);
             if ([shareDic objectForKey:@"reply_id"] != [NSNull null]) {
                 Reply *theReply = [[Reply alloc]initWithEntity:[NSEntityDescription entityForName:@"Reply" inManagedObjectContext:self.context] insertIntoManagedObjectContext:self.context];
                 
@@ -553,7 +553,7 @@ static inline NSString * dateFormatter(NSDate *aDate)
     
     allChartList = [self.context executeFetchRequest:fetchRequest error:nil];
     ChartList *anChartList = [allChartList lastObject];
-    NSLog(@"%@",[anChartList.chartListToMessages array]);
+//    NSLog(@"%@",[anChartList.chartListToMessages array]);
     
     return allChartList;
     

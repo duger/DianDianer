@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>zh_CN</string>
 	<key>CFBundleDisplayName</key>
 	<string>点点儿</string>
 	<key>CFBundleExecutable</key>
@@ -35,9 +35,12 @@
 		<string>Kim GirlType.ttf</string>
 		<string>FZMWFont.ttf</string>
 	</array>
+	<key>UIApplicationExitsOnSuspend</key>
+	<false/>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>voip</string>
+		<string>audio</string>
+		<string>remote-notification</string>
 	</array>
 	<key>UIMainStoryboardFile</key>
 	<string>MainStoryboard</string>

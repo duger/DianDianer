@@ -19,7 +19,7 @@
 #import "NSData+Base64.h"
 #import "NSString+Base64.h"
 
-#import "XMPPManager.h"
+//#import "XMPPManager.h"
 #import "Singleton.h"
 
 #import "NSXMLElement+XMPP.h"
@@ -856,12 +856,6 @@ static XMPPManager *s_XMPPManager = nil;
     NSLog(@"Ohoo,I get the message");
 }
 
-#pragma mark - UITextField Delegate
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    return YES;
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #pragma mark - Core Data
@@ -1563,11 +1557,7 @@ static XMPPManager *s_XMPPManager = nil;
 		if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive)
 		{
             if (![[Singleton instance]isCharting]) {
-                UILocalNotification *localNotification = [[UILocalNotification alloc] init];
-                localNotification.alertAction = @"Ok";
-                localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",displayName,body];
                 
-                [[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
             }
             
             
@@ -1577,8 +1567,8 @@ static XMPPManager *s_XMPPManager = nil;
 			// We are not active, so use a local notification instead
 			UILocalNotification *localNotification = [[UILocalNotification alloc] init];
 			localNotification.alertAction = @"Ok";
-			localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n\n%@",displayName,body];
-            
+			localNotification.alertBody = [NSString stringWithFormat:@"From: %@\n%@",displayName,body];
+            localNotification.applicationIconBadgeNumber += 1;
 			[[UIApplication sharedApplication] presentLocalNotificationNow:localNotification];
 		}
 	}

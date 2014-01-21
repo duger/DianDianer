@@ -127,7 +127,8 @@
 
 //发送消息
 - (void)sendMessage:(NSString *)message;
-- (IBAction)registerInSide:(NSString *)userName andPassword:(NSString *)thePassword;
+//注册
+- (void)registerInSide:(NSString *)userName andPassword:(NSString *)thePassword;
 - (IBAction)addNewFriend:(NSString*)newFriendName;
 - (IBAction)uploadAudio:(id)sender;
 - (IBAction)play:(id)sender;

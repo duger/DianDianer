@@ -128,7 +128,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PvA-9g-9Oh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1936" y="2329"/>
+            <point key="canvasLocation" x="-1936" y="2336"/>
         </scene>
         <!--Charting View Controller-->
         <scene sceneID="VSV-Ms-f7Z">

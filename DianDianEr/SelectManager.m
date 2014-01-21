@@ -67,7 +67,7 @@ static SelectManager *s_selectManager = nil;
 //        result = [[NSMutableArray alloc] init];
 //        result = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
         result = [data objectFromJSONData];
-        NSLog(@"%@",result);
+//        NSLog(@"%@",result);
         [[DiandianCoreDataManager shareDiandianCoreDataManager] setDelegate:self];
         switch (flag) {
             case 1:
@@ -90,7 +90,7 @@ static SelectManager *s_selectManager = nil;
         }
     }];
     
-    NSLog(@"%@",result);
+//    NSLog(@"%@",result);
     return result;
 
 }
@@ -135,7 +135,7 @@ static SelectManager *s_selectManager = nil;
 //    share.s_locationName = willWriteShare.s_locationName;
 //    share.s_hot = willWriteShare.s_hot;
 
-    NSLog(@"刚刚刚写入到本地的数据库的分享%@",share);
+//    NSLog(@"刚刚刚写入到本地的数据库的分享%@",share);
 }
 //配置 评论（将本地写入到服务器）
 - (void)parameterComment:(Comment *)comment
@@ -150,7 +150,7 @@ static SelectManager *s_selectManager = nil;
     comment.c_id= [tempDic objectForKey:@"comment_id"];
     comment.c_user_id = [tempDic objectForKey:@"comment_user_id"];
     comment.share_id = [tempDic objectForKey:@"share_id"];
-    NSLog(@"刚刚刚写入到本地的数据库的评论%@",comment);
+//    NSLog(@"刚刚刚写入到本地的数据库的评论%@",comment);
     
 }
 //配置 回复（将本地写入到服务器）
@@ -167,7 +167,7 @@ static SelectManager *s_selectManager = nil;
     reply.r_to_id = [tempDic objectForKey:@"reply_to_id"];
     reply.r_from_id = [tempDic objectForKey:@"reply_from_id"];
     reply.r_comment_id = [tempDic objectForKey:@"comment_id"];
-    NSLog(@"刚刚刚写入到本地的数据库的回复%@",reply);
+//    NSLog(@"刚刚刚写入到本地的数据库的回复%@",reply);
 }
 //配置 赞 （将本地写入到服务器）
 - (void)parameterGood:(Good *)good
