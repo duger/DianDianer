@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		28AA6DF518D2D9B1001A79A4 /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A89CB02188A149C008A01DD /* Parse.framework */; };
 		3001FA25181F4B74002E62E5 /* Change.m in Sources */ = {isa = PBXBuildFile; fileRef = 3001FA24181F4B74002E62E5 /* Change.m */; };
 		300A66AA18272ACC008D6F43 /* background2.png in Resources */ = {isa = PBXBuildFile; fileRef = 300A66A418272ACC008D6F43 /* background2.png */; };
 		300A66AB18272ACC008D6F43 /* background2@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 300A66A518272ACC008D6F43 /* background2@2x.png */; };
@@ -447,7 +448,6 @@
 		8A7D4FBF1815183600C1351D /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7D4FBE1815183600C1351D /* CoreMedia.framework */; };
 		8A7D4FC11815185000C1351D /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7D4FC01815185000C1351D /* CoreVideo.framework */; };
 		8A7D4FC31815188100C1351D /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A7D4FC21815188100C1351D /* AssetsLibrary.framework */; };
-		8A89CB03188A149C008A01DD /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8A89CB02188A149C008A01DD /* Parse.framework */; };
 		8AA4C8BC182CB47E00F3280E /* leftBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 8AA4C8BB182CB47E00F3280E /* leftBackground.png */; };
 		8AA651361845926900EE5E02 /* MMHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AA651221845926900EE5E02 /* MMHud.m */; };
 		8AA651371845926900EE5E02 /* MMLinearProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8AA651241845926900EE5E02 /* MMLinearProgressView.m */; };
@@ -1749,6 +1749,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				28AA6DF518D2D9B1001A79A4 /* Parse.framework in Frameworks */,
 				8AC43AD0187E98410042A276 /* Foundation.framework in Frameworks */,
 				8AC43ACF187E980E0042A276 /* libxml2.dylib in Frameworks */,
 				300E6EBC18239098006F4F0D /* ImageIO.framework in Frameworks */,
@@ -1759,7 +1760,6 @@
 				8A6878B21818F86300F77266 /* CFNetwork.framework in Frameworks */,
 				8A6878B01818F85500F77266 /* Security.framework in Frameworks */,
 				8A2844C91818E0C300DBB3DC /* libresolv.dylib in Frameworks */,
-				8A89CB03188A149C008A01DD /* Parse.framework in Frameworks */,
 				8A6878AE1818F83900F77266 /* SystemConfiguration.framework in Frameworks */,
 				79731D0C181631090013ABBC /* CoreData.framework in Frameworks */,
 				79E5B67C1833AFFD00D9AB05 /* libmp3lame.a in Frameworks */,
@@ -4668,7 +4668,10 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Lan Ou Technology Co., Ltd.(BeiJing) (GJEL3SJ9F8)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Lan Ou Technology Co., Ltd.(BeiJing) (GJEL3SJ9F8)";
-				FRAMEWORK_SEARCH_PATHS = /Users/duger/Developer/Github/DianDianer;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/DianDianer",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DianDianEr/DianDianEr-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -4679,8 +4682,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"$(SRCROOT)/DianDianEr/XMPP/Vendor/libidn\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"",
-					"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"$(SRCROOT)/DianDianEr\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"",
 					"$(SRCROOT)/DianDianEr/XMPP/Vendor/libidn",
 					"$(SRCROOT)/DianDianEr",
 				);
@@ -4706,7 +4707,10 @@
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Lan Ou Technology Co., Ltd.(BeiJing) (GJEL3SJ9F8)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Lan Ou Technology Co., Ltd.(BeiJing) (GJEL3SJ9F8)";
-				FRAMEWORK_SEARCH_PATHS = /Users/duger/Developer/Github/DianDianer;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)/DianDianer",
+					"$(PROJECT_DIR)",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "DianDianEr/DianDianEr-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
@@ -4717,8 +4721,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"$(SRCROOT)/DianDianEr/XMPP/Vendor/libidn\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"",
-					"\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"$(SRCROOT)/DianDianEr\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\"",
 					"$(SRCROOT)/DianDianEr/XMPP/Vendor/libidn",
 					"$(SRCROOT)/DianDianEr",
 				);
