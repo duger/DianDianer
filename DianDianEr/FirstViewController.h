@@ -14,8 +14,10 @@
 #import "TuYaViewController.h"
 #import "MJRefresh.h"
 #import "RecordViewController.h"
+#import "NCMusicEngine.h"
 
-@interface FirstViewController : UIViewController<AwesomeMenuDelegate,CameraViewControllerDelegate,TuYaViewControllerDelegate,UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate,RecordViewControllerDelegate,UIActionSheetDelegate>
+
+@interface FirstViewController : UIViewController<AwesomeMenuDelegate,CameraViewControllerDelegate,TuYaViewControllerDelegate,UITableViewDataSource,UITableViewDelegate,MJRefreshBaseViewDelegate,RecordViewControllerDelegate,UIActionSheetDelegate,NCMusicEngineDelegate>
 @property (nonatomic,retain) NSMutableArray *shareArray;
 - (IBAction)cicCLickZuoBian:(CustomItem *)sender;
 - (IBAction)didClickRight:(CustomItem *)sender;

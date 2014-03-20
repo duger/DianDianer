@@ -28,8 +28,11 @@
 #import "MMProgressHUDOverlayView.h"
 
 
-@interface FirstViewController ()<NCMusicEngineDelegate>
+@interface FirstViewController ()
 -(AwesomeMenu *)_createAnAwesomeMenu;
+
+- (void)downloadImage:(NSString *)imgURL forIndexPath:(NSIndexPath *)indexPath;
+
 @end
 
 static int line = 5;
@@ -502,7 +505,32 @@ static int indexCount = 1;
     return cell;
 }
 
+- (void)configureCell:(HomePageCell *)cell atIndexPath:(NSIndexPath *)indexPath
+{
+    Share *share = [self.shareArray objectAtIndex: [self.shareArray count] - indexPath.row - 1];
+    if (share.s_image_url) {
+        // 加载图片
+        NSString *imgURL = share.s_image_url;
+        UIImage *cachedImage = [[SDImageCache sharedImageCache] imageFromDiskCacheForKey:imgURL];
+        
+        //没有已经下载好的图片
+        if (!cachedImage) {
+            //如果当前tableview 没有在本拖动或者自由滑动
+            if (!aTableView.dragging && !aTableView.decelerating) {
+                //下载当前cell中的图片
+                [self downloadImage:imgURL forIndexPath:indexPath];
+            }
+            //cell 中图片先用缓存占位图代替
+            
+        }
+    }
 
+}
+
+- (void)downloadImage:(NSString *)imgURL forIndexPath:(NSIndexPath *)indexPath
+{
+    
+}
 
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
