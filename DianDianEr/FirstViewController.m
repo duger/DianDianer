@@ -521,7 +521,10 @@ static int indexCount = 1;
                 [self downloadImage:imgURL forIndexPath:indexPath];
             }
             //cell 中图片先用缓存占位图代替
-            
+            [cell.shareImage setImage:[UIImage imageNamed:@"LOG-IN.png"]];
+        } else {
+            //找到缓存图片，直接插缓存的图片
+            [cell.shareImage setImage:cachedImage];
         }
     }
 
@@ -529,7 +532,31 @@ static int indexCount = 1;
 
 - (void)downloadImage:(NSString *)imgURL forIndexPath:(NSIndexPath *)indexPath
 {
+//    __weak typeof(self) target = self;
+    __weak typeof(UITableView *) btableView = aTableView;
+    //利用SDWebImage 框架提供的功能下载图片
+    [[SDWebImageDownloader sharedDownloader] downloadImageWithURL:[NSURL URLWithString:imgURL] options:SDWebImageDownloaderUseNSURLCache progress:^(NSUInteger receivedSize, long long expectedSize) {
+        
+    } completed:^(UIImage *image, NSData *data, NSError *error, BOOL finished) {
+        //保存图片
+        [[SDImageCache sharedImageCache]  storeImage:image forKey:imgURL toDisk:YES];
+        //延迟在主线程更新 cell 的高度
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [btableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        });
+    }];
+}
+
+
+- (void)loadImageForOnScreenRows
+{
+    NSArray *visiableIndexPathes = [aTableView indexPathsForVisibleRows];
     
+    for (NSIndexPath *indexPath in visiableIndexPathes) {
+        Share *share = [self.shareArray objectAtIndex: [self.shareArray count] - indexPath.row - 1];
+        NSString *imgURL = share.s_image_url;
+        [self downloadImage:imgURL forIndexPath:indexPath];
+    }
 }
 
 
@@ -599,7 +626,20 @@ static int indexCount = 1;
     [self setTopView:nil];
     [super viewDidUnload];
 }
+#pragma mark - Scroll view delegate
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
+    // table view 停止拖动了
+    if (!decelerate) {
+        [self loadImageForOnScreenRows];
+    }
+}
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    // table view 停止滚动了
+    [self loadImageForOnScreenRows];
+}
 
 #pragma mark 代理方法-进入刷新状态就会调用
 - (void)refreshViewBeginRefreshing:(MJRefreshBaseView *)refreshView
@@ -647,6 +687,8 @@ static int indexCount = 1;
     }
     [NSTimer scheduledTimerWithTimeInterval:0.5 target:aTableView selector:@selector(reloadData) userInfo:nil repeats:NO];
 }
+
+
 
 #pragma mark - ActionSheet Delegate
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
