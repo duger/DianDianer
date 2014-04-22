@@ -16,9 +16,9 @@
 
 #define kXMPPmyJID  @"kXMPPmyJID"
 #define kXMPPmyPassword  @"kXMPPmyPassword"
-#define kHOSTNAME     @"124.205.147.26"
-#define kDOMAIN   @"lanouserver"
-#define kDOMAINWITHSOURCE @"lanouserver/diandain"
+#define kHOSTNAME     @"114.215.104.163"
+#define kDOMAIN   @"114.215.104.163"
+#define kDOMAINWITHSOURCE @"114.215.104.163/diandain"
 #define kGUEST @"guest"
 #define kGUESTPASSWORD @"123456"
 

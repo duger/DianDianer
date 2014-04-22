@@ -10,10 +10,10 @@
 #import "JSONKit.h"
 
 
-#define kRecentShare    @"http://124.205.147.26/student/class_10/team_seven/share/downloadShare.php"
-#define kRecentComment  @"http://124.205.147.26/student/class_10/team_seven/comment/downloadComment.php"
-#define kRecentReply    @"http://124.205.147.26/student/class_10/team_seven/reply/downloadReply.php"
-#define kRecentGood     @"http://124.205.147.26/student/class_10/team_seven/good/downloadGood.php"
+#define kRecentShare    @"http://114.215.104.163/team_seven/share/downloadShare.php"
+#define kRecentComment  @"http://114.215.104.163/team_seven/comment/downloadComment.php"
+#define kRecentReply    @"http://114.215.104.163/team_seven/reply/downloadReply.php"
+#define kRecentGood     @"http://114.215.104.163/team_seven/good/downloadGood.php"
 
 
 

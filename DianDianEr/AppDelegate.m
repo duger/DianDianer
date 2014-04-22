@@ -33,10 +33,10 @@
     [[XMPPManager instence]setupStream];
     
     
-    PFObject *player = [PFObject objectWithClassName:@"Player"];//1
-    [player setObject:@"John" forKey:@"Name"];
-    [player setObject:[NSNumber numberWithInt:1230] forKey:@"Score"];//2
-    [player saveInBackground];//3
+//    PFObject *player = [PFObject objectWithClassName:@"Player"];//1
+//    [player setObject:@"John" forKey:@"Name"];
+//    [player setObject:[NSNumber numberWithInt:1230] forKey:@"Score"];//2
+//    [player saveInBackground];//3
 
     return YES;
 }

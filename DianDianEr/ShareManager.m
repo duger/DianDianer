@@ -12,10 +12,10 @@
 #import "ShareViewController.h"
 #import "FirstViewController.h"
 
-#define kManagerUpload_URL @"http://124.205.147.26/student/class_10/team_seven/share/uploadImages.php"
-#define kUploadComment_URL @"http://124.205.147.26/student/class_10/team_seven/comment/uploadComment.php"
-#define kUploadReply_URL @"http://124.205.147.26/student/class_10/team_seven/reply/uploadReply.php"
-#define kUploadGood_URL @"http://124.205.147.26/student/class_10/team_seven/good/uploadGood.php"
+#define kManagerUpload_URL @"http://114.215.104.163/team_seven/share/uploadImages.php"
+#define kUploadComment_URL @"http://114.215.104.163/team_seven/comment/uploadComment.php"
+#define kUploadReply_URL @"http://114.215.104.163/team_seven/reply/uploadReply.php"
+#define kUploadGood_URL @"http://114.215.104.163/team_seven/good/uploadGood.php"
 
 
 
